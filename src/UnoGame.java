@@ -1,5 +1,3 @@
-import javax.swing.*;
-
 public class UnoGame {
     private Deck deck;
     private Card placePile;
@@ -23,10 +21,7 @@ public class UnoGame {
     }
 
     public void playRound(int player) {
-//        if (rev) {
-//            player = hands.length-player;
-//        }
-//        if (!skip) {
+        while (playable()) {
             System.out.println("\n-=-= Player " + (player + 1) + "'s turn =-=-\n");
             System.out.println("Place pile card: " + placePile.toString());
             System.out.println("Your cards: " + hands[player].toString());
@@ -71,10 +66,7 @@ public class UnoGame {
                 rev = !rev;
             }
             player = nextPlayer(player, hands.length);
-//        } else {
-//            System.out.println("\n-=-= Player " + (player + 1) + " has been skipped =-=-\n");
-//            skip = false;
-//        }
+        }
     }
 
     public boolean playable() {

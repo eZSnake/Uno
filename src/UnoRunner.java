@@ -9,8 +9,6 @@ public class UnoRunner {
             players = TextIO.getlnInt();
         }
         UnoGame myGame = new UnoGame(players);
-        while (myGame.playable()) {
-            myGame.playRound(0);
-        }
+        myGame.playRound(0);
     }
 }
