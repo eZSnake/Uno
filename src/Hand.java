@@ -24,7 +24,7 @@ public class Hand {
         for (int i = 0; i < hand.size()-1; i++) {
             ret.append("Card " + (i+1) + ": " + hand.get(i)).append("\n");
         }
-        ret.append("Card " + hand.size() + ": " + hand.get(hand.size()-1) + "\n\n");
+        ret.append("Card " + hand.size() + ": " + hand.get(hand.size()-1));
         return ret.toString();
     }
 
