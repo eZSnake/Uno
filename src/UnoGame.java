@@ -38,20 +38,23 @@ public class UnoGame {
             //
             // check if card can be played: function taking picked card and top of placepile
             boolean actionTaken = false;
+            int cardInt = -1;
             while (!actionTaken) {
                 if (isInt(cardToPlay)) {
-                    int cardInt = Integer.parseInt(cardToPlay);
+                    cardInt = Integer.parseInt(cardToPlay);
                     if (cardInt < 1 || cardInt > hands[player].length()) {
                         System.out.print("That is an invalid number. Enter one between 1 and " + hands[player].length() + ": ");
                         cardInt = TextIO.getlnInt();
                     } else if (!canBePlayed(hands[player].getCard(cardInt))) {
                         System.out.print("That card can't be played. Enter another one: ");
                         cardToPlay = TextIO.getlnString();
+                    } else {
+                        actionTaken = true;
                     }
-                    placePile = hands[player].getCard(cardInt);
-                    hands[player].removeCard(cardInt);
-                    placePile.specialMove(deck, hands, player);
-                    actionTaken = true;
+//                    placePile = hands[player].getCard(cardInt);
+//                    hands[player].removeCard(cardInt);
+//                    placePile.specialMove(deck, hands, player);
+                    //actionTaken = true;
                 } else if (cardToPlay.equals("draw")) {
                     hands[player].addCard(deck.deal());
                     actionTaken = true;
@@ -60,11 +63,19 @@ public class UnoGame {
                     cardToPlay = TextIO.getlnString();
                 }
             }
+            if (cardInt != -1) {
+                placePile = hands[player].getCard(cardInt);
+                hands[player].removeCard(cardInt);
+                placePile.specialMove(deck, hands, player);
+            }
             if (placePile instanceof Skip || placePile instanceof Plus2) {
                 skip = true;
             }
             if (placePile instanceof Switch) {
-                rev = !rev;
+                if (!((Switch) placePile).getHasSwitched()) {
+                    rev = !rev;
+                    ((Switch) placePile).setHasSwitched(true);
+                }
             }
             player = nextPlayer(player, hands.length);
         }
@@ -72,6 +83,11 @@ public class UnoGame {
     }
 
     public boolean playable() {
+        for (int i = 0; i < hands.length; i++) {
+            if (hands[i].length() == 0) {
+                return false;
+            }
+        }
         return deck.cardsLeft() >= 0;
     }
 

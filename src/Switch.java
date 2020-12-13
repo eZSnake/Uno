@@ -1,6 +1,9 @@
 public class Switch extends Card {
+    private boolean hasSwitched;
+
     public Switch(String col) {
         super(col, 1, 10);
+        hasSwitched = false;
     }
 
     public String toString() {
@@ -8,5 +11,13 @@ public class Switch extends Card {
     }
 
     public void specialMove(Deck deck, Hand[] hands, int currPlayer) {
+    }
+
+    public boolean getHasSwitched() {
+        return hasSwitched;
+    }
+
+    public void setHasSwitched(boolean hasSwitched) {
+        this.hasSwitched = hasSwitched;
     }
 }

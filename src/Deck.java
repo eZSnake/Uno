@@ -96,11 +96,11 @@ public class Deck {
             cards[randVal] = cards[i];
             cards[i] = temp;
         }
-        if (!(cards[players*7+1] instanceof NumCol)) {
-            for (int i = players*7+1; i < cards.length; i++) {
+        if (!(cards[players*7] instanceof NumCol)) {
+            for (int i = players*7; i < cards.length; i++) {
                 if (cards[i] instanceof  NumCol) {
-                    Card temp = cards[players*7+1];
-                    cards[players*7+1] = cards[i];
+                    Card temp = cards[players*7];
+                    cards[players*7] = cards[i];
                     cards[i] = temp;
                 }
             }
