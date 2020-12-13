@@ -69,7 +69,14 @@ public class UnoGame {
                 placePile.specialMove(deck, hands, player);
             }
             if (placePile instanceof Skip || placePile instanceof Plus2) {
-                skip = true;
+                if (!((Skip) placePile).getHasSkipped() || !((Plus2) placePile).getHasSkipped()) {
+                    skip = true;
+                    if (placePile instanceof Skip) {
+                        ((Skip) placePile).setHasSkipped(true);
+                    } else {
+                        ((Plus2) placePile).setHasSkipped(true);
+                    }
+                }
             }
             if (placePile instanceof Switch) {
                 if (!((Switch) placePile).getHasSwitched()) {

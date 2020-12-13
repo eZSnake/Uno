@@ -4,7 +4,7 @@ public class ChangeCol extends Card {
     }
 
     public String toString() {
-        return getColor() + "Change Color";
+        return getColor() + " Change Color";
     }
 
     public void specialMove(Deck deck, Hand[] hands, int currPlayer) {
