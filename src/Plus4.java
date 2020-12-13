@@ -1,6 +1,6 @@
 public class Plus4 extends Card {
     public Plus4() {
-        super("", 4, 10);
+        super("", 4, -4);
     }
 
     public String toString() {

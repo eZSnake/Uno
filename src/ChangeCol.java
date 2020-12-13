@@ -1,6 +1,6 @@
 public class ChangeCol extends Card {
     public ChangeCol() {
-        super("", 4, 10);
+        super("", 4, -4);
     }
 
     public String toString() {

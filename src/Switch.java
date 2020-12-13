@@ -2,7 +2,7 @@ public class Switch extends Card {
     private boolean hasSwitched;
 
     public Switch(String col) {
-        super(col, 1, 10);
+        super(col, 1, -1);
         hasSwitched = false;
     }
 

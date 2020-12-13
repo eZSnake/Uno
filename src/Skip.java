@@ -2,7 +2,7 @@ public class Skip extends Card {
     boolean hasSkipped;
 
     public Skip(String col) {
-        super(col, 2, 10);
+        super(col, 2, -2);
         hasSkipped = false;
     }
 

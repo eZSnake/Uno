@@ -2,7 +2,7 @@ public class Plus2 extends Card {
     private boolean hasSkipped;
 
     public Plus2(String col) {
-        super(col, 3, 10);
+        super(col, 3, -3);
         hasSkipped = false;
     }
 
