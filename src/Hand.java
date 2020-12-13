@@ -22,9 +22,9 @@ public class Hand {
     public String toString() {
         StringBuilder ret = new StringBuilder();
         for (int i = 0; i < hand.size()-1; i++) {
-            ret.append(hand.get(i)).append(", ");
+            ret.append("Card " + (i+1) + ": " + hand.get(i)).append("\n");
         }
-        ret.append(hand.get(hand.size()-1));
+        ret.append("Card " + hand.size() + ": " + hand.get(hand.size()-1) + "\n\n");
         return ret.toString();
     }
 

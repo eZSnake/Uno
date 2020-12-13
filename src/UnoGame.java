@@ -22,6 +22,7 @@ public class UnoGame {
 
     public void playRound(int player) {
         while (playable()) {
+            skip = false;
             System.out.println("\n-=-= Player " + (player + 1) + "'s turn =-=-\n");
             System.out.println("Place pile card: " + placePile.toString());
             System.out.println("Your cards: " + hands[player].toString());
@@ -67,6 +68,7 @@ public class UnoGame {
             }
             player = nextPlayer(player, hands.length);
         }
+        System.out.print("\n-=-=-=-=-=-=-\n" + determineWinner() + "\n-=-=-=-=-=-=-");
     }
 
     public boolean playable() {
@@ -89,14 +91,24 @@ public class UnoGame {
     private int nextPlayer(int currPlayer, int players) {
         int nextPlayer;
         if (!rev && !skip) {
-            nextPlayer = (currPlayer + 1)%players;
+            nextPlayer = Math.floorMod(currPlayer + 1, players);
         } else if (!rev && skip){
-            nextPlayer = (currPlayer + 2)%players;
-        } else if (rev && skip) {
-            nextPlayer = (currPlayer - 2)%players;
+            nextPlayer = Math.floorMod(currPlayer + 2, players);
+        } else if (rev && !skip) {
+            nextPlayer = Math.floorMod(currPlayer - 1, players);
         } else {
-            nextPlayer = (currPlayer-1)%players;
+            nextPlayer = Math.floorMod(currPlayer-2, players);
         }
+        //System.out.println("Next Player: " + nextPlayer);
         return nextPlayer;
+    }
+
+    private String determineWinner() {
+        for (int i = 0; i < hands.length; i++) {
+            if (hands[i].length() == 0) {
+                return "Player " + i + " has won the game!";
+            }
+        }
+        return "There are no cards left to draw. It's a tie.";
     }
 }
