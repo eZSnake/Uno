@@ -12,11 +12,11 @@ public class Hand {
     }
 
     public void removeCard(int index) {
-        hand.remove(index-1);
+        hand.remove(index);
     }
 
     public Card getCard(int index) {
-        return hand.get(index-1);
+        return hand.get(index);
     }
 
     public String toString() {

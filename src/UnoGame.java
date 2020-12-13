@@ -24,6 +24,12 @@ public class UnoGame {
         while (playable()) {
             skip = false;
             System.out.println("\n-=-= Player " + (player + 1) + "'s turn =-=-\n");
+            if (!canPlay(player)) {
+                System.out.println("You do not have a card to play. A card will be automatically drawn for you");
+                hands[player].addCard(deck.deal());
+                player = nextPlayer(player, hands.length);
+                continue;
+            }
             System.out.println("Place pile card:\n" + placePile.toString());
             System.out.println("\nYour cards:\n" + hands[player].toString());
             System.out.print("\nWhat card would you like to play or would you like to draw? (1-" + hands[player].length() + "/'draw','d'): ");
@@ -45,7 +51,7 @@ public class UnoGame {
                     if (cardInt < 1 || cardInt > hands[player].length()) {
                         System.out.print("That is an invalid number. Enter one between 1 and " + hands[player].length() + ": ");
                         cardInt = TextIO.getlnInt();
-                    } else if (!canBePlayed(hands[player].getCard(cardInt))) {
+                    } else if (!canBePlayed(hands[player].getCard(cardInt-1))) {
                         System.out.print("That card can't be played. Enter another one: ");
                         cardToPlay = TextIO.getlnString();
                     } else {
@@ -64,8 +70,8 @@ public class UnoGame {
                 }
             }
             if (cardInt != -1) {
-                placePile = hands[player].getCard(cardInt);
-                hands[player].removeCard(cardInt);
+                placePile = hands[player].getCard(cardInt-1);
+                hands[player].removeCard(cardInt-1);
                 placePile.specialMove(deck, hands, player);
             }
             if (placePile instanceof Skip || placePile instanceof Plus2) {
@@ -136,5 +142,14 @@ public class UnoGame {
             }
         }
         return "There are no cards left to draw. It's a tie.";
+    }
+
+    private boolean canPlay(int player) {
+        for (int i = 0; i < hands[player].length(); i++) {
+            if (canBePlayed(hands[player].getCard(i))) {
+                return true;
+            }
+        }
+        return false;
     }
 }
