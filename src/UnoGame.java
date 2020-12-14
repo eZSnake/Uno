@@ -40,11 +40,13 @@ public class UnoGame {
                 if (isInt(cardToPlay)) {
                     cardInt = Integer.parseInt(cardToPlay);
                     if (cardInt < 1 || cardInt > hands[player].length()) {
-                        System.out.print("That is an invalid number. Enter one between 1 and " + hands[player].length() + ": ");
+                        System.out.print("That is an invalid number. Enter one between 1 and " + hands[player].length() + " or 'draw'/'d': ");
                         cardToPlay = TextIO.getlnString();
+                        cardInt = -1;
                     } else if (!canBePlayed(hands[player].getCard(cardInt-1))) {
-                        System.out.print("That card can't be played. Enter another one: ");
+                        System.out.print("That card can't be played. Enter another one or 'draw'/'d': ");
                         cardToPlay = TextIO.getlnString();
+                        cardInt = -1;
                     } else {
                         actionTaken = true;
                     }
