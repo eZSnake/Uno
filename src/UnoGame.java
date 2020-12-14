@@ -117,9 +117,9 @@ public class UnoGame {
         int nextPlayer;
         if (!rev && !skip) {
             nextPlayer = Math.floorMod(currPlayer + 1, players);
-        } else if (!rev && skip){
+        } else if (!rev){
             nextPlayer = Math.floorMod(currPlayer + 2, players);
-        } else if (rev && !skip) {
+        } else if (!skip) {
             nextPlayer = Math.floorMod(currPlayer - 1, players);
         } else {
             nextPlayer = Math.floorMod(currPlayer-2, players);
