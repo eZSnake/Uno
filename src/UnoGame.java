@@ -23,7 +23,7 @@ public class UnoGame {
     public void playRound(int player) {
         while (playable()) {
             skip = false;
-            System.out.println("\n-=-= Player " + (player + 1) + "'s turn =-=-\n");
+            System.out.println("\n\n-=-= Player " + (player + 1) + "'s turn =-=-\n");
             if (!canPlay(player)) {
                 System.out.println("You do not have a card to play. A card will be automatically drawn for you");
                 hands[player].addCard(deck.deal());
@@ -34,15 +34,6 @@ public class UnoGame {
             System.out.println("\nYour cards:\n" + hands[player].toString());
             System.out.print("\nWhat card would you like to play or would you like to draw? (1-" + hands[player].length() + "/'draw','d'): ");
             String cardToPlay = TextIO.getlnString().toLowerCase();
-
-            // while (moveNotValid)
-            // ask for card
-            // check if pick is in 1..numCardsLeft
-            // check if card can be played
-            //
-            // play card
-            //
-            // check if card can be played: function taking picked card and top of placePile
             boolean actionTaken = false;
             int cardInt = -1;
             while (!actionTaken) {
@@ -68,6 +59,9 @@ public class UnoGame {
             if (cardInt != -1) {
                 placePile = hands[player].getCard(cardInt-1);
                 hands[player].removeCard(cardInt-1);
+                if (hands[player].length() <= 0) {
+                    break;
+                }
                 placePile.specialMove(deck, hands, player);
             }
             if (placePile instanceof Skip || placePile instanceof Plus2) {
@@ -94,7 +88,7 @@ public class UnoGame {
         System.out.print("\n-=-=-=-=-=-=-\n" + determineWinner() + "\n-=-=-=-=-=-=-");
     }
 
-    public boolean playable() {
+    private boolean playable() {
         for (int i = 0; i < hands.length; i++) {
             if (hands[i].length() == 0) {
                 return false;
@@ -127,7 +121,6 @@ public class UnoGame {
         } else {
             nextPlayer = Math.floorMod(currPlayer-2, players);
         }
-        //System.out.println("Next Player: " + nextPlayer);
         return nextPlayer;
     }
 
