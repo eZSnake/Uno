@@ -1,7 +1,7 @@
 public class UnoGame {
-    private Deck deck;
+    private final Deck deck;
     private Card placePile;
-    private Hand[] hands;
+    private final Hand[] hands;
     private boolean rev = false, skip = false;
 
     public UnoGame(int players) {
@@ -24,7 +24,7 @@ public class UnoGame {
         while (playable()) {
             skip = false;
             System.out.println("\n\n-=-= Player " + (player + 1) + "'s turn =-=-\n");
-            if (!canPlay(player)) {
+            if (!canPlayACard(player)) {
                 System.out.println("You do not have a card to play. A card will be automatically drawn for you");
                 hands[player].addCard(deck.deal());
                 player = nextPlayer(player, hands.length);
@@ -43,7 +43,7 @@ public class UnoGame {
                         System.out.print("That is an invalid number. Enter one between 1 and " + hands[player].length() + " or 'draw'/'d': ");
                         cardToPlay = TextIO.getlnString();
                         cardInt = -1;
-                    } else if (!canBePlayed(hands[player].getCard(cardInt-1))) {
+                    } else if (!(hands[player].getCard(cardInt-1)).isPlayable(placePile)) {
                         System.out.print("That card can't be played. Enter another one or 'draw'/'d': ");
                         cardToPlay = TextIO.getlnString();
                         cardInt = -1;
@@ -66,16 +66,21 @@ public class UnoGame {
                 }
                 placePile.specialMove(deck, hands, player);
             }
-            if (placePile instanceof Skip || placePile instanceof Plus2) {
+            if (placePile instanceof Skip || placePile instanceof Plus2 || placePile instanceof Plus4) {
                 if (placePile instanceof Skip) {
                     if (!((Skip) placePile).getHasSkipped()) {
                         skip = true;
                         ((Skip) placePile).setHasSkipped(true);
                     }
-                } else {
+                } else if (placePile instanceof Plus2) {
                     if (!((Plus2) placePile).getHasSkipped()) {
                         skip = true;
                         ((Plus2) placePile).setHasSkipped(true);
+                    }
+                } else {
+                    if (!((Plus4) placePile).getHasSkipped()) {
+                        skip = true;
+                        ((Plus4) placePile).setHasSkipped(true);
                     }
                 }
             }
@@ -97,10 +102,6 @@ public class UnoGame {
             }
         }
         return deck.cardsLeft() >= 0;
-    }
-
-    private boolean canBePlayed(Card toPlay) {
-        return (toPlay.getId() == 4 || toPlay.getColor().equals(placePile.getColor()) || toPlay.getNum() == placePile.getNum());
     }
 
     private boolean isInt(String card) {
@@ -135,9 +136,9 @@ public class UnoGame {
         return "There are no cards left to draw. It's a tie.";
     }
 
-    private boolean canPlay(int player) {
+    private boolean canPlayACard(int player) {
         for (int i = 0; i < hands[player].length(); i++) {
-            if (canBePlayed(hands[player].getCard(i))) {
+            if (hands[player].getCard(i).isPlayable(placePile)) {
                 return true;
             }
         }

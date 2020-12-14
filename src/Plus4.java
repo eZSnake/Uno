@@ -1,6 +1,9 @@
 public class Plus4 extends Card {
+    private boolean hasSkipped;
+
     public Plus4() {
         super("", 4, -5);
+        hasSkipped = false;
     }
 
     public String toString() {
@@ -23,5 +26,13 @@ public class Plus4 extends Card {
         for (int i = 0; i < 4; i++) {
             hands[currPlayer].addCard(deck.deal());
         }
+    }
+
+    public boolean getHasSkipped() {
+        return hasSkipped;
+    }
+
+    public void setHasSkipped(boolean hasSkipped) {
+        this.hasSkipped = hasSkipped;
     }
 }

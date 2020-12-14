@@ -35,4 +35,8 @@ public abstract class Card {
     public void setColor(String color) {
         this.color = color;
     }
+
+    public boolean isPlayable(Card placePile) {
+        return (this.getId() == 4 || this.getColor().equals(placePile.getColor()) || this.getNum() == placePile.getNum());
+    }
 }
