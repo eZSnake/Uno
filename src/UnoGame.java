@@ -92,7 +92,7 @@ public class UnoGame {
             }
             player = nextPlayer(player, hands.length);
         }
-        System.out.print("\n-=-=-=-=-=-=-\n" + determineWinner() + "\n-=-=-=-=-=-=-");
+        System.out.print("\n\n-=-=-=-=-=-=-\n" + determineWinner() + "\n-=-=-=-=-=-=-");
     }
 
     private boolean playable() {
@@ -130,7 +130,7 @@ public class UnoGame {
     private String determineWinner() {
         for (int i = 0; i < hands.length; i++) {
             if (hands[i].length() == 0) {
-                return "Player " + (i+1) + " has won the game!";
+                return "Player " + (i+1) + " has won the game!\nCongratulations!";
             }
         }
         return "There are no cards left to draw. It's a tie.";
