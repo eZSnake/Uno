@@ -39,7 +39,7 @@ public class UnoGame {
             while (!actionTaken) {
                 if (isInt(cardToPlay)) {
                     cardInt = Integer.parseInt(cardToPlay);
-                    if (cardInt >= 1 || cardInt <= hands[player].length()) {
+                    if (cardInt < 1 || cardInt > hands[player].length()) {
                         System.out.print("That is an invalid number. Enter one between 1 and " + hands[player].length() + ": ");
                         cardToPlay = TextIO.getlnString();
                     } else if (!canBePlayed(hands[player].getCard(cardInt-1))) {
