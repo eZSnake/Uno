@@ -57,10 +57,6 @@ public class UnoGame {
                     } else {
                         actionTaken = true;
                     }
-//                    placePile = hands[player].getCard(cardInt);
-//                    hands[player].removeCard(cardInt);
-//                    placePile.specialMove(deck, hands, player);
-                    //actionTaken = true;
                 } else if (cardToPlay.equals("draw") || cardToPlay.equals("d")) {
                     hands[player].addCard(deck.deal());
                     actionTaken = true;
