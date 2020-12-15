@@ -37,6 +37,6 @@ public abstract class Card {
     }
 
     public boolean isPlayable(Card placePile) {
-        return (this.getId() == 4 || this.getColor().equals(placePile.getColor()) || this.getNum() == placePile.getNum());
+        return (id == 4 || color.equals(placePile.getColor()) || num == placePile.getNum());
     }
 }
