@@ -1,4 +1,4 @@
-public class UnoGame {
+public class UnoGame { //Eike Rehwald
     private final Deck deck;
     private Card placePile;
     private final Hand[] hands;
@@ -14,9 +14,6 @@ public class UnoGame {
                 hands[i].addCard(deck.deal());
             }
         }
-        for (int i = 0; i < hands.length; i++) {
-            System.out.println(hands[i].toString());
-        }
         placePile = deck.deal();
     }
 
@@ -31,7 +28,7 @@ public class UnoGame {
                 continue;
             }
             System.out.println("Place pile card:\n" + placePile.toString());
-            System.out.println("\nYour cards:\n" + hands[player].toString());
+            System.out.println("\nYour cards:\n" + hands[player].toString(placePile));
             System.out.print("\nWhat card would you like to play or would you like to draw? (1-" + hands[player].length() + "/'draw','d'): ");
             String cardToPlay = TextIO.getlnString().toLowerCase();
             boolean actionTaken = false;
