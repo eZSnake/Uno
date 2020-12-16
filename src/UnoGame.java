@@ -29,6 +29,9 @@ public class UnoGame { //Eike Rehwald
             if (!canPlayACard(player)) {
                 System.out.println("You do not have a card to play. A card will be automatically drawn for you");
                 hands[player].addCard(deck.deal());
+                if (!playable() && !canPlayACard(player) && !canPlayACard(nextPlayer(player, hands.length))) {
+                    break;
+                }
                 player = nextPlayer(player, hands.length);
                 continue;
             }
@@ -76,7 +79,7 @@ public class UnoGame { //Eike Rehwald
                 return false;
             }
         }
-        return deck.cardsLeft() >= 0;
+        return deck.cardsLeft() > 0;
     }
 
     private boolean isInt(String card) {
