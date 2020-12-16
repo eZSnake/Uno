@@ -44,11 +44,8 @@ public class UnoGame { //Eike Rehwald
                     actionTaken = true;
                 } else if (isInt(cardToPlay)) {
                     cardInt = Integer.parseInt(cardToPlay);
-                    if (cardInt < 1 || cardInt > hands[player].length()) {
-                        System.out.print("That is an invalid number. Enter one between 1 and " + hands[player].length() + " or 'draw'/'d': ");
-                        cardToPlay = TextIO.getlnString();
-                    } else if (!(hands[player].getCard(cardInt-1)).isPlayable(placePile)) {
-                        System.out.print("That card can't be played. Enter another one or 'draw'/'d': ");
+                    if (cardInt < 1 || cardInt > hands[player].length() || !(hands[player].getCard(cardInt-1)).isPlayable(placePile)) {
+                        System.out.print("That is an invalid entry. Enter one between 1 and " + hands[player].length() + " or 'draw'/'d': ");
                         cardToPlay = TextIO.getlnString();
                     } else {
                         actionTaken = true;
