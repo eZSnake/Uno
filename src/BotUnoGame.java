@@ -73,8 +73,10 @@ public class BotUnoGame {
                     cardToPlay = TextIO.getlnString();
                 }
             }
-            placePile = hands[player].getCard(cardInt-1);
-            hands[player].removeCard(cardInt-1);
+            if (cardInt != -1) {
+                placePile = hands[player].getCard(cardInt - 1);
+                hands[player].removeCard(cardInt - 1);
+            }
             if (hands[player].length() <= 0) {
                 break;
             }

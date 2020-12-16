@@ -47,6 +47,7 @@ public class UnoGame { //Eike Rehwald
                     if (cardInt < 1 || cardInt > hands[player].length() || !(hands[player].getCard(cardInt-1)).isPlayable(placePile)) {
                         System.out.print("That is an invalid entry. Enter one between 1 and " + hands[player].length() + " or 'draw'/'d': ");
                         cardToPlay = TextIO.getlnString();
+                        cardInt = -1;
                     } else {
                         actionTaken = true;
                     }
@@ -55,8 +56,10 @@ public class UnoGame { //Eike Rehwald
                     cardToPlay = TextIO.getlnString();
                 }
             }
-            placePile = hands[player].getCard(cardInt - 1);
-            hands[player].removeCard(cardInt - 1);
+            if (cardInt != -1) {
+                placePile = hands[player].getCard(cardInt - 1);
+                hands[player].removeCard(cardInt - 1);
+            }
             if (hands[player].length() <= 0) {
                 break;
             }
@@ -77,6 +80,7 @@ public class UnoGame { //Eike Rehwald
     }
 
     private boolean isInt(String card) {
+        //determines if the value the player has selected for which card to play is an integer
         try {
             Integer.parseInt(card);
         } catch (NumberFormatException nfe) {
@@ -86,6 +90,7 @@ public class UnoGame { //Eike Rehwald
     }
 
     private int nextPlayer(int currPlayer, int players) {
+        //determines which player goes next, taking into account the direction and if the next player is supposed to be skipped
         int nextPlayer;
         if (!rev && !skip) {
             nextPlayer = Math.floorMod(currPlayer + 1, players);
@@ -100,6 +105,7 @@ public class UnoGame { //Eike Rehwald
     }
 
     private String determineWinner() {
+        //determines which, if any, player has won or if the game is a draw
         for (int i = 0; i < hands.length; i++) {
             if (hands[i].length() == 0) {
                 return "Player " + (i+1) + " has won the game!\nCongratulations!";
@@ -109,6 +115,7 @@ public class UnoGame { //Eike Rehwald
     }
 
     private boolean canPlayACard(int player) {
+        //checks if a player has a card to play
         for (int i = 0; i < hands[player].length(); i++) {
             if (hands[player].getCard(i).isPlayable(placePile)) {
                 return true;
@@ -118,6 +125,7 @@ public class UnoGame { //Eike Rehwald
     }
 
     private void switchSkip() {
+        //checks to make sure that skips and switches aren't done more than once if another card isn't placed on top
         if (placePile instanceof Skip && !((Skip) placePile).getHasSkipped()) {
             skip = true;
             ((Skip) placePile).setHasSkipped(true);
