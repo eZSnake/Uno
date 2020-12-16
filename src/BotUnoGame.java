@@ -1,13 +1,14 @@
-public class UnoGame { //Eike Rehwald
+public class BotUnoGame {
     private final Deck deck;
     private Card placePile;
     private final Hand[] hands;
-    private boolean rev = false, skip = false;
+    private boolean rev = false, skip = false, botTurn = false;
+    private BasicBot bot = new BasicBot();
 
-    public UnoGame(int players) {
+    public BotUnoGame() {
         deck = new Deck();
-        deck.shuffle(players);
-        hands = new Hand[players];
+        deck.shuffle(2);
+        hands = new Hand[2];
         for (int i = 0; i < hands.length; i++) {
             hands[i] = new Hand();
             for (int j = 0; j < 7; j++) {
@@ -23,19 +24,34 @@ public class UnoGame { //Eike Rehwald
     }
 
     public void playRounds(int player) {
+        String cardToPlay, col;
         while (playable()) {
             skip = false;
-            System.out.println("\n\n-=-= Player " + (player + 1) + "'s turn =-=-\n");
+            if (player == 0) {
+                System.out.println("\n\n-=-= Your turn =-=-\n");
+            } else {
+                System.out.println("\n\n-=-= Bot's turn =-=-\n");
+            }
             if (!canPlayACard(player)) {
-                System.out.println("You do not have a card to play. A card will be automatically drawn for you");
+                if (!botTurn) {
+                    System.out.println("You do not have a card to play. A card will be automatically drawn for you");
+                } else {
+                    System.out.println("The bot doesn't have a playable card. A card will be drawn for it.");
+                }
                 hands[player].addCard(deck.deal());
                 player = nextPlayer(player, hands.length);
                 continue;
             }
-            System.out.println("Place pile card:\n" + placePile.toString());
-            System.out.println("\nYour cards:\n" + hands[player].toString(placePile));
-            System.out.print("\nWhat card would you like to play or would you like to draw? (1-" + hands[player].length() + "/'draw','d'): ");
-            String cardToPlay = TextIO.getlnString().toLowerCase();
+            if (!botTurn) {
+                System.out.println("Place pile card:\n" + placePile.toString());
+                System.out.println("\nYour cards:\n" + hands[player].toString(placePile));
+                System.out.print("\nWhat card would you like to play or would you like to draw? (1-" + hands[player].length() + "/'draw','d'): ");
+                cardToPlay = TextIO.getlnString().toLowerCase();
+            } else {
+                System.out.println("Bot's cards:\n" + hands[1].toString(placePile));
+                cardToPlay = bot.playCard(hands[1], placePile);
+                System.out.println("Bot's play: " + cardToPlay);
+            }
             boolean actionTaken = false;
             int cardInt = -1;
             while (!actionTaken) {
@@ -66,7 +82,12 @@ public class UnoGame { //Eike Rehwald
                 if (hands[player].length() <= 0) {
                     break;
                 }
-                placePile.specialMove(deck, hands, player, "");
+                if (botTurn) {
+                    col = bot.chooseColor(hands[1]);
+                } else {
+                    col = "";
+                }
+                placePile.specialMove(deck, hands, player, col);
             }
             if (placePile instanceof Skip || placePile instanceof Plus2 || placePile instanceof Plus4) {
                 if (placePile instanceof Skip) {
@@ -98,12 +119,7 @@ public class UnoGame { //Eike Rehwald
     }
 
     private boolean playable() {
-        for (int i = 0; i < hands.length; i++) {
-            if (hands[i].length() == 0) {
-                return false;
-            }
-        }
-        return deck.cardsLeft() >= 0;
+        return deck.cardsLeft() > 0;
     }
 
     private boolean isInt(String card) {
@@ -119,23 +135,16 @@ public class UnoGame { //Eike Rehwald
         int nextPlayer;
         if (!rev && !skip) {
             nextPlayer = Math.floorMod(currPlayer + 1, players);
+            botTurn = !botTurn;
         } else if (!rev){
             nextPlayer = Math.floorMod(currPlayer + 2, players);
         } else if (!skip) {
             nextPlayer = Math.floorMod(currPlayer - 1, players);
+            botTurn = !botTurn;
         } else {
             nextPlayer = Math.floorMod(currPlayer-2, players);
         }
         return nextPlayer;
-    }
-
-    private String determineWinner() {
-        for (int i = 0; i < hands.length; i++) {
-            if (hands[i].length() == 0) {
-                return "Player " + (i+1) + " has won the game!\nCongratulations!";
-            }
-        }
-        return "There are no cards left to draw. It's a tie.";
     }
 
     private boolean canPlayACard(int player) {
@@ -145,5 +154,14 @@ public class UnoGame { //Eike Rehwald
             }
         }
         return false;
+    }
+
+    private String determineWinner() {
+        if (hands[0].length() == 0) {
+            return "You have won the game!\nCongratulations!";
+        } else if (hands[1].length() == 0) {
+            return "The Bot has won the game!\nBetter luck next time!";
+        }
+        return "There are no cards left to draw. It's a tie.";
     }
 }

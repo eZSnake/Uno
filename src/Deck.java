@@ -85,7 +85,7 @@ public class Deck {
         for (i = 104; i < 108; i++) {
             cards[i] = new Plus4();
         }
-        printDeck();
+//        printDeck();  //Uncomment to print out the entire deck at the beginning
     }
 
     public void shuffle(int players) {
