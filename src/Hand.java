@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 public class Hand {
     private ArrayList<Card> hand = new ArrayList<Card>();
-    private boolean Star;
+    private boolean Star = true;
 
     public Hand() { }
 
