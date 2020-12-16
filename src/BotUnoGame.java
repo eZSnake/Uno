@@ -1,4 +1,4 @@
-public class BotUnoGame {
+public class BotUnoGame {  //Eike Rehwald
     private final Deck deck;
     private Card placePile;
     private final Hand[] hands;
@@ -99,6 +99,7 @@ public class BotUnoGame {
     }
 
     private boolean playable() {
+        //checks if everyone has more than 0 cards on their hand and that there are more than 0 cards left to draw
         for (int i = 0; i < hands.length; i++) {
             if (hands[i].length() == 0) {
                 return false;
@@ -108,6 +109,7 @@ public class BotUnoGame {
     }
 
     private boolean isInt(String card) {
+        //determines if the value the player has selected for which card to play is an integer
         try {
             Integer.parseInt(card);
         } catch (NumberFormatException nfe) {
@@ -117,6 +119,7 @@ public class BotUnoGame {
     }
 
     private int nextPlayer(int currPlayer, int players) {
+        //determines which player goes next, taking into account the direction and if the next player is supposed to be skipped
         int nextPlayer;
         if (!rev && !skip) {
             nextPlayer = Math.floorMod(currPlayer + 1, players);
@@ -133,6 +136,7 @@ public class BotUnoGame {
     }
 
     private boolean canPlayACard(int player) {
+        //checks if a player has a card to play
         for (int i = 0; i < hands[player].length(); i++) {
             if (hands[player].getCard(i).isPlayable(placePile)) {
                 return true;
@@ -142,6 +146,7 @@ public class BotUnoGame {
     }
 
     private String determineWinner() {
+        //determines which, if any, player has won or if the game is a draw
         if (hands[0].length() == 0) {
             return "You have won the game!\nCongratulations!";
         } else if (hands[1].length() == 0) {
@@ -151,6 +156,7 @@ public class BotUnoGame {
     }
 
     private void switchSkip() {
+        //checks to make sure that skips and switches aren't done more than once if another card isn't placed on top
         if (placePile instanceof Skip && !((Skip) placePile).getHasSkipped()) {
             skip = true;
             ((Skip) placePile).setHasSkipped(true);

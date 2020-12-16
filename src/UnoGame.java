@@ -1,4 +1,4 @@
-public class UnoGame { //Eike Rehwald
+public class UnoGame {  //Eike Rehwald
     private final Deck deck;
     private Card placePile;
     private final Hand[] hands;
@@ -74,6 +74,7 @@ public class UnoGame { //Eike Rehwald
     }
 
     private boolean playable() {
+        //checks if everyone has more than 0 cards on their hand and that there are more than 0 cards left to draw
         for (int i = 0; i < hands.length; i++) {
             if (hands[i].length() == 0) {
                 return false;
