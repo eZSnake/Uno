@@ -47,10 +47,12 @@ public class BotUnoGame {
                         + "\n\nYour cards:\n" + hands[player].toString(placePile)
                         + "\n\nWhat card would you like to play or would you like to draw? (1-" + hands[player].length() + "/'draw','d'): ");
                 cardToPlay = TextIO.getlnString().toLowerCase();
-            } else {
-                System.out.println("Bot's cards:\n" + hands[1].toString(placePile));
+            }
+            else {
+                //Uncomment the System.outs to see the bot's cards and what it chooses
+//                System.out.println("Bot's cards:\n" + hands[1].toString(placePile));
                 cardToPlay = bot.playCard(hands[1], placePile);
-                System.out.println("Bot's play: " + cardToPlay);
+//                System.out.println("Bot's play: " + cardToPlay);
             }
             boolean actionTaken = false;
             int cardInt = -1;
@@ -95,7 +97,12 @@ public class BotUnoGame {
     }
 
     private boolean playable() {
-        return deck.cardsLeft() > 0;
+        for (int i = 0; i < hands.length; i++) {
+            if (hands[i].length() == 0) {
+                return false;
+            }
+        }
+        return deck.cardsLeft() >= 0;
     }
 
     private boolean isInt(String card) {

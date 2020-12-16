@@ -10,7 +10,8 @@ public class BasicBot {
                 playableCards.add(i+1);
             }
         }
-        System.out.println(playableCards.toString());
+        //Uncomment to see the cards the bot chooses from
+//        System.out.println(playableCards.toString());
         return "" + playableCards.get((int)(playableCards.size()*Math.random()));
     }
 
