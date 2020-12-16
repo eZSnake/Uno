@@ -1,13 +1,17 @@
+import java.util.ArrayList;
+
 public class BasicBot {
     public BasicBot() {}
 
     public String playCard(Hand hand, Card placePile) {
+        ArrayList<Integer> playableCards = new ArrayList<Integer>();
         for (int i = 0; i < hand.length(); i++) {
             if (hand.getCard(i).isPlayable(placePile)) {
-                return "" + (i+1);
+                playableCards.add(i+1);
             }
         }
-        return "d";
+        System.out.println(playableCards.toString());
+        return "" + playableCards.get((int)(playableCards.size()*Math.random()));
     }
 
     public String chooseColor(Hand hand) {
