@@ -52,7 +52,11 @@ public class UnoGame { //Eike Rehwald
                     // criteria to check:
                     // is numeric or string 'd, draw'
                     // is 1..handlength
-                    validPick = isValidPick(cardToPlay, hands[player].length());
+                    validPick = isValidPick(cardToPlay, hands[player]);
+                    if (!validPick) {
+                        System.out.print("Invalid pick. Enter a number between 1 and " + hands[player].length()
+                            + " one or 'draw'/'d': ");
+                    }
                 }
                 
                 if (cardToPlay.equals("draw") || cardToPlay.equals("d")) {
@@ -165,19 +169,17 @@ public class UnoGame { //Eike Rehwald
             return false;
         }
         
-        private boolean isValidPick(String cardToPlay, int cardsOnHand) {
+        private boolean isValidPick(String cardToPlay, Hand playersHand) {
             if (cardToPlay.equals("draw") || cardToPlay.equals("d")) {
                 return true;
             }
             if ((!isInt(cardToPlay)) 
                 || (Integer.parseInt(cardToPlay) < 1) 
-                    || (Integer.parseInt(cardToPlay) > cardsOnHand)
+                || (Integer.parseInt(cardToPlay) > playersHand.length())
             ) {
-                System.out.print("Invalid pick. Enter a number between 1 and " 
-                + cardsOnHand + " one or 'draw'/'d': ");
                 return false;
             }
-            return true;
+            return playersHand.getCard(Integer.parseInt(cardToPlay)-1).isPlayable(placePile);
         }
     }
     
