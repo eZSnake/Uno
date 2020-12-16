@@ -1,4 +1,4 @@
-public class UnoRunner { //Eike Rehwald
+public class UnoRunner {  //Eike Rehwald
     public static void main(String[] args) {
         System.out.println("Welcome to the game of Uno.\nEach player starts with 7 cards and first with 0 left wins.\nThe same color can go on the same color, " +
                 "the same number can go on the same number, and wish cards can go on any card.\nIf you can't go, you draw a card.\n" +

@@ -1,9 +1,9 @@
-public class BotUnoGame {
+public class BotUnoGame {  //Eike Rehwald
     private final Deck deck;
     private Card placePile;
     private final Hand[] hands;
     private boolean rev = false, skip = false, botTurn = false;
-    private BasicBot bot = new BasicBot();
+    private final BasicBot bot = new BasicBot();
 
     public BotUnoGame() {
         deck = new Deck();
@@ -43,70 +43,50 @@ public class BotUnoGame {
                 continue;
             }
             if (!botTurn) {
-                System.out.println("Place pile card:\n" + placePile.toString());
-                System.out.println("\nYour cards:\n" + hands[player].toString(placePile));
-                System.out.print("\nWhat card would you like to play or would you like to draw? (1-" + hands[player].length() + "/'draw','d'): ");
+                System.out.print("Place pile card:\n" + placePile.toString()
+                        + "\n\nYour cards:\n" + hands[player].toString(placePile)
+                        + "\n\nWhat card would you like to play or would you like to draw? (1-" + hands[player].length() + "/'draw','d'): ");
                 cardToPlay = TextIO.getlnString().toLowerCase();
-            } else {
-                System.out.println("Bot's cards:\n" + hands[1].toString(placePile));
+            }
+            else {
+                //Uncomment the System.outs to see the bot's cards and what it chooses
+//                System.out.println("Bot's cards:\n" + hands[1].toString(placePile));
                 cardToPlay = bot.playCard(hands[1], placePile);
-                System.out.println("Bot's play: " + cardToPlay);
+//                System.out.println("Bot's play: " + cardToPlay);
             }
             boolean actionTaken = false;
             int cardInt = -1;
             while (!actionTaken) {
-                if (isInt(cardToPlay)) {
+                if (cardToPlay.equals("draw") || cardToPlay.equals("d")) {
+                    hands[player].addCard(deck.deal());
+                    actionTaken = true;
+                } else if (isInt(cardToPlay)) {
                     cardInt = Integer.parseInt(cardToPlay);
-                    if (cardInt < 1 || cardInt > hands[player].length()) {
-                        System.out.print("That is an invalid number. Enter one between 1 and " + hands[player].length() + " or 'draw'/'d': ");
+                    if (cardInt < 1 || cardInt > hands[player].length() || !(hands[player].getCard(cardInt-1)).isPlayable(placePile)) {
+                        System.out.print("That is an invalid entry. Enter one between 1 and " + hands[player].length() + " or 'draw'/'d': ");
                         cardToPlay = TextIO.getlnString();
-                        cardInt = -1;
-                    } else if (!(hands[player].getCard(cardInt-1)).isPlayable(placePile)) {
-                        System.out.print("That card can't be played. Enter another one or 'draw'/'d': ");
-                        cardToPlay = TextIO.getlnString();
-                        cardInt = -1;
                     } else {
                         actionTaken = true;
                     }
-                } else if (cardToPlay.equals("draw") || cardToPlay.equals("d")) {
-                    hands[player].addCard(deck.deal());
-                    actionTaken = true;
                 } else {
                     System.out.print("That isn't a valid value. Enter 'draw', 'd', or a number from 1 to " + hands[player].length() + ": ");
                     cardToPlay = TextIO.getlnString();
                 }
             }
             if (cardInt != -1) {
-                placePile = hands[player].getCard(cardInt-1);
-                hands[player].removeCard(cardInt-1);
-                if (hands[player].length() <= 0) {
-                    break;
-                }
-                if (botTurn) {
-                    col = bot.chooseColor(hands[1]);
-                } else {
-                    col = "";
-                }
-                placePile.specialMove(deck, hands, player, col);
+                placePile = hands[player].getCard(cardInt - 1);
+                hands[player].removeCard(cardInt - 1);
             }
-            if (placePile instanceof Skip || placePile instanceof Plus2 || placePile instanceof Plus4) {
-                if (placePile instanceof Skip) {
-                    if (!((Skip) placePile).getHasSkipped()) {
-                        skip = true;
-                        ((Skip) placePile).setHasSkipped(true);
-                    }
-                } else if (placePile instanceof Plus2) {
-                    if (!((Plus2) placePile).getHasSkipped()) {
-                        skip = true;
-                        ((Plus2) placePile).setHasSkipped(true);
-                    }
-                } else {
-                    if (!((Plus4) placePile).getHasSkipped()) {
-                        skip = true;
-                        ((Plus4) placePile).setHasSkipped(true);
-                    }
-                }
+            if (hands[player].length() <= 0) {
+                break;
             }
+            if (botTurn) {
+                col = bot.chooseColor(hands[1]);
+            } else {
+                col = "";
+            }
+            placePile.specialMove(deck, hands, player, col);
+            switchSkip();
             if (placePile instanceof Switch) {
                 if (!((Switch) placePile).getHasSwitched()) {
                     rev = !rev;
@@ -119,10 +99,17 @@ public class BotUnoGame {
     }
 
     private boolean playable() {
-        return deck.cardsLeft() > 0;
+        //checks if everyone has more than 0 cards on their hand and that there are more than 0 cards left to draw
+        for (int i = 0; i < hands.length; i++) {
+            if (hands[i].length() == 0) {
+                return false;
+            }
+        }
+        return deck.cardsLeft() >= 0;
     }
 
     private boolean isInt(String card) {
+        //determines if the value the player has selected for which card to play is an integer
         try {
             Integer.parseInt(card);
         } catch (NumberFormatException nfe) {
@@ -132,6 +119,7 @@ public class BotUnoGame {
     }
 
     private int nextPlayer(int currPlayer, int players) {
+        //determines which player goes next, taking into account the direction and if the next player is supposed to be skipped
         int nextPlayer;
         if (!rev && !skip) {
             nextPlayer = Math.floorMod(currPlayer + 1, players);
@@ -148,6 +136,7 @@ public class BotUnoGame {
     }
 
     private boolean canPlayACard(int player) {
+        //checks if a player has a card to play
         for (int i = 0; i < hands[player].length(); i++) {
             if (hands[player].getCard(i).isPlayable(placePile)) {
                 return true;
@@ -157,11 +146,32 @@ public class BotUnoGame {
     }
 
     private String determineWinner() {
+        //determines which, if any, player has won or if the game is a draw
         if (hands[0].length() == 0) {
             return "You have won the game!\nCongratulations!";
         } else if (hands[1].length() == 0) {
             return "The Bot has won the game!\nBetter luck next time!";
         }
         return "There are no cards left to draw. It's a tie.";
+    }
+
+    private void switchSkip() {
+        //checks to make sure that skips and switches aren't done more than once if another card isn't placed on top
+        if (placePile instanceof Skip && !((Skip) placePile).getHasSkipped()) {
+            skip = true;
+            ((Skip) placePile).setHasSkipped(true);
+        }
+        if (placePile instanceof Plus2 && !((Plus2) placePile).getHasSkipped()) {
+            skip = true;
+            ((Plus2) placePile).setHasSkipped(true);
+        }
+        if (placePile instanceof Plus4 && !((Plus4) placePile).getHasSkipped()) {
+            skip = true;
+            ((Plus4) placePile).setHasSkipped(true);
+        }
+        if (placePile instanceof Switch && !((Switch) placePile).getHasSwitched()) {
+            rev = !rev;
+            ((Switch) placePile).setHasSwitched(true);
+        }
     }
 }
