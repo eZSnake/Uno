@@ -7,6 +7,6 @@ public class NumCol extends Card {
         return getColor() + " " + getNum();
     }
 
-    public void specialMove(Deck deck, Hand[] hands, int currPlayer) {
+    public void specialMove(Deck deck, Hand[] hands, int currPlayer, String col) {
     }
 }
