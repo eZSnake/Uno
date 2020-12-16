@@ -14,6 +14,11 @@ public class UnoGame { //Eike Rehwald
                 hands[i].addCard(deck.deal());
             }
         }
+        //Uncomment below to print out all player's starting hands
+//        for (int i = 0; i < hands.length; i++) {
+//            System.out.println("Player " + (i+1) + "'s Hand:");
+//            System.out.println(hands[i].toString());
+//        }
         placePile = deck.deal();
     }
 
