@@ -11,21 +11,47 @@ public class BasicBot {
     }
 
     public String chooseColor(Hand hand) {
+//        for (int i = 0; i < hand.length(); i++) {
+//            if (hand.getCard(i) instanceof NumCol) {
+//                return hand.getCard(i).getColor();
+//            }
+//        }
+//        int randCol = (int)(4*Math.random());
+//        switch (randCol) {
+//            case 0:
+//                return "Blue";
+//            case 1:
+//                return "Green";
+//            case 2:
+//                return "Red";
+//            default:
+//                return "Yellow";
+//        }
+        int blueCards = 0;
+        int greenCards = 0;
+        int redCards = 0;
+        int yellowCards = 0;
         for (int i = 0; i < hand.length(); i++) {
-            if (hand.getCard(i) instanceof NumCol) {
-                return hand.getCard(i).getColor();
+            String col = hand.getCard(i).getColor();
+            switch (col) {
+                case "Blue":
+                    blueCards++;
+                case "Green":
+                    greenCards++;
+                case "Red":
+                    redCards++;
+                default:
+                    yellowCards++;
             }
         }
-        int randCol = (int)(4*Math.random());
-        switch (randCol) {
-            case 0:
-                return "Blue";
-            case 1:
-                return "Green";
-            case 2:
-                return "Red";
-            default:
-                return "Yellow";
+        if (blueCards >= greenCards && blueCards >= redCards && blueCards >= yellowCards) {
+            return "Blue";
+        } else if (greenCards >= blueCards && greenCards >= redCards && greenCards >= yellowCards) {
+            return "Red";
+        } else if (redCards >= blueCards && redCards >= greenCards && redCards >= yellowCards) {
+            return "Red";
+        } else {
+            return "Yellow";
         }
     }
 }
