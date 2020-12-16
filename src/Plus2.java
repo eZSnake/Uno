@@ -10,7 +10,7 @@ public class Plus2 extends Card {
         return getColor() + " +2";
     }
 
-    public void specialMove(Deck deck, Hand[] hands, int currPlayer, String col) {
+    public void specialMove(Deck deck, Hand[] hands, int currPlayer) {
         if (currPlayer < hands.length-1) {
             currPlayer++;
         } else {

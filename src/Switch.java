@@ -10,7 +10,7 @@ public class Switch extends Card {
         return getColor() + " Switch";
     }
 
-    public void specialMove(Deck deck, Hand[] hands, int currPlayer, String col) {
+    public void specialMove(Deck deck, Hand[] hands, int currPlayer) {
     }
 
     public boolean getHasSwitched() {

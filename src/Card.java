@@ -10,7 +10,7 @@ public abstract class Card {
 
     public abstract String toString();
 
-    public abstract void specialMove(Deck deck, Hand[] hands, int currPlayer, String col);
+    public abstract void specialMove(Deck deck, Hand[] hands, int currPlayer);
 
     public int getNum() {
         return num;

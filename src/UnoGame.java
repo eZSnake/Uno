@@ -22,7 +22,7 @@ public class UnoGame { //Eike Rehwald
         placePile = deck.deal();
     }
 
-    public void playRounds(int player) {
+    public void playRound(int player) {
         while (playable()) {
             skip = false;
             System.out.println("\n\n-=-= Player " + (player + 1) + "'s turn =-=-\n");
@@ -66,7 +66,7 @@ public class UnoGame { //Eike Rehwald
                 if (hands[player].length() <= 0) {
                     break;
                 }
-                placePile.specialMove(deck, hands, player, "");
+                placePile.specialMove(deck, hands, player);
             }
             if (placePile instanceof Skip || placePile instanceof Plus2 || placePile instanceof Plus4) {
                 if (placePile instanceof Skip) {
