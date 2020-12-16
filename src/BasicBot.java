@@ -15,22 +15,6 @@ public class BasicBot {
     }
 
     public String chooseColor(Hand hand) {
-//        for (int i = 0; i < hand.length(); i++) {
-//            if (hand.getCard(i) instanceof NumCol) {
-//                return hand.getCard(i).getColor();
-//            }
-//        }
-//        int randCol = (int)(4*Math.random());
-//        switch (randCol) {
-//            case 0:
-//                return "Blue";
-//            case 1:
-//                return "Green";
-//            case 2:
-//                return "Red";
-//            default:
-//                return "Yellow";
-//        }
         int blueCards = 0;
         int greenCards = 0;
         int redCards = 0;
