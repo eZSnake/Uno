@@ -32,12 +32,8 @@ public class BotUnoGame {
             } else {
                 System.out.println("\n\n-=-= Bot's turn =-=-\n");
             }
-            if (!canPlayACard(player)) {
-                if (!botTurn) {
-                    System.out.println("You do not have a card to play. A card will be automatically drawn for you");
-                } else {
-                    System.out.println("The bot doesn't have a playable card. A card will be drawn for it.");
-                }
+            if (!canPlayACard(player) && !botTurn) {
+                System.out.println("You do not have a card to play. A card will be automatically drawn for you");
                 hands[player].addCard(deck.deal());
                 player = nextPlayer(player, hands.length);
                 continue;
