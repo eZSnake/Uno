@@ -31,12 +31,45 @@ public class Hand {
             if (Star && hand.get(i).isPlayable(placePile)) {
                 ret.append("(*) ");
             }
-            ret.append("Card " + (i+1) + ": " + hand.get(i)).append("\n");
+            System.out.println(hand.get(i).getColor());
+            switch (hand.get(i).getColor()) {
+                case "Blue":
+                    ret.append("\033[1;38;5;20m");
+                    break;
+                case "Green":
+                    ret.append("\033[1;38;5;40m");
+                    break;
+                case "Red":
+                    ret.append("\033[1;38;5;196m");
+                    break;
+                case "Yellow":
+                    ret.append("\033[1;93m");
+                    break;
+                default:
+                    ret.append("\033[1;97m");
+            }
+            ret.append("Card " + (i+1) + ": " + hand.get(i)).append("\033[0m\n");
         }
         if (Star && hand.get(hand.size()-1).isPlayable(placePile)) {
             ret.append("(*) ");
         }
-        ret.append("Card " + hand.size() + ": " + hand.get(hand.size()-1));
+        switch (hand.get(hand.size()-1).getColor()) {
+            case "Blue":
+                ret.append("\033[1;38;5;20m");
+                break;
+            case "Green":
+                ret.append("\033[1;38;5;40m");
+                break;
+            case "Red":
+                ret.append("\033[1;38;5;196m");
+                break;
+            case "Yellow":
+                ret.append("\033[1;93m");
+                break;
+            default:
+                ret.append("\033[1;97m");
+        }
+        ret.append("Card " + hand.size() + ": " + hand.get(hand.size()-1) + "\033[0m");
         return ret.toString();
     }
 
