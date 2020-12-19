@@ -31,7 +31,6 @@ public class Hand {
             if (Star && hand.get(i).isPlayable(placePile)) {
                 ret.append("(*) ");
             }
-            System.out.println(hand.get(i).getColor());
             switch (hand.get(i).getColor()) {
                 case "Blue":
                     ret.append("\033[1;38;5;20m");

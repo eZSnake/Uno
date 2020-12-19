@@ -43,8 +43,8 @@ public class BotUnoGame {  //Eike Rehwald
                 continue;
             }
             if (!botTurn) {
-                System.out.print("Place pile card:\n" + placePile.toString()
-                        + "\n\nYour cards:\n" + hands[player].toString(placePile)
+                System.out.print("Place pile card:\n" + placePileCardColor());
+                System.out.print("\n\nYour cards:\n" + hands[player].toString(placePile)
                         + "\n\nWhat card would you like to play or would you like to draw? (1-" + hands[player].length() + "/'draw','d'): ");
                 cardToPlay = TextIO.getlnString().toLowerCase();
             }
@@ -173,5 +173,27 @@ public class BotUnoGame {  //Eike Rehwald
             rev = !rev;
             ((Switch) placePile).setHasSwitched(true);
         }
+    }
+
+    private StringBuilder placePileCardColor() {
+        StringBuilder placePileCard = new StringBuilder();
+        switch (placePile.getColor()) {
+            case "Blue":
+                placePileCard.append("\033[1;38;5;20m");
+                break;
+            case "Green":
+                placePileCard.append("\033[1;38;5;40m");
+                break;
+            case "Red":
+                placePileCard.append("\033[1;38;5;196m");
+                break;
+            case "Yellow":
+                placePileCard.append("\033[1;93m");
+                break;
+            default:
+                placePileCard.append("\033[1;97m");
+        }
+        placePileCard.append(placePile.toString()).append("\033[0m\n");
+        return placePileCard;
     }
 }
