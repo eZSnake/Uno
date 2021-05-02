@@ -40,6 +40,10 @@ public abstract class Card {
         this.color = color;
     }
 
+    public BufferedImage getImage() {
+        return image;
+    }
+
     public boolean isPlayable(Card placePile) {
         return (id == 4 || color.equals(placePile.getColor()) || num == placePile.getNum());
     }
