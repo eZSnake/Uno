@@ -1,6 +1,8 @@
+import java.awt.image.BufferedImage;
+
 public class ChangeCol extends Card {
-    public ChangeCol() {
-        super("", 4, -4);
+    public ChangeCol(BufferedImage img) {
+        super("", 4, -4, img);
     }
 
     public String toString() {

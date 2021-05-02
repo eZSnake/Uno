@@ -1,8 +1,10 @@
+import java.awt.image.BufferedImage;
+
 public class Switch extends Card {
     private boolean hasSwitched;
 
-    public Switch(String col) {
-        super(col, 1, -1);
+    public Switch(String col, BufferedImage img) {
+        super(col, 1, -1, img);
         hasSwitched = false;
     }
 

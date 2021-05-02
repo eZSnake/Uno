@@ -1,11 +1,15 @@
+import java.awt.image.BufferedImage;
+
 public abstract class Card {
     private int num, id;
     private String color;
+    private BufferedImage image;
 
-    public Card(String col, int id, int num) {
+    public Card(String col, int id, int num, BufferedImage img) {
         color = col;
         this.id = id;
         this.num = num;
+        image = img;
     }
 
     public abstract String toString();

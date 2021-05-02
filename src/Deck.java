@@ -1,8 +1,13 @@
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.Random;
 
 public class Deck {
     private int cardsDealt = 0;
     private final Card[] cards = new Card[108];
+    private BufferedImage img;
 
     public Deck() {
         int i;
@@ -12,17 +17,29 @@ public class Deck {
             if (i%2 == 0) {
                 numToSet--;
             }
-            cards[i] = new NumCol("Blue", numToSet);
+            try {
+                img = ImageIO.read(new File("blue" + i + ".jpg"));
+            } catch (IOException ignored) {}
+            cards[i] = new NumCol("Blue", numToSet, img);
             numToSet++;
         }
         for (i = 19; i < 21; i++) {
-            cards[i] = new Skip("Blue");
+            try {
+                img = ImageIO.read(new File("blueskip.jpg"));
+            } catch (IOException ignored) {}
+            cards[i] = new Skip("Blue", img);
         }
         for (i = 21; i < 23; i++) {
-            cards[i] = new Switch("Blue");
+            try {
+                img = ImageIO.read(new File("blueswitch.jpg"));
+            } catch (IOException ignored) {}
+            cards[i] = new Switch("Blue", img);
         }
         for (i = 23; i < 25; i++) {
-            cards[i] = new Plus2("Blue");
+            try {
+                img = ImageIO.read(new File("blueplus2.jpg"));
+            } catch (IOException ignored) {}
+            cards[i] = new Plus2("Blue", img);
         }
         //Green cards
         numToSet = 1;
@@ -30,17 +47,29 @@ public class Deck {
             if ((i-1)%2 == 0) {
                 numToSet--;
             }
-            cards[i] = new NumCol("Green", numToSet);
+            try {
+                img = ImageIO.read(new File("green" + i + ".jpg"));
+            } catch (IOException ignored) {}
+            cards[i] = new NumCol("Green", numToSet, img);
             numToSet++;
         }
         for (i = 44; i < 46; i++) {
-            cards[i] = new Skip("Green");
+            try {
+                img = ImageIO.read(new File("greenskip.jpg"));
+            } catch (IOException ignored) {}
+            cards[i] = new Skip("Green", img);
         }
         for (i = 46; i < 48; i++) {
-            cards[i] = new Switch("Green");
+            try {
+                img = ImageIO.read(new File("greenswitch.jpg"));
+            } catch (IOException ignored) {}
+            cards[i] = new Switch("Green", img);
         }
         for (i = 48; i < 50; i++) {
-            cards[i] = new Plus2("Green");
+            try {
+                img = ImageIO.read(new File("greenplus2.jpg"));
+            } catch (IOException ignored) {}
+            cards[i] = new Plus2("Green", img);
         }
         //Red cards
         numToSet = 1;
@@ -48,17 +77,29 @@ public class Deck {
             if (i%2 == 0) {
                 numToSet--;
             }
-            cards[i] = new NumCol("Red", numToSet);
+            try {
+                img = ImageIO.read(new File("red" + i + ".jpg"));
+            } catch (IOException ignored) {}
+            cards[i] = new NumCol("Red", numToSet, img);
             numToSet++;
         }
         for (i = 69; i < 71; i++) {
-            cards[i] = new Skip("Red");
+            try {
+                img = ImageIO.read(new File("redskip.jpg"));
+            } catch (IOException ignored) {}
+            cards[i] = new Skip("Red", img);
         }
         for (i = 71; i < 73; i++) {
-            cards[i] = new Switch("Red");
+            try {
+                img = ImageIO.read(new File("redswitch.jpg"));
+            } catch (IOException ignored) {}
+            cards[i] = new Switch("Red", img);
         }
         for (i = 73; i < 75; i++) {
-            cards[i] = new Plus2("Red");
+            try {
+                img = ImageIO.read(new File("redplus2.jpg"));
+            } catch (IOException ignored) {}
+            cards[i] = new Plus2("Red", img);
         }
         //Yellow cards
         numToSet = 1;
@@ -66,24 +107,42 @@ public class Deck {
             if ((i-1)%2 == 0) {
                 numToSet--;
             }
-            cards[i] = new NumCol("Yellow", numToSet);
+            try {
+                img = ImageIO.read(new File("yellow" + i + ".jpg"));
+            } catch (IOException ignored) {}
+            cards[i] = new NumCol("Yellow", numToSet, img);
             numToSet++;
         }
         for (i = 94; i < 96; i++) {
-            cards[i] = new Skip("Yellow");
+            try {
+                img = ImageIO.read(new File("yellowskip.jpg"));
+            } catch (IOException ignored) {}
+            cards[i] = new Skip("Yellow", img);
         }
         for (i = 96; i < 98; i++) {
-            cards[i] = new Switch("Yellow");
+            try {
+                img = ImageIO.read(new File("yellowswitch.jpg"));
+            } catch (IOException ignored) {}
+            cards[i] = new Switch("Yellow", img);
         }
         for (i = 98; i < 100; i++) {
-            cards[i] = new Plus2("Yellow");
+            try {
+                img = ImageIO.read(new File("yellowplus2.jpg"));
+            } catch (IOException ignored) {}
+            cards[i] = new Plus2("Yellow", img);
         }
         //Special cards
         for (i = 100; i < 104; i++) {
-            cards[i] = new ChangeCol();
+            try {
+                img = ImageIO.read(new File("changecol.jpg"));
+            } catch (IOException ignored) {}
+            cards[i] = new ChangeCol(img);
         }
         for (i = 104; i < 108; i++) {
-            cards[i] = new Plus4();
+            try {
+                img = ImageIO.read(new File("plus4.jpg"));
+            } catch (IOException ignored) {}
+            cards[i] = new Plus4(img);
         }
 //        printDeck();  //Uncomment to print out the entire deck at the beginning
     }

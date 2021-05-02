@@ -1,6 +1,8 @@
+import java.awt.image.BufferedImage;
+
 public class NumCol extends Card {
-    public NumCol(String col, int num) {
-        super(col, 0, num);
+    public NumCol(String col, int num, BufferedImage img) {
+        super(col, 0, num, img);
     }
 
     public String toString() {
