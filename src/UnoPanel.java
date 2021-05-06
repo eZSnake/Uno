@@ -12,8 +12,8 @@ public class UnoPanel extends JPanel {
         UnoPanel panel = new UnoPanel();
         UnoListener listener = new UnoListener(panel);
 
-//        window.setContentPane(menu(listener));
-        window.setContentPane(botPlayingScreen(listener));
+        window.setContentPane(menu(listener));
+//        window.setContentPane(botPlayingScreen(listener));
         window.setSize(800,600);
         window.setLocation(300,300);
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -44,7 +44,9 @@ public class UnoPanel extends JPanel {
         try {
             back = ImageIO.read(new File("UnoCards/back.png"));
         } catch (IOException ignored) {}
-        int targetWidth = 200, targetHeight = 286;
+//        int targetWidth = [blank].getWidth() / 4, targetHeight = targetWidth * 143 / 100;
+        int targetWidth = 200, targetHeight = targetWidth * 143 / 100;
+        System.out.println(menu.getWidth());
         Image resultingImage = back.getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
         BufferedImage outputImage = new BufferedImage(targetWidth, targetHeight, BufferedImage.TYPE_INT_RGB);
         outputImage.getGraphics().drawImage(resultingImage, 0, 0, null);
