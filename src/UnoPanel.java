@@ -12,7 +12,8 @@ public class UnoPanel extends JPanel {
         UnoPanel panel = new UnoPanel();
         UnoListener listener = new UnoListener(panel);
 
-        window.setContentPane(menu(listener));
+//        window.setContentPane(menu(listener));
+        window.setContentPane(botPlayingScreen(listener));
         window.setSize(800,600);
         window.setLocation(300,300);
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -52,9 +53,16 @@ public class UnoPanel extends JPanel {
         return menu;
     }
 
-    public static JPanel playingScreen(UnoListener listener) {
-        JPanel playingScreen = new JPanel();
-        playingScreen.setLayout(new BorderLayout());
-        return playingScreen;
+    public static JPanel botPlayingScreen(UnoListener listener) {
+        JPanel botPlayingScreen = new JPanel();
+        botPlayingScreen.setLayout(new BorderLayout());
+
+        JLabel botCards = new JLabel("Bot's cards: ");
+        botPlayingScreen.add(botCards, BorderLayout.NORTH);
+        JButton draw = new JButton("Draw");
+        draw.addActionListener(listener);
+        botPlayingScreen.add(draw, BorderLayout.SOUTH);
+
+        return botPlayingScreen;
     }
 }

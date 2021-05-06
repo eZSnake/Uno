@@ -1,6 +1,4 @@
-import javax.swing.*;
-
-public class BotUnoGame extends JPanel {  //Eike Rehwald
+public class BotUnoGame {  //Eike Rehwald
     private final Deck deck;
     private Card placePile;
     private final Hand[] hands;

@@ -17,10 +17,14 @@ public class UnoListener implements ActionListener, ChangeListener {
         String a = e.getActionCommand();
         if (a.equals("Bot")) {
             BotUnoGame botGame = new BotUnoGame();
+            //BotUnoGraphics botGame = new BotUnoGraphics();
             botGame.playRounds(0);
         } else if (a.equals("Players: ")) {
             UnoGame myGame = new UnoGame(playerCount);
             myGame.playRounds(0);
+        } else if (a.equals("Draw")) {
+            //draw card
+            System.out.println("Drawing card");
         }
     }
 
