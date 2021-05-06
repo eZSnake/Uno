@@ -18,6 +18,10 @@ public class BotUnoGraphics {
         placePile = deck.deal();
     }
 
+    public void playRounds(int player) {
+
+    }
+
     public void draw() {
         hands[0].addCard(deck.deal()); //0 placeholder
     }
