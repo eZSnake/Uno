@@ -30,8 +30,15 @@ public class BotUnoGraphics {
         }
     }
 
+    public void draw(int extPlayer) {
+        //checks if the player is trying to draw while the bot is playing
+        if (extPlayer == player) {
+            hands[player].addCard(deck.deal());
+        }
+    }
+
     public void draw() {
-        hands[player].addCard(deck.deal());
+        draw(player);
     }
 
     private boolean playable() {

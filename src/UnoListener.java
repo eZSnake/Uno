@@ -24,7 +24,7 @@ public class UnoListener implements ActionListener, ChangeListener {
             UnoGame myGame = new UnoGame(playerCount);
             myGame.playRounds(0);
         } else if (a.equals("Draw")) {
-            botGame.draw();
+            botGame.draw(0);
             System.out.println("Drawing card");
         }
     }
