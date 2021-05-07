@@ -6,6 +6,9 @@ import java.io.File;
 import java.io.IOException;
 
 public class UnoPanel extends JPanel {
+    static Container c;
+    static CardLayout screen;
+
     public static void main(String[] args) {
         JFrame window = new JFrame("Uno");
 
@@ -13,7 +16,15 @@ public class UnoPanel extends JPanel {
         UnoListener listener = new UnoListener(panel);
 
 //        window.setContentPane(menu(listener));
-        window.setContentPane(botPlayingScreen(listener));
+//        window.setContentPane(botPlayingScreen(listener));
+
+        screen = new CardLayout();
+        c = window.getContentPane();
+        c.setLayout(screen);
+        c.add(menu(listener));
+        c.add(botPlayingScreen(listener));
+        window.setContentPane(c);
+
         window.setSize(800,600);
         window.setLocation(300,300);
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -97,5 +108,9 @@ public class UnoPanel extends JPanel {
             cards.add(card);
         }
         return cards;
+    }
+
+    public void nextScreen() {
+        screen.next(c);
     }
 }

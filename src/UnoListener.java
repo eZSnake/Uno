@@ -19,6 +19,7 @@ public class UnoListener implements ActionListener, ChangeListener {
         if (a.equals("Bot")) {
 //            botGame = new BotUnoGraphics();
             botGame.playRounds();
+            panel.nextScreen();
         } else if (a.equals("Players: ")) {
             UnoGame myGame = new UnoGame(playerCount);
             myGame.playRounds(0);
