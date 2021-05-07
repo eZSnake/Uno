@@ -59,11 +59,27 @@ public class UnoPanel extends JPanel {
         JPanel botPlayingScreen = new JPanel();
         botPlayingScreen.setLayout(new BorderLayout());
 
-        JLabel cardsLeft = new JLabel("Cards left: Bot's cards: " + listener.pCardsLeft(1) + " - Player's cards: " + listener.pCardsLeft(0));
-        botPlayingScreen.add(cardsLeft, BorderLayout.NORTH);
+        JLabel pCardsLeft = new JLabel("Cards left: Bot's cards: " + listener.pCardsLeft(1) + " - Player's cards: " + listener.pCardsLeft(0));
+        botPlayingScreen.add(pCardsLeft, BorderLayout.NORTH);
+        JLabel cardsLeft = new JLabel("Cards in drawpile: " + listener.getCardsLeft() + "    ");
+        botPlayingScreen.add(cardsLeft, BorderLayout.EAST);
         JButton draw = new JButton("Draw");
         draw.addActionListener(listener);
-        botPlayingScreen.add(draw, BorderLayout.SOUTH);
+        int targetWidth = 100, targetHeight = targetWidth * 143 / 100;
+        JPanel cards = new JPanel();
+        Hand playerHand = listener.getPlayerHand();
+        for (int i = 0; i < playerHand.length(); i++) {
+            JButton card = new JButton(playerHand.getCard(i).toString());
+            Image img = playerHand.getCard(i).getImage().getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
+            card.setIcon(new ImageIcon(img));
+            card.addActionListener(listener);
+            cards.add(card);
+        }
+        JPanel bottom = new JPanel();
+        bottom.add(draw, BorderLayout.SOUTH);
+        bottom.add(cards, BorderLayout.NORTH);
+
+        botPlayingScreen.add(bottom, BorderLayout.SOUTH);
 
         return botPlayingScreen;
     }

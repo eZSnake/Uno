@@ -1,5 +1,5 @@
 import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.Random;
@@ -7,7 +7,7 @@ import java.util.Random;
 public class Deck {
     private int cardsDealt = 0;
     private final Card[] cards = new Card[108];
-    private BufferedImage img;
+    private Image img;
 
     public Deck() {
         int i;

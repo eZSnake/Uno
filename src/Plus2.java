@@ -1,9 +1,9 @@
-import java.awt.image.BufferedImage;
+import java.awt.*;
 
 public class Plus2 extends Card {
     private boolean hasSkipped;
 
-    public Plus2(String col, BufferedImage img) {
+    public Plus2(String col, Image img) {
         super(col, 3, -3, img);
         hasSkipped = false;
     }

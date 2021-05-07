@@ -1,11 +1,11 @@
-import java.awt.image.BufferedImage;
+import java.awt.*;
 
 public abstract class Card {
     private int num, id;
     private String color;
-    private BufferedImage image;
+    private Image image;
 
-    public Card(String col, int id, int num, BufferedImage img) {
+    public Card(String col, int id, int num, Image img) {
         color = col;
         this.id = id;
         this.num = num;
@@ -40,7 +40,7 @@ public abstract class Card {
         this.color = color;
     }
 
-    public BufferedImage getImage() {
+    public Image getImage() {
         return image;
     }
 

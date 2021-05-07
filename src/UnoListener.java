@@ -37,7 +37,14 @@ public class UnoListener implements ActionListener, ChangeListener {
     }
 
     public int pCardsLeft(int plyr) {
-        System.out.println("Cards left in hand -list- " + plyr + ": " + botGame.getPCardsLeft(plyr));
         return botGame.getPCardsLeft(plyr);
+    }
+
+    public int getCardsLeft() {
+        return botGame.getCardsLeft();
+    }
+
+    public Hand getPlayerHand() {
+        return botGame.getPlayerHand();
     }
 }

@@ -99,7 +99,14 @@ public class BotUnoGraphics {
     }
 
     public int getPCardsLeft(int plyr) {
-        System.out.println("Cards left in hand " + plyr + ": " + hands[plyr].length());
         return hands[plyr].length();
+    }
+
+    public int getCardsLeft() {
+        return deck.cardsLeft();
+    }
+
+    public Hand getPlayerHand() {
+        return hands[0];
     }
 }
