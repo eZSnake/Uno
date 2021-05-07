@@ -97,4 +97,9 @@ public class BotUnoGraphics {
             ((Switch) placePile).setHasSwitched(true);
         }
     }
+
+    public int getPCardsLeft(int plyr) {
+        System.out.println("Cards left in hand " + plyr + ": " + hands[plyr].length());
+        return hands[plyr].length();
+    }
 }

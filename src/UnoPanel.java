@@ -12,8 +12,8 @@ public class UnoPanel extends JPanel {
         UnoPanel panel = new UnoPanel();
         UnoListener listener = new UnoListener(panel);
 
-        window.setContentPane(menu(listener));
-//        window.setContentPane(botPlayingScreen(listener));
+//        window.setContentPane(menu(listener));
+        window.setContentPane(botPlayingScreen(listener));
         window.setSize(800,600);
         window.setLocation(300,300);
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -59,8 +59,8 @@ public class UnoPanel extends JPanel {
         JPanel botPlayingScreen = new JPanel();
         botPlayingScreen.setLayout(new BorderLayout());
 
-        JLabel botCards = new JLabel("Bot's cards: ");
-        botPlayingScreen.add(botCards, BorderLayout.NORTH);
+        JLabel cardsLeft = new JLabel("Cards left: Bot's cards: " + listener.pCardsLeft(1) + " - Player's cards: " + listener.pCardsLeft(0));
+        botPlayingScreen.add(cardsLeft, BorderLayout.NORTH);
         JButton draw = new JButton("Draw");
         draw.addActionListener(listener);
         botPlayingScreen.add(draw, BorderLayout.SOUTH);

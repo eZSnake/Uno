@@ -7,7 +7,7 @@ import java.awt.event.ActionListener;
 public class UnoListener implements ActionListener, ChangeListener {
     private UnoPanel panel;
     private int playerCount;
-    private BotUnoGraphics botGame;
+    private BotUnoGraphics botGame = new BotUnoGraphics(); //TODO remove everything after = for full implementation
 
     public UnoListener(UnoPanel panel) {
         this.panel = panel;
@@ -17,8 +17,7 @@ public class UnoListener implements ActionListener, ChangeListener {
     public void actionPerformed(ActionEvent e) {
         String a = e.getActionCommand();
         if (a.equals("Bot")) {
-//            botGame = new BotUnoGame();
-            botGame = new BotUnoGraphics();
+//            botGame = new BotUnoGraphics();
             botGame.playRounds();
         } else if (a.equals("Players: ")) {
             UnoGame myGame = new UnoGame(playerCount);
@@ -35,5 +34,10 @@ public class UnoListener implements ActionListener, ChangeListener {
         if (!source.getValueIsAdjusting()) {
             playerCount = source.getValue();
         }
+    }
+
+    public int pCardsLeft(int plyr) {
+        System.out.println("Cards left in hand -list- " + plyr + ": " + botGame.getPCardsLeft(plyr));
+        return botGame.getPCardsLeft(plyr);
     }
 }
