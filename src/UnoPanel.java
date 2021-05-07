@@ -16,14 +16,14 @@ public class UnoPanel extends JPanel {
         UnoListener listener = new UnoListener(panel);
 
 //        window.setContentPane(menu(listener));
-//        window.setContentPane(botPlayingScreen(listener));
+        window.setContentPane(botPlayingScreen(listener));
 
         screen = new CardLayout();
         c = window.getContentPane();
         c.setLayout(screen);
         c.add(menu(listener));
         c.add(botPlayingScreen(listener));
-        window.setContentPane(c);
+//        window.setContentPane(c);
 
         window.setSize(800,600);
         window.setLocation(300,300);

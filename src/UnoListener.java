@@ -16,6 +16,7 @@ public class UnoListener implements ActionListener, ChangeListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         String a = e.getActionCommand();
+        System.out.println(a);
         if (a.equals("Bot")) {
 //            botGame = new BotUnoGraphics();
             botGame.playRounds();
