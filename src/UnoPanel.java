@@ -46,7 +46,6 @@ public class UnoPanel extends JPanel {
         } catch (IOException ignored) {}
 //        int targetWidth = [blank].getWidth() / 4, targetHeight = targetWidth * 143 / 100;
         int targetWidth = 200, targetHeight = targetWidth * 143 / 100;
-        System.out.println(menu.getWidth());
         Image resultingImage = back.getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
         BufferedImage outputImage = new BufferedImage(targetWidth, targetHeight, BufferedImage.TYPE_INT_RGB);
         outputImage.getGraphics().drawImage(resultingImage, 0, 0, null);
@@ -61,12 +60,34 @@ public class UnoPanel extends JPanel {
 
         JLabel pCardsLeft = new JLabel("Cards left: Bot's cards: " + listener.pCardsLeft(1) + " - Player's cards: " + listener.pCardsLeft(0));
         botPlayingScreen.add(pCardsLeft, BorderLayout.NORTH);
+        Image back = null;
+        int targetWidth = 100, targetHeight = targetWidth * 143 / 100;
+        try {
+            back = ImageIO.read(new File("UnoCards/back.png")).getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
+        } catch (IOException ignored) {}
+        botPlayingScreen.add(new JLabel(new ImageIcon(back)), BorderLayout.EAST);
         JLabel cardsLeft = new JLabel("Cards in drawpile: " + listener.getCardsLeft() + "    ");
         botPlayingScreen.add(cardsLeft, BorderLayout.EAST);
         JButton draw = new JButton("Draw");
         draw.addActionListener(listener);
-        int targetWidth = 100, targetHeight = targetWidth * 143 / 100;
+
+        JPanel cards = playerCards(listener);
+
+        JPanel bottom = new JPanel();
+//        bottom.add(draw, BorderLayout.SOUTH);
+//        bottom.add(cards, BorderLayout.NORTH);
+        bottom.setLayout(new GridLayout(2, 1));
+        bottom.add(cards);
+        bottom.add(draw);
+
+        botPlayingScreen.add(bottom, BorderLayout.SOUTH);
+
+        return botPlayingScreen;
+    }
+
+    public static JPanel playerCards(UnoListener listener) {
         JPanel cards = new JPanel();
+        int targetWidth = 100, targetHeight = targetWidth * 143 / 100;
         Hand playerHand = listener.getPlayerHand();
         for (int i = 0; i < playerHand.length(); i++) {
             JButton card = new JButton(playerHand.getCard(i).toString());
@@ -75,12 +96,6 @@ public class UnoPanel extends JPanel {
             card.addActionListener(listener);
             cards.add(card);
         }
-        JPanel bottom = new JPanel();
-        bottom.add(draw, BorderLayout.SOUTH);
-        bottom.add(cards, BorderLayout.NORTH);
-
-        botPlayingScreen.add(bottom, BorderLayout.SOUTH);
-
-        return botPlayingScreen;
+        return cards;
     }
 }
