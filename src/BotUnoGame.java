@@ -4,6 +4,7 @@ public class BotUnoGame {  //Eike Rehwald
     private final Hand[] hands;
     private boolean rev = false, skip = false, botTurn = false;
     private final BasicBot bot = new BasicBot();
+    private int player;
 
     public BotUnoGame() {
         deck = new Deck();
@@ -23,7 +24,7 @@ public class BotUnoGame {  //Eike Rehwald
         placePile = deck.deal();
     }
 
-    public void playRounds(int player) {
+    public void playRounds() {
         String cardToPlay, col;
         while (playable()) {
             skip = false;
@@ -32,14 +33,14 @@ public class BotUnoGame {  //Eike Rehwald
             } else {
                 System.out.println("\n\n-=-= Bot's turn =-=-\n");
             }
-            if (!canPlayACard(player)) {
+            if (!canPlayACard()) {
                 if (!botTurn) {
                     System.out.println("You do not have a card to play. A card will be automatically drawn for you");
                 } else {
                     System.out.println("The bot doesn't have a playable card. A card will be drawn for it.");
                 }
                 hands[player].addCard(deck.deal());
-                player = nextPlayer(player, hands.length);
+                nextPlayer(hands.length);
                 continue;
             }
             if (!botTurn) {
@@ -93,7 +94,7 @@ public class BotUnoGame {  //Eike Rehwald
                     ((Switch) placePile).setHasSwitched(true);
                 }
             }
-            player = nextPlayer(player, hands.length);
+            nextPlayer(hands.length);
         }
         System.out.print("\n\n-=-=-=-=-=-=-\n" + determineWinner() + "\n-=-=-=-=-=-=-");
     }
@@ -118,24 +119,24 @@ public class BotUnoGame {  //Eike Rehwald
         return true;
     }
 
-    private int nextPlayer(int currPlayer, int players) {
+    private void nextPlayer(int players) {
         //determines which player goes next, taking into account the direction and if the next player is supposed to be skipped
         int nextPlayer;
         if (!rev && !skip) {
-            nextPlayer = Math.floorMod(currPlayer + 1, players);
+            nextPlayer = Math.floorMod(player + 1, players);
             botTurn = !botTurn;
         } else if (!rev){
-            nextPlayer = Math.floorMod(currPlayer + 2, players);
+            nextPlayer = Math.floorMod(player + 2, players);
         } else if (!skip) {
-            nextPlayer = Math.floorMod(currPlayer - 1, players);
+            nextPlayer = Math.floorMod(player - 1, players);
             botTurn = !botTurn;
         } else {
-            nextPlayer = Math.floorMod(currPlayer-2, players);
+            nextPlayer = Math.floorMod(player-2, players);
         }
-        return nextPlayer;
+        player = nextPlayer;
     }
 
-    private boolean canPlayACard(int player) {
+    private boolean canPlayACard() {
         //checks if a player has a card to play
         for (int i = 0; i < hands[player].length(); i++) {
             if (hands[player].getCard(i).isPlayable(placePile)) {

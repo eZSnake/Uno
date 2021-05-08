@@ -53,16 +53,13 @@ public class UnoPanel extends JPanel {
 
         menu.add(new JTextArea("Welcome to the game of Uno.\nEach player starts with 7 cards and first with 0 left wins.\nThe same color can go on the same color, " +
                 "the same number can go on the same number, and wish cards can go on any card.\nIf you can't go, you draw a card.\n"), BorderLayout.NORTH);
-        BufferedImage back = null; //new ImageIcon("UnoCards/back.png").getImage();
+
+        Image back = null;
+        int targetWidth = dims.getWidth() / 5, targetHeight = targetWidth * 143 / 100;
         try {
-            back = ImageIO.read(new File("UnoCards/back.png"));
+            back = ImageIO.read(new File("UnoCards/back.png")).getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
         } catch (IOException ignored) {}
-//        int targetWidth = [blank].getWidth() / 4, targetHeight = targetWidth * 143 / 100;
-        int targetWidth = dims.getWidth() / 10, targetHeight = targetWidth * 143 / 100;
-        Image resultingImage = back.getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
-        BufferedImage outputImage = new BufferedImage(targetWidth, targetHeight, BufferedImage.TYPE_INT_RGB);
-        outputImage.getGraphics().drawImage(resultingImage, 0, 0, null);
-        JLabel picLabel = new JLabel(new ImageIcon(outputImage));
+        JLabel picLabel = new JLabel(new ImageIcon(back));
         menu.add(picLabel, BorderLayout.CENTER);
         return menu;
     }
@@ -75,27 +72,29 @@ public class UnoPanel extends JPanel {
         top.setLayout(new GridLayout(2, 1));
         JButton goMenu = new JButton("Menu");
         goMenu.addActionListener(listener);
-        top.add(goMenu, BorderLayout.NORTH);
+        top.add(goMenu);
         JLabel pCardsLeft = new JLabel("Cards left: Bot's cards: " + listener.pCardsLeft(1) + " - Player's cards: " + listener.pCardsLeft(0));
-        top.add(pCardsLeft, BorderLayout.SOUTH);
+        top.add("playercards", pCardsLeft);
         botPlayingScreen.add(top, BorderLayout.NORTH);
 
+        JPanel right = new JPanel();
+        right.setLayout(new GridLayout(2, 1));
         Image back = null;
         int targetWidth = dims.getWidth() / 20, targetHeight = targetWidth * 143 / 100;
         try {
             back = ImageIO.read(new File("UnoCards/back.png")).getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
         } catch (IOException ignored) {}
-        botPlayingScreen.add(new JLabel(new ImageIcon(back)), BorderLayout.EAST);
+        right.add(new JLabel(new ImageIcon(back)));
         JLabel cardsLeft = new JLabel("Cards in drawpile: " + listener.getCardsLeft() + "    ");
-        botPlayingScreen.add(cardsLeft, BorderLayout.EAST);
+        right.add("cardsleft", cardsLeft);
+        botPlayingScreen.add(right, BorderLayout.EAST);
+
         JButton draw = new JButton("Draw");
         draw.addActionListener(listener);
 
         JPanel cards = playerCards(listener);
 
         JPanel bottom = new JPanel();
-//        bottom.add(draw, BorderLayout.SOUTH);
-//        bottom.add(cards, BorderLayout.NORTH);
         bottom.setLayout(new GridLayout(2, 1));
         bottom.add(cards);
         bottom.add(draw);

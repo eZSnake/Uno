@@ -17,7 +17,7 @@ public class UnoRunner {  //Eike Rehwald
             myGame.playRounds(0);
         } else {
             BotUnoGame botGame = new BotUnoGame();
-            botGame.playRounds(0);
+            botGame.playRounds();
         }
     }
 }

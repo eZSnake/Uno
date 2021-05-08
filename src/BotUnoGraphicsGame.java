@@ -1,4 +1,4 @@
-public class BotUnoGraphics {
+public class BotUnoGraphicsGame implements Game {
     private final Deck deck;
     private Card placePile;
     private final Hand[] hands;
@@ -6,7 +6,7 @@ public class BotUnoGraphics {
     private final BasicBot bot = new BasicBot();
     private int player = 0;
 
-    public BotUnoGraphics() {
+    public BotUnoGraphicsGame() {
         deck = new Deck();
         deck.shuffle(2);
         hands = new Hand[2];

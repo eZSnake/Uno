@@ -7,7 +7,7 @@ import java.awt.event.ActionListener;
 public class UnoListener implements ActionListener, ChangeListener {
     private UnoPanel panel;
     private int playerCount;
-    private BotUnoGraphics botGame = new BotUnoGraphics(); //TODO remove everything after = for full implementation
+    private Game game = new BotUnoGraphicsGame(); //TODO remove everything after = for full implementation
 
     public UnoListener(UnoPanel panel) {
         this.panel = panel;
@@ -18,18 +18,18 @@ public class UnoListener implements ActionListener, ChangeListener {
         String a = e.getActionCommand();
         System.out.println(a);
         if (a.equals("Bot")) {
-//            botGame = new BotUnoGraphics();
+//            game = new BotUnoGraphicsGame();
             panel.nextScreen();
             panel.repaint();
-//            botGame.playRounds();
+//            game.playRounds();
         } else if (a.equals("Players: ")) {
             UnoGame myGame = new UnoGame(playerCount);
             myGame.playRounds(0);
             panel.repaint();
         } else if (a.equals("Draw")) {
-            botGame.draw(0);
+            game.draw(0);
             System.out.println("Drawing card");
-            panel.revalidate();
+            System.out.println(getPlayerHand().length());
             panel.repaint();
         } else if (a.equals("Menu")) {
             panel.goToMenu();
@@ -46,18 +46,18 @@ public class UnoListener implements ActionListener, ChangeListener {
     }
 
     public int pCardsLeft(int plyr) {
-        return botGame.getPCardsLeft(plyr);
+        return game.getPCardsLeft(plyr);
     }
 
     public int getCardsLeft() {
-        return botGame.getCardsLeft();
+        return game.getCardsLeft();
     }
 
     public Hand getPlayerHand() {
-        return botGame.getPlayerHand();
+        return game.getPlayerHand();
     }
 
     public Deck getDeck() {
-        return botGame.getDeck();
+        return game.getDeck();
     }
 }
