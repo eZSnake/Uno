@@ -20,6 +20,7 @@ public class BotUnoGraphicsGame implements Game {
     }
 
     public void playRounds() {
+        String cardToPlay;
         while (playable()) {
             skip = false;
             if (!canPlayACard()) {
@@ -27,8 +28,13 @@ public class BotUnoGraphicsGame implements Game {
                 nextPlayer(hands.length);
                 continue;
             }
+            if (botTurn) {
+                cardToPlay = bot.playCard(hands[1], placePile);
+            }
         }
+        determineWinner();
     }
+
 
     public void draw(int extPlayer) {
         //checks if the player is trying to draw while the bot is playing
@@ -112,5 +118,17 @@ public class BotUnoGraphicsGame implements Game {
 
     public Deck getDeck() {
         return deck;
+    }
+
+    public int determineWinner() {
+        if (!playable()) {
+            if (hands[0].length() == 0) {
+                return 0;
+            } else if (hands[1].length() == 0) {
+                return 1;
+            }
+            return 2;
+        }
+        return -1;
     }
 }

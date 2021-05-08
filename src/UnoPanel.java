@@ -20,12 +20,16 @@ public class UnoPanel extends JPanel {
 //        window.setContentPane(menu(listener));
 //        window.setContentPane(botPlayingScreen(listener));
 //        window.setContentPane(allCards(listener));
+//        window.setContentPane(botWins(listener));
 
         screen = new CardLayout();
         c = window.getContentPane();
         c.setLayout(screen);
         c.add(menu(listener));
         c.add(botPlayingScreen(listener));
+        c.add(playerWins(listener));
+        c.add(botWins(listener));
+        c.add(tieGame(listener));
         window.setContentPane(c);
 
         window.setLocation(300,300);
@@ -87,7 +91,7 @@ public class UnoPanel extends JPanel {
         right.add(new JLabel(new ImageIcon(back)));
         JLabel cardsLeft = new JLabel("Cards in drawpile: " + listener.getCardsLeft() + "    ");
         right.add("cardsleft", cardsLeft);
-        botPlayingScreen.add(right, BorderLayout.EAST);
+        botPlayingScreen.add(right, BorderLayout.EAST,1);
 
         JButton draw = new JButton("Draw");
         draw.addActionListener(listener);
@@ -128,6 +132,40 @@ public class UnoPanel extends JPanel {
 //            System.out.println(card);
         }
         return cards;
+    }
+
+    public static JPanel playerWins(UnoListener listener) {
+        JPanel playerWins = new JPanel();
+        JButton menu = new JButton("Menu");
+        menu.addActionListener(listener);
+        playerWins.add(menu);
+        return playerWins;
+    }
+
+    public static JPanel botWins(UnoListener listener) {
+        JPanel botWins = new JPanel();
+        botWins.setLayout(new GridLayout(3, 1));
+        JButton menu = new JButton("Menu");
+        menu.addActionListener(listener);
+        botWins.add(menu);
+        JTextArea text = new JTextArea("The bot wins!\nBetter luck next time!\n*Robot Noises*");
+        text.setFont(new Font("Arial", Font.PLAIN, 50));
+        botWins.add(text);
+        Image robot = null;
+        int targetWidth = dims.getWidth() / 8, targetHeight = targetWidth * 143 / 100;
+        try {
+            robot = ImageIO.read(new File("UnoCards/robot.jpg")).getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
+        } catch (IOException ignored) {}
+        botWins.add(new JLabel(new ImageIcon(robot)));
+        return botWins;
+    }
+
+    public static JPanel tieGame(UnoListener listener) {
+        JPanel tieGame = new JPanel();
+        JButton menu = new JButton("Menu");
+        menu.addActionListener(listener);
+        tieGame.add(menu);
+        return tieGame;
     }
 
     public void nextScreen() {

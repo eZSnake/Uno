@@ -15,6 +15,7 @@ public class UnoListener implements ActionListener, ChangeListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        setWinnerScreen();
         String a = e.getActionCommand();
         System.out.println(a);
         if (a.equals("Bot")) {
@@ -31,6 +32,7 @@ public class UnoListener implements ActionListener, ChangeListener {
             System.out.println("Drawing card");
             System.out.println(getPlayerHand().length());
             panel.repaint();
+//            panel.getComponent(1).list();
         } else if (a.equals("Menu")) {
             panel.goToMenu();
             panel.repaint();
@@ -59,5 +61,19 @@ public class UnoListener implements ActionListener, ChangeListener {
 
     public Deck getDeck() {
         return game.getDeck();
+    }
+
+    private void setWinnerScreen() {
+        switch (game.determineWinner()) {
+            case 0:
+                panel.nextScreen();
+            case 1:
+                panel.nextScreen();
+                panel.nextScreen();
+            case 2:
+                panel.nextScreen();
+                panel.nextScreen();
+                panel.nextScreen();
+        }
     }
 }

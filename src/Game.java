@@ -10,4 +10,6 @@ public interface Game {
     Hand getPlayerHand();
 
     Deck getDeck();
+
+    int determineWinner();
 }
