@@ -48,6 +48,9 @@ public class UnoListener implements ActionListener, ChangeListener {
     }
 
     public int pCardsLeft(int plyr) {
+        if (game == null) {
+            return 0;
+        }
         return game.getPCardsLeft(plyr);
     }
 

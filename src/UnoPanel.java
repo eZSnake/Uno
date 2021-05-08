@@ -54,9 +54,11 @@ public class UnoPanel extends JPanel {
         playerCount.setPaintTicks(true);
         buttons.add(playerCount);
         menu.add(buttons, BorderLayout.SOUTH);
-
-        menu.add(new JTextArea("Welcome to the game of Uno.\nEach player starts with 7 cards and first with 0 left wins.\nThe same color can go on the same color, " +
-                "the same number can go on the same number, and wish cards can go on any card.\nIf you can't go, you draw a card.\n"), BorderLayout.NORTH);
+        JTextArea welcome = new JTextArea("Welcome to the game of Uno.\nEach player starts with 7 cards and first with 0 left wins.\nThe same color can go on the same color, " +
+                "the same number can go on the same number, and wish cards can go on any card.\nIf you can't go, you draw a card.");
+        welcome.setFont(new Font("Arial", Font.PLAIN, 20));
+        welcome.setEditable(false);
+        menu.add(welcome, BorderLayout.NORTH);
 
         Image back = null;
         int targetWidth = dims.getWidth() / 5, targetHeight = targetWidth * 143 / 100;
@@ -78,6 +80,7 @@ public class UnoPanel extends JPanel {
         goMenu.addActionListener(listener);
         top.add(goMenu);
         JLabel pCardsLeft = new JLabel("Cards left: Bot's cards: " + listener.pCardsLeft(1) + " - Player's cards: " + listener.pCardsLeft(0));
+        pCardsLeft.setFont(new Font("Arial", Font.PLAIN, 20));
         top.add("playercards", pCardsLeft);
         botPlayingScreen.add(top, BorderLayout.NORTH);
 
@@ -90,6 +93,7 @@ public class UnoPanel extends JPanel {
         } catch (IOException ignored) {}
         right.add(new JLabel(new ImageIcon(back)));
         JLabel cardsLeft = new JLabel("Cards in drawpile: " + listener.getCardsLeft() + "    ");
+        cardsLeft.setFont(new Font("Arial", Font.PLAIN, 20));
         right.add("cardsleft", cardsLeft);
         botPlayingScreen.add(right, BorderLayout.EAST,1);
 

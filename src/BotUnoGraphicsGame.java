@@ -20,7 +20,8 @@ public class BotUnoGraphicsGame implements Game {
     }
 
     public void playRounds() {
-        String cardToPlay;
+        String cardToPlay, col;
+        int cardInt = -1;
         while (playable()) {
             skip = false;
             if (!canPlayACard()) {
@@ -30,6 +31,26 @@ public class BotUnoGraphicsGame implements Game {
             }
             if (botTurn) {
                 cardToPlay = bot.playCard(hands[1], placePile);
+            }
+            if (cardInt != -1) {
+                placePile = hands[player].getCard(cardInt - 1);
+                hands[player].removeCard(cardInt - 1);
+            }
+            if (hands[player].length() <= 0) {
+                break;
+            }
+            if (botTurn) {
+                col = bot.chooseColor(hands[1]);
+            } else {
+                col = "";
+            }
+            placePile.specialMove(deck, hands, player, col);
+            switchSkip();
+            if (placePile instanceof Switch) {
+                if (!((Switch) placePile).getHasSwitched()) {
+                    rev = !rev;
+                    ((Switch) placePile).setHasSwitched(true);
+                }
             }
         }
         determineWinner();
