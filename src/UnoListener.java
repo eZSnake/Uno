@@ -19,14 +19,21 @@ public class UnoListener implements ActionListener, ChangeListener {
         System.out.println(a);
         if (a.equals("Bot")) {
 //            botGame = new BotUnoGraphics();
-            botGame.playRounds();
             panel.nextScreen();
+            panel.repaint();
+//            botGame.playRounds();
         } else if (a.equals("Players: ")) {
             UnoGame myGame = new UnoGame(playerCount);
             myGame.playRounds(0);
+            panel.repaint();
         } else if (a.equals("Draw")) {
             botGame.draw(0);
             System.out.println("Drawing card");
+            panel.revalidate();
+            panel.repaint();
+        } else if (a.equals("Menu")) {
+            panel.goToMenu();
+            panel.repaint();
         }
     }
 
@@ -48,5 +55,9 @@ public class UnoListener implements ActionListener, ChangeListener {
 
     public Hand getPlayerHand() {
         return botGame.getPlayerHand();
+    }
+
+    public Deck getDeck() {
+        return botGame.getDeck();
     }
 }

@@ -109,4 +109,8 @@ public class BotUnoGraphics {
     public Hand getPlayerHand() {
         return hands[0];
     }
+
+    public Deck getDeck() {
+        return deck;
+    }
 }

@@ -8,24 +8,26 @@ import java.io.IOException;
 public class UnoPanel extends JPanel {
     static Container c;
     static CardLayout screen;
+    static PanelDims dims;
 
     public static void main(String[] args) {
         JFrame window = new JFrame("Uno");
-
         UnoPanel panel = new UnoPanel();
         UnoListener listener = new UnoListener(panel);
+        window.setSize(1920,1080);
+        dims = new PanelDims(window.getWidth(), window.getHeight());
 
 //        window.setContentPane(menu(listener));
-        window.setContentPane(botPlayingScreen(listener));
+//        window.setContentPane(botPlayingScreen(listener));
+//        window.setContentPane(allCards(listener));
 
         screen = new CardLayout();
         c = window.getContentPane();
         c.setLayout(screen);
         c.add(menu(listener));
         c.add(botPlayingScreen(listener));
-//        window.setContentPane(c);
+        window.setContentPane(c);
 
-        window.setSize(800,600);
         window.setLocation(300,300);
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setVisible(true);
@@ -56,7 +58,7 @@ public class UnoPanel extends JPanel {
             back = ImageIO.read(new File("UnoCards/back.png"));
         } catch (IOException ignored) {}
 //        int targetWidth = [blank].getWidth() / 4, targetHeight = targetWidth * 143 / 100;
-        int targetWidth = 200, targetHeight = targetWidth * 143 / 100;
+        int targetWidth = dims.getWidth() / 10, targetHeight = targetWidth * 143 / 100;
         Image resultingImage = back.getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
         BufferedImage outputImage = new BufferedImage(targetWidth, targetHeight, BufferedImage.TYPE_INT_RGB);
         outputImage.getGraphics().drawImage(resultingImage, 0, 0, null);
@@ -69,10 +71,17 @@ public class UnoPanel extends JPanel {
         JPanel botPlayingScreen = new JPanel();
         botPlayingScreen.setLayout(new BorderLayout());
 
+        JPanel top = new JPanel();
+        top.setLayout(new GridLayout(2, 1));
+        JButton goMenu = new JButton("Menu");
+        goMenu.addActionListener(listener);
+        top.add(goMenu, BorderLayout.NORTH);
         JLabel pCardsLeft = new JLabel("Cards left: Bot's cards: " + listener.pCardsLeft(1) + " - Player's cards: " + listener.pCardsLeft(0));
-        botPlayingScreen.add(pCardsLeft, BorderLayout.NORTH);
+        top.add(pCardsLeft, BorderLayout.SOUTH);
+        botPlayingScreen.add(top, BorderLayout.NORTH);
+
         Image back = null;
-        int targetWidth = 100, targetHeight = targetWidth * 143 / 100;
+        int targetWidth = dims.getWidth() / 20, targetHeight = targetWidth * 143 / 100;
         try {
             back = ImageIO.read(new File("UnoCards/back.png")).getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
         } catch (IOException ignored) {}
@@ -98,7 +107,7 @@ public class UnoPanel extends JPanel {
 
     public static JPanel playerCards(UnoListener listener) {
         JPanel cards = new JPanel();
-        int targetWidth = 100, targetHeight = targetWidth * 143 / 100;
+        int targetWidth = dims.getWidth() / 20, targetHeight = targetWidth * 143 / 100;
         Hand playerHand = listener.getPlayerHand();
         for (int i = 0; i < playerHand.length(); i++) {
             JButton card = new JButton(playerHand.getCard(i).toString());
@@ -110,7 +119,28 @@ public class UnoPanel extends JPanel {
         return cards;
     }
 
+    public static JPanel allCards(UnoListener listener) {
+        JPanel cards = new JPanel();
+        Deck deck = listener.getDeck();
+        for (Card card : deck.getCards()) {
+            Image img = card.getImage().getScaledInstance(100, 143, Image.SCALE_SMOOTH);
+            JLabel image = new JLabel(new ImageIcon(img));
+            cards.add(image);
+//            System.out.println(card);
+        }
+        return cards;
+    }
+
     public void nextScreen() {
         screen.next(c);
+    }
+
+    public void goToMenu() {
+        screen.first(c);
+    }
+
+    @Override
+    public void paintComponents(Graphics g) {
+        super.paintComponents(g);
     }
 }

@@ -18,7 +18,7 @@ public class Deck {
                 numToSet--;
             }
             try {
-                img = ImageIO.read(new File("UnoCards/blue" + i + ".jpg"));
+                img = ImageIO.read(new File("UnoCards/blue" + numToSet + ".jpg"));
             } catch (IOException ignored) {}
             cards[i] = new NumCol("Blue", numToSet, img);
             numToSet++;
@@ -48,7 +48,7 @@ public class Deck {
                 numToSet--;
             }
             try {
-                img = ImageIO.read(new File("UnoCards/green" + i + ".jpg"));
+                img = ImageIO.read(new File("UnoCards/green" + numToSet + ".jpg"));
             } catch (IOException ignored) {}
             cards[i] = new NumCol("Green", numToSet, img);
             numToSet++;
@@ -78,7 +78,7 @@ public class Deck {
                 numToSet--;
             }
             try {
-                img = ImageIO.read(new File("UnoCards/red" + i + ".jpg"));
+                img = ImageIO.read(new File("UnoCards/red" + numToSet + ".jpg"));
             } catch (IOException ignored) {}
             cards[i] = new NumCol("Red", numToSet, img);
             numToSet++;
@@ -108,7 +108,7 @@ public class Deck {
                 numToSet--;
             }
             try {
-                img = ImageIO.read(new File("UnoCards/yellow" + i + ".jpg"));
+                img = ImageIO.read(new File("UnoCards/yellow" + numToSet + ".jpg"));
             } catch (IOException ignored) {}
             cards[i] = new NumCol("Yellow", numToSet, img);
             numToSet++;
@@ -179,5 +179,9 @@ public class Deck {
         for (int i = 0; i < 108; i++) {
             System.out.println(cards[i].toString());
         }
+    }
+
+    public Card[] getCards() {
+        return cards;
     }
 }
