@@ -22,7 +22,7 @@ public class BotUnoGraphicsGame implements Game {
     public void playRounds() {
         String cardToPlay, col;
         int cardInt = -1;
-        while (playable()) {
+        while (roundPlayable()) {
             skip = false;
             if (!canPlayACard()) {
                 draw();
@@ -58,7 +58,7 @@ public class BotUnoGraphicsGame implements Game {
 
 
     public void draw(int extPlayer) {
-        //checks if the player is trying to draw while the bot is playing
+        //draws a card and also checks if the player is trying to draw while the bot is playing
         if (extPlayer == player) {
             hands[player].addCard(deck.deal());
         }
@@ -68,7 +68,7 @@ public class BotUnoGraphicsGame implements Game {
         draw(player);
     }
 
-    private boolean playable() {
+    private boolean roundPlayable() {
         //checks if everyone has more than 0 cards on their hand and that there are more than 0 cards left to draw
         for (Hand hand : hands) {
             if (hand.length() == 0) {
@@ -125,6 +125,30 @@ public class BotUnoGraphicsGame implements Game {
         }
     }
 
+    public boolean canPlayCard(Card toPlay) {
+        //convert string to card fisrt
+        for (int i = 0; i < hands[player].length(); i++) {
+            System.out.println(placePile.toString());
+            //if (hands[player].getCard(i).toString().equals(toPlay)) {
+            if (toPlay.getId() == 4 || toPlay.getColor().equals(placePile.getColor()) || toPlay.getNum() == placePile.getNum()) {
+                System.out.println("True");
+                return true;
+            }
+        }
+        System.out.println("False");
+        return false;
+    }
+
+    public Card stringToCard(String conv) {
+        Card card = null;
+        for (int i = 0; i < hands[player].length(); i++) {
+            if (hands[player].getCard(i).toString().equals(conv)) {
+                card = hands[player].getCard(i);
+            }
+        }
+        return card;
+    }
+
     public int getPCardsLeft(int plyr) {
         return hands[plyr].length();
     }
@@ -141,8 +165,12 @@ public class BotUnoGraphicsGame implements Game {
         return deck;
     }
 
+    public Card getPlacePile() {
+        return placePile;
+    }
+
     public int determineWinner() {
-        if (!playable()) {
+        if (!roundPlayable()) {
             if (hands[0].length() == 0) {
                 return 0;
             } else if (hands[1].length() == 0) {
