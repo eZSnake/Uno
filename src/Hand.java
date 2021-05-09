@@ -14,6 +14,10 @@ public class Hand {
         hand.remove(index);
     }
 
+    public void removeCard(Card c) {
+        hand.remove(c);
+    }
+
     public Card getCard(int index) {
         return hand.get(index);
     }

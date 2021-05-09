@@ -9,7 +9,7 @@ public class UnoPanel extends JPanel {
     private static Container c;
     private static CardLayout screen;
     private static PanelDims dims;
-    private static JLabel pCardsLeft, cardsLeft;
+    private static JLabel pCardsLeft, cardsLeft, placePile;
     private static UnoListener listener;
     private static JPanel cards;
 
@@ -110,8 +110,11 @@ public class UnoPanel extends JPanel {
         top.add(right);
         botPlayingScreen.add(top, BorderLayout.NORTH);
         //Center (card on place pile)
+        targetWidth = dims.getWidth() / 15;
+        targetHeight = targetWidth * 143 / 100;
         Image img = listener.getPlacePile().getImage().getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
-        botPlayingScreen.add(new JLabel(new ImageIcon(img)), BorderLayout.CENTER);
+        placePile = new JLabel(new ImageIcon(img));
+        botPlayingScreen.add(placePile, BorderLayout.CENTER);
         //Bottom (cards on hand and draw)
         JPanel bottom = new JPanel();
         bottom.setLayout(new GridLayout(2, 1));
@@ -197,13 +200,13 @@ public class UnoPanel extends JPanel {
         return tieGame;
     }
 
-    public void updateCardsLeft() {
+    public void updateCardElements() {
         pCardsLeft.setText("        Cards left: Bot's cards: " + listener.pCardsLeft(1) + " - Player's cards: " + listener.pCardsLeft(0));
         cardsLeft.setText("        Cards in drawpile: " + listener.getCardsLeft());
-    }
-
-    public void updatePlayerCards() {
         cards = playerCards();
+        int targetWidth = dims.getWidth() / 15, targetHeight = targetWidth * 143 / 100;
+        Image img = listener.getPlacePile().getImage().getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
+        placePile.setIcon(new ImageIcon(img));
     }
 
     public void nextScreen() {

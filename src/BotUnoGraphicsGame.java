@@ -68,6 +68,11 @@ public class BotUnoGraphicsGame implements Game {
         draw(player);
     }
 
+    public void playCard(Card toPlay) {
+        placePile = toPlay;
+        hands[player].removeCard(toPlay);
+    }
+
     private boolean roundPlayable() {
         //checks if everyone has more than 0 cards on their hand and that there are more than 0 cards left to draw
         for (Hand hand : hands) {

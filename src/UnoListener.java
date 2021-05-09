@@ -34,8 +34,7 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
             game.draw(0);
             System.out.println("Drawing card");
             System.out.println(getPlayerHand().length());
-            panel.updateCardsLeft();
-            panel.updatePlayerCards();
+            panel.updateCardElements();
             panel.removeAll();
             panel.revalidate();
             panel.repaint();
@@ -55,11 +54,11 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
                         col = 1 + (int)(Math.random() * 4);
                     }
                 }
+                game.playCard(toPlay);
             } else {
                 JOptionPane.showMessageDialog(panel, "That card can't be played.");
             }
-            panel.updateCardsLeft();
-            panel.updatePlayerCards();
+            panel.updateCardElements();
             panel.repaint();
         }
     }
