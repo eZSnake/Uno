@@ -34,6 +34,10 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
             game.draw(0);
             System.out.println("Drawing card");
             System.out.println(getPlayerHand().length());
+            panel.updateCardsLeft();
+            panel.updatePlayerCards();
+            panel.removeAll();
+            panel.revalidate();
             panel.repaint();
 //            panel.getComponent(1).list();
         } else if (a.equals("Menu")) {
@@ -44,12 +48,19 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
             if (game.canPlayCard(toPlay)) {
                 if (toPlay.getId() == 4) {
                     Object[] options = {"Blue", "Green", "Red", "Yellow"};
-                    int n = JOptionPane.showOptionDialog(panel, "What color would you like? Please select below.", "Choose color", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[3]);
-                    System.out.println(n);
+                    int col = JOptionPane.showOptionDialog(panel, "What color would you like? Please select below.", "Choose color", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[3]);
+                    System.out.println(col);
+                    if (col == -1) {
+                        JOptionPane.showMessageDialog(panel, "A random color will now be chosen for you as you have failed to follow instructions");
+                        col = 1 + (int)(Math.random() * 4);
+                    }
                 }
             } else {
                 JOptionPane.showMessageDialog(panel, "That card can't be played.");
             }
+            panel.updateCardsLeft();
+            panel.updatePlayerCards();
+            panel.repaint();
         }
     }
 

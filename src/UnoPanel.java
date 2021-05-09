@@ -6,30 +6,33 @@ import java.io.File;
 import java.io.IOException;
 
 public class UnoPanel extends JPanel {
-    static Container c;
-    static CardLayout screen;
-    static PanelDims dims;
+    private static Container c;
+    private static CardLayout screen;
+    private static PanelDims dims;
+    private static JLabel pCardsLeft, cardsLeft;
+    private static UnoListener listener;
+    private static JPanel cards;
 
     public static void main(String[] args) {
         JFrame window = new JFrame("Uno");
         UnoPanel panel = new UnoPanel();
-        UnoListener listener = new UnoListener(panel);
+        listener = new UnoListener(panel);
         window.setSize(1920,1080);
         dims = new PanelDims(window.getWidth(), window.getHeight());
 
-//        window.setContentPane(menu(listener));
-//        window.setContentPane(botPlayingScreen(listener));
-//        window.setContentPane(allCards(listener));
-//        window.setContentPane(playerWins(listener));
+//        window.setContentPane(menu());
+//        window.setContentPane(botPlayingScreen());
+//        window.setContentPane(allCards());
+//        window.setContentPane(botWins());
 
         screen = new CardLayout();
         c = window.getContentPane();
         c.setLayout(screen);
-        c.add(menu(listener));
-        c.add(botPlayingScreen(listener));
-        c.add(playerWins(listener));
-        c.add(botWins(listener));
-        c.add(tieGame(listener));
+        c.add(menu());
+        c.add(botPlayingScreen());
+        c.add(playerWins());
+        c.add(botWins());
+        c.add(tieGame());
         window.setContentPane(c);
 
         window.setLocation(300,300);
@@ -37,7 +40,7 @@ public class UnoPanel extends JPanel {
         window.setVisible(true);
     }
 
-    public static JPanel menu(UnoListener listener) {
+    public static JPanel menu() {
         JPanel menu = new JPanel();
         menu.setLayout(new BorderLayout());
         //Choose if you play against bot or real people
@@ -76,7 +79,7 @@ public class UnoPanel extends JPanel {
         return menu;
     }
 
-    public static JPanel botPlayingScreen(UnoListener listener) {
+    public static JPanel botPlayingScreen() {
         JPanel botPlayingScreen = new JPanel();
         botPlayingScreen.setLayout(new BorderLayout());
         //Top of the screen
@@ -88,7 +91,7 @@ public class UnoPanel extends JPanel {
         JButton goMenu = new JButton("Menu");
         goMenu.addActionListener(listener);
         left.add(goMenu);
-        JLabel pCardsLeft = new JLabel("        Cards left: Bot's cards: " + listener.pCardsLeft(1) + " - Player's cards: " + listener.pCardsLeft(0));
+        pCardsLeft = new JLabel("        Cards left: Bot's cards: " + listener.pCardsLeft(1) + " - Player's cards: " + listener.pCardsLeft(0));
         pCardsLeft.setFont(new Font("Arial", Font.PLAIN, 20));
         left.add("playercards", pCardsLeft);
         top.add(left);
@@ -101,7 +104,7 @@ public class UnoPanel extends JPanel {
             back = ImageIO.read(new File("UnoCards/back.png")).getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
         } catch (IOException ignored) {}
         right.add(new JLabel(new ImageIcon(back)));
-        JLabel cardsLeft = new JLabel("        Cards in drawpile: " + listener.getCardsLeft());
+        cardsLeft = new JLabel("        Cards in drawpile: " + listener.getCardsLeft());
         cardsLeft.setFont(new Font("Arial", Font.PLAIN, 20));
         right.add("cardsleft", cardsLeft);
         top.add(right);
@@ -114,7 +117,7 @@ public class UnoPanel extends JPanel {
         bottom.setLayout(new GridLayout(2, 1));
         JButton draw = new JButton("Draw");
         draw.addActionListener(listener);
-        JPanel cards = playerCards(listener);
+        cards = playerCards();
         bottom.add(cards);
         bottom.add(draw);
 
@@ -123,7 +126,7 @@ public class UnoPanel extends JPanel {
         return botPlayingScreen;
     }
 
-    public static JPanel playerCards(UnoListener listener) {
+    public static JPanel playerCards() {
         JPanel cards = new JPanel();
         int targetWidth = dims.getWidth() / 20, targetHeight = targetWidth * 143 / 100;
         Hand playerHand = listener.getPlayerHand();
@@ -137,7 +140,7 @@ public class UnoPanel extends JPanel {
         return cards;
     }
 
-    public static JPanel allCards(UnoListener listener) {
+    public static JPanel allCards() {
         JPanel cards = new JPanel();
         Deck deck = listener.getDeck();
         for (Card card : deck.getCards()) {
@@ -149,7 +152,7 @@ public class UnoPanel extends JPanel {
         return cards;
     }
 
-    public static JPanel playerWins(UnoListener listener) {
+    public static JPanel playerWins() {
         JPanel playerWins = new JPanel();
         playerWins.setLayout(new BoxLayout(playerWins, BoxLayout.Y_AXIS));
         JButton menu = new JButton("Menu");
@@ -162,7 +165,7 @@ public class UnoPanel extends JPanel {
         return playerWins;
     }
 
-    public static JPanel botWins(UnoListener listener) {
+    public static JPanel botWins() {
         JPanel botWins = new JPanel();
         botWins.setLayout(new BoxLayout(botWins, BoxLayout.Y_AXIS));
         JButton menu = new JButton("Menu");
@@ -181,7 +184,7 @@ public class UnoPanel extends JPanel {
         return botWins;
     }
 
-    public static JPanel tieGame(UnoListener listener) {
+    public static JPanel tieGame() {
         JPanel tieGame = new JPanel();
         tieGame.setLayout(new BoxLayout(tieGame, BoxLayout.Y_AXIS));
         JButton menu = new JButton("Menu");
@@ -192,6 +195,15 @@ public class UnoPanel extends JPanel {
         text.setEditable(false);
         tieGame.add(text);
         return tieGame;
+    }
+
+    public void updateCardsLeft() {
+        pCardsLeft.setText("        Cards left: Bot's cards: " + listener.pCardsLeft(1) + " - Player's cards: " + listener.pCardsLeft(0));
+        cardsLeft.setText("        Cards in drawpile: " + listener.getCardsLeft());
+    }
+
+    public void updatePlayerCards() {
+        cards = playerCards();
     }
 
     public void nextScreen() {
