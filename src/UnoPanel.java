@@ -11,7 +11,8 @@ public class UnoPanel extends JPanel {
     private static PanelDims dims;
     private static JLabel pCardsLeft, cardsLeft, placePile;
     private static UnoListener listener;
-    private static JPanel cards;
+    private static JPanel cards, bottomCards;
+    private static JButton goMenu = new JButton("Menu");
 
     public static void main(String[] args) {
         JFrame window = new JFrame("Uno");
@@ -88,7 +89,6 @@ public class UnoPanel extends JPanel {
         //Left top (cards left and go to menu
         JPanel left = new JPanel();
         left.setLayout(new GridLayout(2, 1));
-        JButton goMenu = new JButton("Menu");
         goMenu.addActionListener(listener);
         left.add(goMenu);
         pCardsLeft = new JLabel("        Cards left: Bot's cards: " + listener.pCardsLeft(1) + " - Player's cards: " + listener.pCardsLeft(0));
@@ -116,15 +116,15 @@ public class UnoPanel extends JPanel {
         placePile = new JLabel(new ImageIcon(img));
         botPlayingScreen.add(placePile, BorderLayout.CENTER);
         //Bottom (cards on hand and draw)
-        JPanel bottom = new JPanel();
-        bottom.setLayout(new GridLayout(2, 1));
+        bottomCards = new JPanel();
+        bottomCards.setLayout(new GridLayout(2, 1));
         JButton draw = new JButton("Draw");
         draw.addActionListener(listener);
         cards = playerCards();
-        bottom.add(cards);
-        bottom.add(draw);
+        bottomCards.add(cards);
+        bottomCards.add(draw);
 
-        botPlayingScreen.add(bottom, BorderLayout.SOUTH);
+        botPlayingScreen.add(bottomCards, BorderLayout.SOUTH);
 
         return botPlayingScreen;
     }
@@ -158,9 +158,8 @@ public class UnoPanel extends JPanel {
     public static JPanel playerWins() {
         JPanel playerWins = new JPanel();
         playerWins.setLayout(new BoxLayout(playerWins, BoxLayout.Y_AXIS));
-        JButton menu = new JButton("Menu");
-        menu.addActionListener(listener);
-        playerWins.add(menu);
+        goMenu.addActionListener(listener);
+        playerWins.add(goMenu);
         JTextArea text = new JTextArea("        You win!\n        Congratulations!\n        But can you do it again?");
         text.setFont(new Font("Arial", Font.PLAIN, 50));
         text.setEditable(false);
@@ -171,9 +170,8 @@ public class UnoPanel extends JPanel {
     public static JPanel botWins() {
         JPanel botWins = new JPanel();
         botWins.setLayout(new BoxLayout(botWins, BoxLayout.Y_AXIS));
-        JButton menu = new JButton("Menu");
-        menu.addActionListener(listener);
-        botWins.add(menu);
+        goMenu.addActionListener(listener);
+        botWins.add(goMenu);
         JTextArea text = new JTextArea("        The bot wins!\n        Better luck next time!\n        *Robot Noises*");
         text.setFont(new Font("Arial", Font.PLAIN, 50));
         text.setEditable(false);
@@ -190,9 +188,8 @@ public class UnoPanel extends JPanel {
     public static JPanel tieGame() {
         JPanel tieGame = new JPanel();
         tieGame.setLayout(new BoxLayout(tieGame, BoxLayout.Y_AXIS));
-        JButton menu = new JButton("Menu");
-        menu.addActionListener(listener);
-        tieGame.add(menu);
+        goMenu.addActionListener(listener);
+        tieGame.add(goMenu);
         JTextArea text = new JTextArea("        The game is a tie!\n        There are no more cards to draw or play!\n        Better luck next time!");
         text.setFont(new Font("Arial", Font.PLAIN, 50));
         text.setEditable(false);
@@ -203,7 +200,15 @@ public class UnoPanel extends JPanel {
     public void updateCardElements() {
         pCardsLeft.setText("        Cards left: Bot's cards: " + listener.pCardsLeft(1) + " - Player's cards: " + listener.pCardsLeft(0));
         cardsLeft.setText("        Cards in drawpile: " + listener.getCardsLeft());
+
+        bottomCards.removeAll();
+        bottomCards.setLayout(new GridLayout(2, 1));
         cards = playerCards();
+        bottomCards.add(cards);
+        JButton draw = new JButton("Draw");
+        draw.addActionListener(listener);
+        bottomCards.add(draw);
+
         int targetWidth = dims.getWidth() / 15, targetHeight = targetWidth * 143 / 100;
         Image img = listener.getPlacePile().getImage().getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
         placePile.setIcon(new ImageIcon(img));
