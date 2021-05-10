@@ -19,10 +19,9 @@ public class BotUnoGraphicsGame implements Game {
         }
         placePile = deck.deal();
         this.listener = listener;
-
     }
 
-    public void playRounds() {
+    public void playRounds() { //TODO Look at who plays when and if that happens
         String col = null;
         while (roundPlayable()) {
             skip = false;
@@ -70,7 +69,7 @@ public class BotUnoGraphicsGame implements Game {
     }
 
     private boolean roundPlayable() {
-        //checks if everyone has more than 0 cards on their hand and that there are more than 0 cards left to draw
+        //Checks if everyone has more than 0 cards on their hand and that there are more than 0 cards left to draw
         for (Hand hand : hands) {
             if (hand.length() == 0) {
                 return false;
@@ -80,7 +79,7 @@ public class BotUnoGraphicsGame implements Game {
     }
 
     private void nextPlayer() {
-        //determines which player goes next, taking into account the direction and if the next player is supposed to be skipped
+        //Determines which player goes next, taking into account the direction and if the next player is supposed to be skipped
         int nextPlayer;
         if (!rev && !skip) {
             nextPlayer = Math.floorMod(player + 1, hands.length);
@@ -97,7 +96,7 @@ public class BotUnoGraphicsGame implements Game {
     }
 
     private boolean canPlayACard() {
-        //checks if a player has a card to play
+        //Checks if a player has a card to play
         for (int i = 0; i < hands[player].length(); i++) {
             if (hands[player].getCard(i).isPlayable(placePile)) {
                 return true;
@@ -107,7 +106,7 @@ public class BotUnoGraphicsGame implements Game {
     }
 
     private void switchSkip() {
-        //checks to make sure that skips and switches aren't done more than once if another card isn't placed on top
+        //Checks to make sure that skips and switches aren't done more than once if another card isn't placed on top
         if (placePile instanceof Skip && !((Skip) placePile).getHasSkipped()) {
             skip = true;
             ((Skip) placePile).setHasSkipped(true);
