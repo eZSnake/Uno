@@ -21,7 +21,8 @@ public class BotUnoGraphicsGame implements Game {
         this.listener = listener;
     }
 
-    public void playRounds() { //TODO Look at who plays when and if that happens
+    public void playRounds() {
+        //TODO Look at who plays when and if that happens
         String col = null;
         while (roundPlayable()) {
             skip = false;
@@ -49,7 +50,7 @@ public class BotUnoGraphicsGame implements Game {
 
 
     public void draw(int extPlayer) {
-        //draws a card and also checks if the player is trying to draw while the bot is playing
+        //Draws a card and also checks if the player is trying to draw while the bot is playing
         if (extPlayer == player) {
             hands[player].addCard(deck.deal());
         }
@@ -126,9 +127,8 @@ public class BotUnoGraphicsGame implements Game {
     }
 
     public boolean canPlayCard(Card toPlay) {
-        //convert string to card fisrt
+        //Convert string to card fisrt
         for (int i = 0; i < hands[player].length(); i++) {
-            //if (hands[player].getCard(i).toString().equals(toPlay)) {
             if (toPlay.getId() == 4 || toPlay.getColor().equals(placePile.getColor()) || toPlay.getNum() == placePile.getNum()) {
                 return true;
             }
@@ -137,6 +137,7 @@ public class BotUnoGraphicsGame implements Game {
     }
 
     public Card stringToCard(String conv) {
+        //Converts an inputted string to a card on the hand of the current player
         Card card = null;
         for (int i = 0; i < hands[player].length(); i++) {
             if (hands[player].getCard(i).toString().equals(conv)) {
@@ -146,6 +147,7 @@ public class BotUnoGraphicsGame implements Game {
         return card;
     }
 
+    //Methods to pass along information to the listener class and beyond
     public int getPCardsLeft(int plyr) {
         return hands[plyr].length();
     }
@@ -175,6 +177,7 @@ public class BotUnoGraphicsGame implements Game {
     }
 
     public int determineWinner() {
+        //Determines the winner, if there is one
         if (!roundPlayable()) {
             if (hands[0].length() == 0) {
                 return 0;
