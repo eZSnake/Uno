@@ -44,6 +44,10 @@ public abstract class Card {
         return image;
     }
 
+    public void setImage(Image img) {
+        image = img;
+    }
+
     public boolean isPlayable(Card placePile) {
         return (id == 4 || color.equals(placePile.getColor()) || num == placePile.getNum());
     }

@@ -1,4 +1,8 @@
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
+import java.util.Locale;
 
 public class Plus4 extends Card {
     private boolean hasSkipped;
@@ -13,15 +17,20 @@ public class Plus4 extends Card {
     }
 
     public void specialMove(Deck deck, Hand[] hands, int currPlayer, String col) {
-        System.out.print("What would you like to change the color to? ");
-        if (col.equals("")) {
-            col = TextIO.getlnString().toLowerCase();
-            while (!col.equals("blue") && !col.equals("red") && !col.equals("green") && !col.equals("yellow")) {
-                System.out.print("Invalid color. Choose between Blue, Red, Green, Yellow. ");
-                col = TextIO.getlnString().toLowerCase();
-            }
-        }
+//        System.out.print("What would you like to change the color to? ");
+//        if (col.equals("")) {
+//            col = TextIO.getlnString().toLowerCase();
+//            while (!col.equals("blue") && !col.equals("red") && !col.equals("green") && !col.equals("yellow")) {
+//                System.out.print("Invalid color. Choose between Blue, Red, Green, Yellow. ");
+//                col = TextIO.getlnString().toLowerCase();
+//            }
+//        }
         this.setColor(col.substring(0, 1).toUpperCase() + col.substring(1));
+        Image img = null;
+        try {
+            img = ImageIO.read(new File("UnoCards/" + col.toLowerCase() + "plus4.jpg"));
+        } catch (IOException ignored) {}
+        setImage(img);
         if (currPlayer < hands.length-1) {
             currPlayer++;
         } else {

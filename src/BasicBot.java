@@ -3,16 +3,16 @@ import java.util.ArrayList;
 public class BasicBot {
     public BasicBot() {}
 
-    public String playCard(Hand hand, Card placePile) {
-        ArrayList<Integer> playableCards = new ArrayList<Integer>();
+    public Card playCard(Hand hand, Card placePile) {
+        ArrayList<Card> playableCards = new ArrayList<>();
         for (int i = 0; i < hand.length(); i++) {
             if (hand.getCard(i).isPlayable(placePile)) {
-                playableCards.add(i+1);
+                playableCards.add(hand.getCard(i));
             }
         }
         //Uncomment to see the cards the bot chooses from
 //        System.out.println(playableCards.toString());
-        return "" + playableCards.get((int)(playableCards.size()*Math.random()));
+        return playableCards.get((int)(playableCards.size()*Math.random()));
     }
 
     public String chooseColor(Hand hand) {

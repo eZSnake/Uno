@@ -13,6 +13,7 @@ public class Plus2 extends Card {
     }
 
     public void specialMove(Deck deck, Hand[] hands, int currPlayer, String col) {
+        //TODO Not adding 2 cards to next player
         if (currPlayer < hands.length-1) {
             currPlayer++;
         } else {

@@ -1,12 +1,13 @@
 public class BotUnoGraphicsGame implements Game {
+    private UnoListener listener;
     private final Deck deck;
     private Card placePile;
     private final Hand[] hands;
-    private boolean rev = false, skip = false, botTurn = false;
+    private boolean rev = false, skip = false, botTurn = false, botHasPlayed = false;
     private final BasicBot bot = new BasicBot();
     private int player = 0;
 
-    public BotUnoGraphicsGame() {
+    public BotUnoGraphicsGame(UnoListener listener) {
         deck = new Deck();
         deck.shuffle(2);
         hands = new Hand[2];
@@ -17,32 +18,22 @@ public class BotUnoGraphicsGame implements Game {
             }
         }
         placePile = deck.deal();
+        this.listener = listener;
+
     }
 
     public void playRounds() {
-        String cardToPlay, col;
-        int cardInt = -1;
+        String col = null;
         while (roundPlayable()) {
             skip = false;
-            if (!canPlayACard()) {
-                draw();
-                nextPlayer(hands.length);
-                continue;
-            }
-            if (botTurn) {
-                cardToPlay = bot.playCard(hands[1], placePile);
-            }
-            if (cardInt != -1) {
-                placePile = hands[player].getCard(cardInt - 1);
-                hands[player].removeCard(cardInt - 1);
-            }
-            if (hands[player].length() <= 0) {
-                break;
-            }
-            if (botTurn) {
-                col = bot.chooseColor(hands[1]);
-            } else {
-                col = "";
+            if (player == 1) {
+                Card toPlay = bot.playCard(hands[1], placePile);
+                if (toPlay.getId() == 4) {
+                    col = bot.chooseColor(hands[1]);
+                }
+                botHasPlayed = true;
+                botHasPlayed();
+                playCard(toPlay);
             }
             placePile.specialMove(deck, hands, player, col);
             switchSkip();
@@ -52,6 +43,7 @@ public class BotUnoGraphicsGame implements Game {
                     ((Switch) placePile).setHasSwitched(true);
                 }
             }
+            nextPlayer();
         }
         determineWinner();
     }
@@ -73,6 +65,10 @@ public class BotUnoGraphicsGame implements Game {
         hands[player].removeCard(toPlay);
     }
 
+    public void doSpecialMove(String col) {
+        placePile.specialMove(deck, hands, player, col);
+    }
+
     private boolean roundPlayable() {
         //checks if everyone has more than 0 cards on their hand and that there are more than 0 cards left to draw
         for (Hand hand : hands) {
@@ -83,19 +79,19 @@ public class BotUnoGraphicsGame implements Game {
         return deck.cardsLeft() >= 0;
     }
 
-    private void nextPlayer(int players) {
+    private void nextPlayer() {
         //determines which player goes next, taking into account the direction and if the next player is supposed to be skipped
         int nextPlayer;
         if (!rev && !skip) {
-            nextPlayer = Math.floorMod(player + 1, players);
+            nextPlayer = Math.floorMod(player + 1, hands.length);
             botTurn = !botTurn;
         } else if (!rev){
-            nextPlayer = Math.floorMod(player + 2, players);
+            nextPlayer = Math.floorMod(player + 2, hands.length);
         } else if (!skip) {
-            nextPlayer = Math.floorMod(player - 1, players);
+            nextPlayer = Math.floorMod(player - 1, hands.length);
             botTurn = !botTurn;
         } else {
-            nextPlayer = Math.floorMod(player - 2, players);
+            nextPlayer = Math.floorMod(player - 2, hands.length);
         }
         player = nextPlayer;
     }
@@ -133,14 +129,11 @@ public class BotUnoGraphicsGame implements Game {
     public boolean canPlayCard(Card toPlay) {
         //convert string to card fisrt
         for (int i = 0; i < hands[player].length(); i++) {
-            System.out.println(placePile.toString());
             //if (hands[player].getCard(i).toString().equals(toPlay)) {
             if (toPlay.getId() == 4 || toPlay.getColor().equals(placePile.getColor()) || toPlay.getNum() == placePile.getNum()) {
-                System.out.println("True");
                 return true;
             }
         }
-        System.out.println("False");
         return false;
     }
 
@@ -172,6 +165,14 @@ public class BotUnoGraphicsGame implements Game {
 
     public Card getPlacePile() {
         return placePile;
+    }
+
+    public void botHasPlayed() {
+        System.out.println("botHasPlayed has been called in game");
+        if (botHasPlayed) {
+            botHasPlayed = false;
+            listener.botPlayed();
+        }
     }
 
     public int determineWinner() {

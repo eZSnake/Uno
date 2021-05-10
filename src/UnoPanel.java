@@ -1,7 +1,6 @@
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
@@ -31,9 +30,9 @@ public class UnoPanel extends JPanel {
         c.setLayout(screen);
         c.add(menu());
         c.add(botPlayingScreen());
-        c.add(playerWins());
-        c.add(botWins());
-        c.add(tieGame());
+        c.add(playerWins(), "playerWin");
+        c.add(botWins(), "botWin");
+        c.add(tieGame(), "tieGame");
         window.setContentPane(c);
 
         window.setLocation(300,300);
@@ -220,6 +219,10 @@ public class UnoPanel extends JPanel {
 
     public void goToMenu() {
         screen.first(c);
+    }
+
+    public void showScreen(String toShow) {
+        screen.show(c, toShow);
     }
 
     @Override

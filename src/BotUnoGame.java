@@ -52,7 +52,7 @@ public class BotUnoGame {  //Eike Rehwald
             else {
                 //Uncomment the System.outs to see the bot's cards and what it chooses
 //                System.out.println("Bot's cards:\n" + hands[1].toString(placePile));
-                cardToPlay = bot.playCard(hands[1], placePile);
+                cardToPlay = bot.playCard(hands[1], placePile).toString();
 //                System.out.println("Bot's play: " + cardToPlay);
             }
             boolean actionTaken = false;
