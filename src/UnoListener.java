@@ -25,7 +25,7 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
 //            game = new BotUnoGraphicsGame();
                 panel.nextScreen();
                 panel.repaint();
-//            game.playRounds();
+                game.playRounds();
                 break;
             case "Players: ":
                 UnoGame myGame = new UnoGame(playerCount);
@@ -34,6 +34,7 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
                 break;
             case "Draw":
                 game.draw(0);
+                game.setPlayerHasPlayed();
                 panel.updateCardElements();
                 panel.repaint();
 //            panel.getComponent(1).list();
@@ -58,6 +59,7 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
                 } else {
                     JOptionPane.showMessageDialog(panel, "That card can't be played.");
                 }
+                game.setPlayerHasPlayed();
                 panel.updateCardElements();
                 setWinnerScreen();
                 panel.repaint();

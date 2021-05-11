@@ -11,7 +11,6 @@ public class UnoPanel extends JPanel {
     private static JLabel pCardsLeft, cardsLeft, placePile;
     private static UnoListener listener;
     private static JPanel cards, bottomCards;
-    private static JButton goMenu = new JButton("Menu");
 
     public static void main(String[] args) {
         JFrame window = new JFrame("Uno");
@@ -88,6 +87,7 @@ public class UnoPanel extends JPanel {
         //Left top (cards left and go to menu
         JPanel left = new JPanel();
         left.setLayout(new GridLayout(2, 1));
+        JButton goMenu = new JButton("Menu");
         goMenu.addActionListener(listener);
         left.add(goMenu);
         pCardsLeft = new JLabel("        Cards left: Bot's cards: " + listener.pCardsLeft(1) + " - Player's cards: " + listener.pCardsLeft(0));
@@ -157,6 +157,7 @@ public class UnoPanel extends JPanel {
     public static JPanel playerWins() {
         JPanel playerWins = new JPanel();
         playerWins.setLayout(new BoxLayout(playerWins, BoxLayout.Y_AXIS));
+        JButton goMenu = new JButton("Menu");
         goMenu.addActionListener(listener);
         playerWins.add(goMenu);
         JTextArea text = new JTextArea("        You win!\n        Congratulations!\n        But can you do it again?");
@@ -169,6 +170,7 @@ public class UnoPanel extends JPanel {
     public static JPanel botWins() {
         JPanel botWins = new JPanel();
         botWins.setLayout(new BoxLayout(botWins, BoxLayout.Y_AXIS));
+        JButton goMenu = new JButton("Menu");
         goMenu.addActionListener(listener);
         botWins.add(goMenu);
         JTextArea text = new JTextArea("        The bot wins!\n        Better luck next time!\n        *Robot Noises*");
@@ -187,6 +189,7 @@ public class UnoPanel extends JPanel {
     public static JPanel tieGame() {
         JPanel tieGame = new JPanel();
         tieGame.setLayout(new BoxLayout(tieGame, BoxLayout.Y_AXIS));
+        JButton goMenu = new JButton("Menu");
         goMenu.addActionListener(listener);
         tieGame.add(goMenu);
         JTextArea text = new JTextArea("        The game is a tie!\n        There are no more cards to draw or play!\n        Better luck next time!");
