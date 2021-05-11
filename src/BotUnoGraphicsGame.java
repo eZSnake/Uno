@@ -24,20 +24,12 @@ public class BotUnoGraphicsGame implements Game {
     public void playRounds() {
         //TODO Look at who plays when and if that happens
         //TODO Stop infinite loops of one call preventing game from running
-        String col = null;
+
         while (roundPlayable()) {
             skip = false;
             System.out.println("Player: " + player);
             if (player == 1) {
-                Card toPlay = bot.playCard(hands[1], placePile);
-                if (toPlay.getId() == 4) {
-                    col = bot.chooseColor(hands[1]);
-                }
-                botHasPlayed = true;
-                botHasPlayed();
-                playCard(toPlay);
-                doSpecialMove(col);
-                nextPlayer();
+                botPlayCard();
             }
             switchSkip();
             if (placePile instanceof Switch) {
@@ -67,6 +59,19 @@ public class BotUnoGraphicsGame implements Game {
     public void playCard(Card toPlay) {
         placePile = toPlay;
         hands[player].removeCard(toPlay);
+    }
+
+    private void botPlayCard() {
+        String col = null;
+        Card toPlay = bot.playCard(hands[1], placePile);
+        if (toPlay.getId() == 4) {
+            col = bot.chooseColor(hands[1]);
+        }
+        botHasPlayed = true;
+        botHasPlayed();
+        playCard(toPlay);
+        doSpecialMove(col);
+        nextPlayer();
     }
 
     public void doSpecialMove(String col) {
