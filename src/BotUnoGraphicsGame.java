@@ -1,9 +1,9 @@
-public class BotUnoGraphicsGame implements Game {
+public class BotUnoGraphicsGame { //implements Game
     private UnoListener listener;
     private final Deck deck;
     private Card placePile;
     private final Hand[] hands;
-    private boolean rev = false, skip = false, botTurn = false, botHasPlayed = false, playerHasPlayed = false;
+    private boolean rev = false, skip = false, botTurn = false; // botHasPlayed = false, playerHasPlayed = false;
     private final BasicBot bot = new BasicBot();
     private int player = 0;
 
@@ -21,21 +21,21 @@ public class BotUnoGraphicsGame implements Game {
         this.listener = listener;
     }
 
-    public void playRounds() {
-        //TODO Look at who plays when and if that happens
-        //TODO Stop infinite loops of one call preventing game from running
-
-        while (roundPlayable()) {
-
-//            System.out.println("Player: " + player);
-//            if (player == 1) {
-//                botPlayCard();
-//            }
-
-//            System.out.println("Next player: " + player);
-        }
-        determineWinner();
-    }
+//    public void playRounds() {
+//        //TODO Look at who plays when and if that happens
+//        //TODO Stop infinite loops of one call preventing game from running
+//
+//        while (roundPlayable()) {
+//
+////            System.out.println("Player: " + player);
+////            if (player == 1) {
+////                botPlayCard();
+////            }
+//
+////            System.out.println("Next player: " + player);
+//        }
+//        determineWinner();
+//    }
 
 
     public void draw(int extPlayer) {
@@ -43,6 +43,7 @@ public class BotUnoGraphicsGame implements Game {
         if (extPlayer == player) {
             hands[player].addCard(deck.deal());
         }
+        nextPlayer();
     }
 
     public void draw() {
@@ -66,6 +67,7 @@ public class BotUnoGraphicsGame implements Game {
     public void botPlayCard() {
         //TODO Problem after playing 2+ cards in a row (eg skip + num)
         if (!canPlayACard()) {
+            System.out.println("Bot drawing");
             draw();
         } else {
             String col = null;
@@ -73,8 +75,6 @@ public class BotUnoGraphicsGame implements Game {
             if (toPlay.getId() == 4) {
                 col = bot.chooseColor(hands[1]);
             }
-            botHasPlayed = true;
-            botHasPlayed();
             playCard(toPlay);
             doSpecialMove(col);
             if (getPlayer() == 1) {
@@ -112,22 +112,6 @@ public class BotUnoGraphicsGame implements Game {
             nextPlayer = Math.floorMod(player - 2, hands.length);
         }
         player = nextPlayer;
-    }
-
-    public int checkNextPlayer() {
-        int nextPlayer;
-        if (!rev && !skip) {
-            nextPlayer = Math.floorMod(player + 1, hands.length);
-            botTurn = !botTurn;
-        } else if (!rev){
-            nextPlayer = Math.floorMod(player + 2, hands.length);
-        } else if (!skip) {
-            nextPlayer = Math.floorMod(player - 1, hands.length);
-            botTurn = !botTurn;
-        } else {
-            nextPlayer = Math.floorMod(player - 2, hands.length);
-        }
-        return nextPlayer;
     }
 
     private boolean canPlayACard() {
@@ -202,29 +186,8 @@ public class BotUnoGraphicsGame implements Game {
         return placePile;
     }
 
-    public void setPlayerHasPlayed() {
-        nextPlayer();
-    }
-
     public int getPlayer() {
         return player;
-    }
-
-    public boolean pHasPlayed() {
-        System.out.println("pHasPlayed has been called in game");
-        if (playerHasPlayed) {
-            playerHasPlayed = false;
-            return true;
-        }
-        return false;
-    }
-
-    private void botHasPlayed() {
-        System.out.println("botHasPlayed has been called in game");
-        if (botHasPlayed) {
-            botHasPlayed = false;
-            listener.botPlayed();
-        }
     }
 
     public int determineWinner() {

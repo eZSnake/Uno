@@ -34,7 +34,6 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
                 break;
             case "Draw":
                 game.draw(0);
-                game.setPlayerHasPlayed();
                 if (game.getPlayer() == 1) {
                     System.out.println("Bots turn");
                     game.botPlayCard();
