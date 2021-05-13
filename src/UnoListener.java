@@ -33,12 +33,14 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
                 panel.repaint();
                 break;
             case "Draw":
+                //TODO Card overflow when having over 9 cards on hand
                 game.draw(0);
                 if (game.getPlayer() == 1) {
                     System.out.println("Bots turn");
                     game.botPlayCard();
                 }
                 panel.updateCardElements();
+                panel.updateCards();
                 panel.repaint();
 //            panel.getComponent(1).list();
                 break;
@@ -69,6 +71,7 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
                     game.botPlayCard();
                 }
                 panel.updateCardElements();
+                panel.updateCards();
                 setWinnerScreen();
                 panel.repaint();
                 break;

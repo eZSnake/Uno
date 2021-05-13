@@ -200,9 +200,16 @@ public class UnoPanel extends JPanel {
     }
 
     public void updateCardElements() {
+        //TODO Card overflow when having over 9 cards on hand
         pCardsLeft.setText("        Cards left: Bot's cards: " + listener.pCardsLeft(1) + " - Player's cards: " + listener.pCardsLeft(0));
         cardsLeft.setText("        Cards in drawpile: " + listener.getCardsLeft());
 
+        int targetWidth = dims.getWidth() / 15, targetHeight = targetWidth * 143 / 100;
+        Image img = listener.getPlacePile().getImage().getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
+        placePile.setIcon(new ImageIcon(img));
+    }
+    //TODO Maybe refresh only elements when bot plays and everything when player plays
+    public void updateCards() {
         bottomCards.removeAll();
         bottomCards.setLayout(new GridLayout(2, 1));
         cards = playerCards();
@@ -210,10 +217,6 @@ public class UnoPanel extends JPanel {
         JButton draw = new JButton("Draw");
         draw.addActionListener(listener);
         bottomCards.add(draw);
-
-        int targetWidth = dims.getWidth() / 15, targetHeight = targetWidth * 143 / 100;
-        Image img = listener.getPlacePile().getImage().getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
-        placePile.setIcon(new ImageIcon(img));
     }
 
     public void nextScreen() {
