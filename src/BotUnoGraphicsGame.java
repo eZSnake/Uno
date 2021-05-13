@@ -64,17 +64,21 @@ public class BotUnoGraphicsGame implements Game {
     }
 
     public void botPlayCard() {
-        String col = null;
-        Card toPlay = bot.playCard(hands[1], placePile);
-        if (toPlay.getId() == 4) {
-            col = bot.chooseColor(hands[1]);
-        }
-        botHasPlayed = true;
-        botHasPlayed();
-        playCard(toPlay);
-        doSpecialMove(col);
-        if (getPlayer() == 1) {
-            botPlayCard();
+        if (!canPlayACard()) {
+            draw();
+        } else {
+            String col = null;
+            Card toPlay = bot.playCard(hands[1], placePile);
+            if (toPlay.getId() == 4) {
+                col = bot.chooseColor(hands[1]);
+            }
+            botHasPlayed = true;
+            botHasPlayed();
+            playCard(toPlay);
+            doSpecialMove(col);
+            if (getPlayer() == 1) {
+                botPlayCard();
+            }
         }
     }
 

@@ -6,12 +6,13 @@ public class BasicBot {
     public Card playCard(Hand hand, Card placePile) {
         ArrayList<Card> playableCards = new ArrayList<>();
         for (int i = 0; i < hand.length(); i++) {
+            System.out.println(hand.getCard((i)));
             if (hand.getCard(i).isPlayable(placePile)) {
                 playableCards.add(hand.getCard(i));
             }
         }
         //Uncomment to see the cards the bot chooses from
-//        System.out.println(playableCards.toString());
+        System.out.println(playableCards);
         return playableCards.get((int)(playableCards.size()*Math.random()));
     }
 
