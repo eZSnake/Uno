@@ -36,6 +36,7 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
                 game.draw(0);
                 game.setPlayerHasPlayed();
                 if (game.getPlayer() == 1) {
+                    System.out.println("Bots turn");
                     game.botPlayCard();
                 }
                 panel.updateCardElements();
@@ -47,6 +48,7 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
                 panel.repaint();
                 break;
             default:
+                System.out.println("Player played");
                 Card toPlay = game.stringToCard(a);
                 if (game.canPlayCard(toPlay)) {
                     game.playCard(toPlay);
@@ -64,6 +66,7 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
                 }
 //                game.setPlayerHasPlayed();
                 if (game.getPlayer() == 1) {
+                    System.out.println("Bots turn");
                     game.botPlayCard();
                 }
                 panel.updateCardElements();

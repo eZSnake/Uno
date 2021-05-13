@@ -64,6 +64,7 @@ public class BotUnoGraphicsGame implements Game {
     }
 
     public void botPlayCard() {
+        //TODO Problem after playing 2+ cards in a row (eg skip + num)
         if (!canPlayACard()) {
             draw();
         } else {
