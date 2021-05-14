@@ -35,14 +35,13 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
             case "Draw":
                 //TODO Card overflow when having over 9 cards on hand
                 game.draw(0);
+                panel.updateCardElements();
+                panel.repaint();
                 if (game.getPlayer() == 1) {
                     System.out.println("Bots turn");
                     game.botPlayCard();
                 }
-                panel.updateCardElements();
-                panel.updateCards();
-                panel.repaint();
-//            panel.getComponent(1).list();
+                updateWholeScreen();
                 break;
             case "Menu":
                 panel.goToMenu();
@@ -65,15 +64,13 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
                 } else {
                     JOptionPane.showMessageDialog(panel, "That card can't be played.");
                 }
-//                game.setPlayerHasPlayed();
+                panel.updateCardElements();
+                panel.repaint();
                 if (game.getPlayer() == 1) {
                     System.out.println("Bots turn");
                     game.botPlayCard();
                 }
-                panel.updateCardElements();
-                panel.updateCards();
-                setWinnerScreen();
-                panel.repaint();
+                updateWholeScreen();
                 break;
         }
     }
@@ -141,9 +138,9 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
     @Override
     public void componentHidden(ComponentEvent e) { }
 
-    public void botPlayed() {
-        System.out.println("-listener- Bot Played...Refreshing");
+    private void updateWholeScreen() {
         panel.updateCardElements();
+        panel.updateCards();
         setWinnerScreen();
         panel.repaint();
     }

@@ -21,23 +21,6 @@ public class BotUnoGraphicsGame { //implements Game
         this.listener = listener;
     }
 
-//    public void playRounds() {
-//        //TODO Look at who plays when and if that happens
-//        //TODO Stop infinite loops of one call preventing game from running
-//
-//        while (roundPlayable()) {
-//
-////            System.out.println("Player: " + player);
-////            if (player == 1) {
-////                botPlayCard();
-////            }
-//
-////            System.out.println("Next player: " + player);
-//        }
-//        determineWinner();
-//    }
-
-
     public void draw(int extPlayer) {
         //Draws a card and also checks if the player is trying to draw while the bot is playing
         if (extPlayer == player) {
@@ -65,7 +48,8 @@ public class BotUnoGraphicsGame { //implements Game
     }
 
     public void botPlayCard() {
-        //TODO Problem after playing 2+ cards in a row (eg skip + num)
+//        try {wait(100);} catch(InterruptedException ignored) {}
+        try {Thread.sleep(50);} catch(InterruptedException ignored) {}
         if (!canPlayACard()) {
             System.out.println("Bot drawing");
             draw();
