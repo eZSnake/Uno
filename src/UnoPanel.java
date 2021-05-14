@@ -130,13 +130,20 @@ public class UnoPanel extends JPanel {
 
     public static JPanel playerCards() {
         JPanel cards = new JPanel();
-        int targetWidth = dims.getWidth() / 20, targetHeight = targetWidth * 143 / 100;
-        Hand playerHand = listener.getPlayerHand();
+        int div = 20;
+        Hand playerHand = listener.getPlayerHand(0);
+        //TODO Optimize size changeing
+        if (playerHand.length() > 9) {
+            div += 2 * playerHand.length() + 4;
+        }
+        int targetWidth = dims.getWidth() / div, targetHeight = targetWidth * 143 / 100;
         for (int i = 0; i < playerHand.length(); i++) {
             JButton card = new JButton(playerHand.getCard(i).toString());
             Image img = playerHand.getCard(i).getImage().getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
             card.setIcon(new ImageIcon(img));
             card.addActionListener(listener);
+            card.setVerticalTextPosition(SwingConstants.BOTTOM);
+            card.setSize(targetWidth, targetHeight);
             cards.add(card);
         }
         return cards;

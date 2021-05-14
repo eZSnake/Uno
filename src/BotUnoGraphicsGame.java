@@ -158,8 +158,8 @@ public class BotUnoGraphicsGame { //implements Game
         return deck.cardsLeft();
     }
 
-    public Hand getPlayerHand() {
-        return hands[0];
+    public Hand getPlayerHand(int plyr) {
+        return hands[plyr];
     }
 
     public Deck getDeck() {

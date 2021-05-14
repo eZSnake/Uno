@@ -94,8 +94,8 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
         return game.getCardsLeft();
     }
 
-    public Hand getPlayerHand() {
-        return game.getPlayerHand();
+    public Hand getPlayerHand(int plyr) {
+        return game.getPlayerHand(plyr);
     }
 
     public Deck getDeck() {
