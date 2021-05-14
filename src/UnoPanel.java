@@ -28,15 +28,26 @@ public class UnoPanel extends JPanel {
         c = window.getContentPane();
         c.setLayout(screen);
         c.add(menu());
-        c.add(botPlayingScreen());
-        c.add(playerWins(), "playerWin");
-        c.add(botWins(), "botWin");
-        c.add(tieGame(), "tieGame");
         window.setContentPane(c);
 
         window.setLocation(300,300);
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setVisible(true);
+    }
+
+    public static void setBotGame() {
+        c.add(botPlayingScreen());
+        c.add(playerBotWins(), "playerWin");
+        c.add(botWins(), "botWin");
+        c.add(tieGame(), "tieGame");
+    }
+
+    public static void setPlayerGame() {
+        //Add player screens
+        for (int i = 0; i < listener.getPlayerCount(); i++) {
+            c.add(playerPlayingScreen(i), "player" + i);
+            c.add(playerNWins(i), "player" + i + "Win");
+        }
     }
 
     public static JPanel menu() {
@@ -128,6 +139,12 @@ public class UnoPanel extends JPanel {
         return botPlayingScreen;
     }
 
+    public static JPanel playerPlayingScreen(int player) {
+        JPanel playerPlayingScreen = new JPanel();
+
+        return playerPlayingScreen;
+    }
+
     public static JPanel playerCards() {
         JPanel cards = new JPanel();
         int div = 20;
@@ -161,17 +178,30 @@ public class UnoPanel extends JPanel {
         return cards;
     }
 
-    public static JPanel playerWins() {
-        JPanel playerWins = new JPanel();
-        playerWins.setLayout(new BoxLayout(playerWins, BoxLayout.Y_AXIS));
+    public static JPanel playerBotWins() {
+        JPanel playerBotWins = new JPanel();
+        playerBotWins.setLayout(new BoxLayout(playerBotWins, BoxLayout.Y_AXIS));
         JButton goMenu = new JButton("Menu");
         goMenu.addActionListener(listener);
-        playerWins.add(goMenu);
+        playerBotWins.add(goMenu);
         JTextArea text = new JTextArea("        You win!\n        Congratulations!\n        But can you do it again?");
         text.setFont(new Font("Arial", Font.PLAIN, 50));
         text.setEditable(false);
-        playerWins.add(text);
-        return playerWins;
+        playerBotWins.add(text);
+        return playerBotWins;
+    }
+
+    public static JPanel playerNWins(int player) {
+        JPanel playerNWins = new JPanel();
+        playerNWins.setLayout(new BoxLayout(playerNWins, BoxLayout.Y_AXIS));
+        JButton goMenu = new JButton("Menu");
+        goMenu.addActionListener(listener);
+        playerNWins.add(goMenu);
+        JTextArea text = new JTextArea("        Player " + player + " wins!\n        Congratulations!\n        But can this feat be repeated?");
+        text.setFont(new Font("Arial", Font.PLAIN, 50));
+        text.setEditable(false);
+        playerNWins.add(text);
+        return playerNWins;
     }
 
     public static JPanel botWins() {
@@ -207,16 +237,18 @@ public class UnoPanel extends JPanel {
     }
 
     public void updateCardElements() {
-        //TODO Card overflow when having over 9 cards on hand
+        System.out.println("Updating card elements");
         pCardsLeft.setText("        Cards left: Bot's cards: " + listener.pCardsLeft(1) + " - Player's cards: " + listener.pCardsLeft(0));
         cardsLeft.setText("        Cards in drawpile: " + listener.getCardsLeft());
 
         int targetWidth = dims.getWidth() / 15, targetHeight = targetWidth * 143 / 100;
         Image img = listener.getPlacePile().getImage().getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
         placePile.setIcon(new ImageIcon(img));
+        repaint();
     }
     //TODO Maybe refresh only elements when bot plays and everything when player plays
     public void updateCards() {
+        //TODO Card overflow when having over 9 cards on hand
         bottomCards.removeAll();
         bottomCards.setLayout(new GridLayout(2, 1));
         cards = playerCards();
@@ -224,6 +256,7 @@ public class UnoPanel extends JPanel {
         JButton draw = new JButton("Draw");
         draw.addActionListener(listener);
         bottomCards.add(draw);
+        repaint();
     }
 
     public void nextScreen() {

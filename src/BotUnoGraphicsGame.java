@@ -6,11 +6,11 @@ public class BotUnoGraphicsGame { //implements Game
     private boolean rev = false, skip = false, botTurn = false; // botHasPlayed = false, playerHasPlayed = false;
     private final BasicBot bot = new BasicBot();
     private int player = 0;
-
-    public BotUnoGraphicsGame(UnoListener listener) {
+//TODO Maybe make it one game file for both bot and not -> only have a bot initialized if true or always have it run
+    public BotUnoGraphicsGame(UnoListener listener, int players) {
         deck = new Deck();
-        deck.shuffle(2);
-        hands = new Hand[2];
+        deck.shuffle(players);
+        hands = new Hand[players];
         for (int i = 0; i < hands.length; i++) {
             hands[i] = new Hand();
             for (int j = 0; j < 7; j++) {
@@ -48,7 +48,6 @@ public class BotUnoGraphicsGame { //implements Game
     }
 
     public void botPlayCard() {
-//        try {wait(100);} catch(InterruptedException ignored) {}
         try {Thread.sleep(50);} catch(InterruptedException ignored) {}
         if (!canPlayACard()) {
             System.out.println("Bot drawing");

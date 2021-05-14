@@ -10,7 +10,8 @@ import java.awt.event.ComponentListener;
 public class UnoListener implements ActionListener, ChangeListener, ComponentListener {
     private UnoPanel panel;
     private int playerCount;
-    private BotUnoGraphicsGame game = new BotUnoGraphicsGame(this); //TODO remove everything after = for full implementation
+    private BotUnoGraphicsGame game = new BotUnoGraphicsGame(this, 2); //TODO remove everything after = for full implementation
+    private boolean botGame = false;
 
     public UnoListener(UnoPanel panel) {
         this.panel = panel;
@@ -23,20 +24,21 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
         switch (a) {
             case "Bot":
 //            game = new BotUnoGraphicsGame();
+                botGame = true;
+                game = new BotUnoGraphicsGame(this, 2);
                 panel.nextScreen();
                 panel.repaint();
-//                game.playRounds();
                 break;
             case "Players: ":
                 UnoGame myGame = new UnoGame(playerCount);
                 myGame.playRounds(0);
+                game = new BotUnoGraphicsGame(this, playerCount);
                 panel.repaint();
                 break;
             case "Draw":
                 //TODO Card overflow when having over 9 cards on hand
                 game.draw(0);
                 panel.updateCardElements();
-                panel.repaint();
                 if (game.getPlayer() == 1) {
                     System.out.println("Bots turn");
                     game.botPlayCard();
@@ -65,7 +67,6 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
                     JOptionPane.showMessageDialog(panel, "That card can't be played.");
                 }
                 panel.updateCardElements();
-                panel.repaint();
                 if (game.getPlayer() == 1) {
                     System.out.println("Bots turn");
                     game.botPlayCard();
@@ -106,17 +107,23 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
         return game.getPlacePile();
     }
 
+    public int getPlayerCount() {
+        return playerCount;
+    }
+
     private void setWinnerScreen() {
-        switch (game.determineWinner()) {
-            case 0:
-                panel.showScreen("playerWin");
-                break;
-            case 1:
-                panel.showScreen("botWin");
-                break;
-            case 2:
-                panel.showScreen("tieGame");
-                break;
+        if (botGame) {
+            switch (game.determineWinner()) {
+                case 0:
+                    panel.showScreen("playerWin");
+                    break;
+                case 1:
+                    panel.showScreen("botWin");
+                    break;
+                case 2:
+                    panel.showScreen("tieGame");
+                    break;
+            }
         }
         panel.removeAll();
         panel.repaint();
@@ -142,6 +149,5 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
         panel.updateCardElements();
         panel.updateCards();
         setWinnerScreen();
-        panel.repaint();
     }
 }
