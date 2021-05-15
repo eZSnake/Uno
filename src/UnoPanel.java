@@ -19,11 +19,6 @@ public class UnoPanel extends JPanel {
         window.setSize(1920,1080);
         dims = new PanelDims(window.getWidth(), window.getHeight());
 
-//        window.setContentPane(menu());
-//        window.setContentPane(botPlayingScreen());
-//        window.setContentPane(allCards());
-//        window.setContentPane(botWins());
-
         screen = new CardLayout();
         c = window.getContentPane();
         c.setLayout(screen);
@@ -35,19 +30,25 @@ public class UnoPanel extends JPanel {
         window.setVisible(true);
     }
 
-    public static void setBotGame() {
+    public void setBotGame() {
         c.add(botPlayingScreen());
         c.add(playerBotWins(), "playerWin");
         c.add(botWins(), "botWin");
         c.add(tieGame(), "tieGame");
     }
 
-    public static void setPlayerGame() {
+    public void setPlayerGame() {
         //Add player screens
         for (int i = 0; i < listener.getPlayerCount(); i++) {
             c.add(playerPlayingScreen(i), "player" + i);
             c.add(playerNWins(i), "player" + i + "Win");
         }
+        c.add(tieGame(), "tieGame");
+    }
+
+    public void resetC() {
+        c.removeAll();
+        c.add(menu());
     }
 
     public static JPanel menu() {
@@ -130,10 +131,9 @@ public class UnoPanel extends JPanel {
         bottomCards.setLayout(new GridLayout(2, 1));
         JButton draw = new JButton("Draw");
         draw.addActionListener(listener);
-        cards = playerCards();
+        cards = playerCards(0);
         bottomCards.add(cards);
         bottomCards.add(draw);
-
         botPlayingScreen.add(bottomCards, BorderLayout.SOUTH);
 
         return botPlayingScreen;
@@ -141,14 +141,61 @@ public class UnoPanel extends JPanel {
 
     public static JPanel playerPlayingScreen(int player) {
         JPanel playerPlayingScreen = new JPanel();
+        playerPlayingScreen.setLayout(new BorderLayout());
+        //Top of the screen
+        JPanel top = new JPanel();
+        top.setLayout(new GridLayout(1, 2));
+        //Left top (cards left and go to menu
+        JPanel left = new JPanel();
+        left.setLayout(new GridLayout(2, 1));
+        JButton goMenu = new JButton("Menu");
+        goMenu.addActionListener(listener);
+        left.add(goMenu);
+        StringBuilder cardsLeftAsString = new StringBuilder("        Cards left: ");
+        for (int i = 0; i < listener.getPlayerCount(); i++) {
+            cardsLeftAsString.append("Player ").append(i + 1).append(": ").append(listener.pCardsLeft(i)).append(" - ");
+        }
+        pCardsLeft = new JLabel(cardsLeftAsString.toString());
+        pCardsLeft.setFont(new Font("Arial", Font.PLAIN, 20));
+        left.add("playercards", pCardsLeft);
+        top.add(left);
+        //Top right (cards left in draw pile w/ pic)
+        JPanel right = new JPanel();
+        right.setLayout(new GridLayout(2, 1));
+        Image back = null;
+        int targetWidth = dims.getWidth() / 20, targetHeight = targetWidth * 143 / 100;
+        try {
+            back = ImageIO.read(new File("UnoCards/back.png")).getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
+        } catch (IOException ignored) {}
+        right.add(new JLabel(new ImageIcon(back)));
+        cardsLeft = new JLabel("        Cards in drawpile: " + listener.getCardsLeft());
+        cardsLeft.setFont(new Font("Arial", Font.PLAIN, 20));
+        right.add("cardsleft", cardsLeft);
+        top.add(right);
+        playerPlayingScreen.add(top, BorderLayout.NORTH);
+        //Center (card on place pile)
+        targetWidth = dims.getWidth() / 15;
+        targetHeight = targetWidth * 143 / 100;
+        Image img = listener.getPlacePile().getImage().getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
+        placePile = new JLabel(new ImageIcon(img));
+        playerPlayingScreen.add(placePile, BorderLayout.CENTER);
+        //Bottom (cards on hand and draw)
+        bottomCards = new JPanel();
+        bottomCards.setLayout(new GridLayout(2, 1));
+        JButton draw = new JButton("Draw");
+        draw.addActionListener(listener);
+        cards = playerCards(player);
+        bottomCards.add(cards);
+        bottomCards.add(draw);
+        playerPlayingScreen.add(bottomCards, BorderLayout.SOUTH);
 
         return playerPlayingScreen;
     }
 
-    public static JPanel playerCards() {
+    public static JPanel playerCards(int player) {
         JPanel cards = new JPanel();
         int div = 20;
-        Hand playerHand = listener.getPlayerHand(0);
+        Hand playerHand = listener.getPlayerHand(player);
         //TODO Optimize size changeing
         if (playerHand.length() > 9) {
             div += 2 * playerHand.length() + 4;
@@ -197,7 +244,7 @@ public class UnoPanel extends JPanel {
         JButton goMenu = new JButton("Menu");
         goMenu.addActionListener(listener);
         playerNWins.add(goMenu);
-        JTextArea text = new JTextArea("        Player " + player + " wins!\n        Congratulations!\n        But can this feat be repeated?");
+        JTextArea text = new JTextArea("        Player " + (player + 1) + " wins!\n        Congratulations!\n        But can this feat be repeated?");
         text.setFont(new Font("Arial", Font.PLAIN, 50));
         text.setEditable(false);
         playerNWins.add(text);
@@ -238,7 +285,15 @@ public class UnoPanel extends JPanel {
 
     public void updateCardElements() {
         System.out.println("Updating card elements");
-        pCardsLeft.setText("        Cards left: Bot's cards: " + listener.pCardsLeft(1) + " - Player's cards: " + listener.pCardsLeft(0));
+        if (listener.isBotGame()) {
+            pCardsLeft.setText("        Cards left: Bot's cards: " + listener.pCardsLeft(1) + " - Player's cards: " + listener.pCardsLeft(0));
+        } else {
+            StringBuilder cardsLeftAsString = new StringBuilder("        Cards left: ");
+            for (int i = 0; i < listener.getPlayerCount(); i++) {
+                cardsLeftAsString.append("Player ").append(i + 1).append(": ").append(listener.pCardsLeft(i)).append(" - ");
+            }
+            pCardsLeft.setText(cardsLeftAsString.toString());
+        }
         cardsLeft.setText("        Cards in drawpile: " + listener.getCardsLeft());
 
         int targetWidth = dims.getWidth() / 15, targetHeight = targetWidth * 143 / 100;
@@ -247,11 +302,11 @@ public class UnoPanel extends JPanel {
         repaint();
     }
     //TODO Maybe refresh only elements when bot plays and everything when player plays
-    public void updateCards() {
+    public void updateCards(int player) {
         //TODO Card overflow when having over 9 cards on hand
         bottomCards.removeAll();
         bottomCards.setLayout(new GridLayout(2, 1));
-        cards = playerCards();
+        cards = playerCards(player);
         bottomCards.add(cards);
         JButton draw = new JButton("Draw");
         draw.addActionListener(listener);

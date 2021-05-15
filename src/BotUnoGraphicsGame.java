@@ -5,9 +5,10 @@ public class BotUnoGraphicsGame { //implements Game
     private final Hand[] hands;
     private boolean rev = false, skip = false, botTurn = false; // botHasPlayed = false, playerHasPlayed = false;
     private final BasicBot bot = new BasicBot();
-    private int player = 0;
+    private int player = 0, players = 0;
 //TODO Maybe make it one game file for both bot and not -> only have a bot initialized if true or always have it run
     public BotUnoGraphicsGame(UnoListener listener, int players) {
+        this.players = players;
         deck = new Deck();
         deck.shuffle(players);
         hands = new Hand[players];
@@ -34,6 +35,8 @@ public class BotUnoGraphicsGame { //implements Game
     }
 
     public void playCard(Card toPlay) {
+        //TODO Bot not playing if played +2 then drew
+        //TODO +4 giving to wrong person?
         skip = false;
         placePile = toPlay;
         hands[player].removeCard(toPlay);
@@ -176,12 +179,12 @@ public class BotUnoGraphicsGame { //implements Game
     public int determineWinner() {
         //Determines the winner, if there is one
         if (!roundPlayable()) {
-            if (hands[0].length() == 0) {
-                return 0;
-            } else if (hands[1].length() == 0) {
-                return 1;
+            for (int i = 0; i < players; i++) {
+                if (hands[i].length() == 0) {
+                    return i;
+                }
             }
-            return 2;
+            return 4;
         }
         return -1;
     }

@@ -26,26 +26,29 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
 //            game = new BotUnoGraphicsGame();
                 botGame = true;
                 game = new BotUnoGraphicsGame(this, 2);
+                panel.setBotGame();
                 panel.nextScreen();
                 panel.repaint();
                 break;
             case "Players: ":
-                UnoGame myGame = new UnoGame(playerCount);
-                myGame.playRounds(0);
+                //TODO Initializing of player only game not working (screens only?)
+                //TODO Implement switching screens for players
                 game = new BotUnoGraphicsGame(this, playerCount);
+                panel.setPlayerGame();
                 panel.repaint();
                 break;
             case "Draw":
                 //TODO Card overflow when having over 9 cards on hand
                 game.draw(0);
                 panel.updateCardElements();
-                if (game.getPlayer() == 1) {
+                if (botGame && game.getPlayer() == 1) {
                     System.out.println("Bots turn");
                     game.botPlayCard();
                 }
                 updateWholeScreen();
                 break;
             case "Menu":
+                panel.resetC();
                 panel.goToMenu();
                 panel.repaint();
                 break;
@@ -67,7 +70,7 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
                     JOptionPane.showMessageDialog(panel, "That card can't be played.");
                 }
                 panel.updateCardElements();
-                if (game.getPlayer() == 1) {
+                if (botGame && game.getPlayer() == 1) {
                     System.out.println("Bots turn");
                     game.botPlayCard();
                 }
@@ -111,6 +114,10 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
         return playerCount;
     }
 
+    public boolean isBotGame() {
+        return botGame;
+    }
+
     private void setWinnerScreen() {
         if (botGame) {
             switch (game.determineWinner()) {
@@ -120,7 +127,25 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
                 case 1:
                     panel.showScreen("botWin");
                     break;
+                case 4:
+                    panel.showScreen("tieGame");
+                    break;
+            }
+        } else {
+            switch (game.determineWinner()) {
+                case 0:
+                    panel.showScreen("player0Win");
+                    break;
+                case 1:
+                    panel.showScreen("player1Win");
+                    break;
                 case 2:
+                    panel.showScreen("player2Win");
+                    break;
+                case 3:
+                    panel.showScreen("player3Win");
+                    break;
+                case 4:
                     panel.showScreen("tieGame");
                     break;
             }
@@ -147,7 +172,7 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
 
     private void updateWholeScreen() {
         panel.updateCardElements();
-        panel.updateCards();
+        panel.updateCards(game.getPlayer());
         setWinnerScreen();
     }
 }
