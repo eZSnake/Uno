@@ -9,8 +9,8 @@ import java.awt.event.ComponentListener;
 
 public class UnoListener implements ActionListener, ChangeListener, ComponentListener {
     private UnoPanel panel;
-    private int playerCount;
-    private BotUnoGraphicsGame game = new BotUnoGraphicsGame(this, 2); //TODO remove everything after = for full implementation
+    private int playerCount = 2;
+    private UnoGraphicsGame game = new UnoGraphicsGame(this, 2); //TODO remove everything after = for full implementation
     private boolean botGame = false;
 
     public UnoListener(UnoPanel panel) {
@@ -23,27 +23,32 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
         String a = e.getActionCommand();
         switch (a) {
             case "Bot":
-//            game = new BotUnoGraphicsGame();
                 botGame = true;
-                game = new BotUnoGraphicsGame(this, 2);
+                game = new UnoGraphicsGame(this, 2);
                 panel.setBotGame();
                 panel.nextScreen();
                 panel.repaint();
                 break;
             case "Players: ":
-                //TODO Initializing of player only game not working (screens only?)
-                //TODO Implement switching screens for players
-                game = new BotUnoGraphicsGame(this, playerCount);
+                //TODO Initializing of player only game not working (screens only?) -> DONE
+                //TODO Implement switching screens for players -> DONE
+                //TODO Player 1 screen not displaying info properly
+                //TODO Currently crashes after drawing card?
+                game = new UnoGraphicsGame(this, playerCount);
                 panel.setPlayerGame();
+                panel.playerScreen("player0");
                 panel.repaint();
                 break;
             case "Draw":
                 //TODO Card overflow when having over 9 cards on hand
                 game.draw(0);
                 panel.updateCardElements();
+                game.nextPlayer();
                 if (botGame && game.getPlayer() == 1) {
                     System.out.println("Bots turn");
                     game.botPlayCard();
+                } else {
+//                    JOptionPane.showMessageDialog(panel, "Player " + (game.getPlayer() + 1) + "'s turn. Click OK to continue.");
                 }
                 updateWholeScreen();
                 break;
@@ -70,9 +75,14 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
                     JOptionPane.showMessageDialog(panel, "That card can't be played.");
                 }
                 panel.updateCardElements();
+                game.nextPlayer();
                 if (botGame && game.getPlayer() == 1) {
                     System.out.println("Bots turn");
                     game.botPlayCard();
+                } else {
+                    System.out.println("player" + game.getPlayer());
+                    panel.playerScreen("player" + game.getPlayer());
+//                    JOptionPane.showMessageDialog(panel, "Player " + (game.getPlayer() + 1) + "'s turn. Click OK to continue.");
                 }
                 updateWholeScreen();
                 break;
@@ -81,7 +91,7 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
 
     @Override
     public void stateChanged(ChangeEvent e) {
-        JSlider source = (JSlider)e.getSource();
+        JSlider source = (JSlider) e.getSource();
         if (!source.getValueIsAdjusting()) {
             playerCount = source.getValue();
         }
@@ -156,19 +166,22 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
 
     @Override
     public void componentResized(ComponentEvent e) {
-        Component c = (Component)e.getSource();
+        Component c = (Component) e.getSource();
         panel.setPanelDims(c.getWidth(), c.getHeight());
         panel.repaint();
     }
 
     @Override
-    public void componentMoved(ComponentEvent e) { }
+    public void componentMoved(ComponentEvent e) {
+    }
 
     @Override
-    public void componentShown(ComponentEvent e) { }
+    public void componentShown(ComponentEvent e) {
+    }
 
     @Override
-    public void componentHidden(ComponentEvent e) { }
+    public void componentHidden(ComponentEvent e) {
+    }
 
     private void updateWholeScreen() {
         panel.updateCardElements();

@@ -1,4 +1,4 @@
-public class BotUnoGraphicsGame { //implements Game
+public class UnoGraphicsGame { //implements Game
     private UnoListener listener;
     private final Deck deck;
     private Card placePile;
@@ -6,8 +6,8 @@ public class BotUnoGraphicsGame { //implements Game
     private boolean rev = false, skip = false, botTurn = false; // botHasPlayed = false, playerHasPlayed = false;
     private final BasicBot bot = new BasicBot();
     private int player = 0, players = 0;
-//TODO Maybe make it one game file for both bot and not -> only have a bot initialized if true or always have it run
-    public BotUnoGraphicsGame(UnoListener listener, int players) {
+//TODO Maybe make it one game file for both bot and not -> only have a bot initialized if true or always have it run -> DONE
+    public UnoGraphicsGame(UnoListener listener, int players) {
         this.players = players;
         deck = new Deck();
         deck.shuffle(players);
@@ -47,10 +47,10 @@ public class BotUnoGraphicsGame { //implements Game
                 ((Switch) placePile).setHasSwitched(true);
             }
         }
-        nextPlayer();
     }
 
     public void botPlayCard() {
+        skip = false;
         try {Thread.sleep(50);} catch(InterruptedException ignored) {}
         if (!canPlayACard()) {
             System.out.println("Bot drawing");
@@ -67,6 +67,7 @@ public class BotUnoGraphicsGame { //implements Game
                 botPlayCard();
             }
         }
+        nextPlayer();
     }
 
     public void doSpecialMove(String col) {
@@ -83,7 +84,7 @@ public class BotUnoGraphicsGame { //implements Game
         return deck.cardsLeft() >= 0;
     }
 
-    private void nextPlayer() {
+    public void nextPlayer() {
         //Determines which player goes next, taking into account the direction and if the next player is supposed to be skipped
         int nextPlayer;
         if (!rev && !skip) {

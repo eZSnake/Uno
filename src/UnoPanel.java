@@ -326,6 +326,11 @@ public class UnoPanel extends JPanel {
         screen.show(c, toShow);
     }
 
+    public void playerScreen(String player) {
+        System.out.println(player);
+        screen.show(c, player);
+    }
+
     @Override
     public void paintComponents(Graphics g) {
         super.paintComponents(g);
