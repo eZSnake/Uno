@@ -58,6 +58,7 @@ public class UnoGraphicsGame { //implements Game
         } else {
             String col = null;
             Card toPlay = bot.playCard(hands[1], placePile);
+            System.out.println("Bot's play: " + toPlay);
             if (toPlay.getId() == 4) {
                 col = bot.chooseColor(hands[1]);
             }

@@ -23,6 +23,7 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
         String a = e.getActionCommand();
         switch (a) {
             case "Bot":
+                //TODO Don't switch to bot's screen
                 botGame = true;
                 game = new UnoGraphicsGame(this, 2);
                 panel.setBotGame();
@@ -41,13 +42,17 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
                 break;
             case "Draw":
                 //TODO Card overflow when having over 9 cards on hand
-                game.draw(0);
+                if (botGame) {
+                    game.draw(0);
+                } else {
+                    game.draw();
+                }
                 panel.updateCardElements();
                 game.nextPlayer();
                 if (botGame && game.getPlayer() == 1) {
-                    System.out.println("Bots turn");
                     game.botPlayCard();
-                } else {
+                } else if (!botGame) {
+                    panel.playerScreen("player" + game.getPlayer());
 //                    JOptionPane.showMessageDialog(panel, "Player " + (game.getPlayer() + 1) + "'s turn. Click OK to continue.");
                 }
                 updateWholeScreen();
@@ -58,29 +63,26 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
                 panel.repaint();
                 break;
             default:
-                System.out.println("Player played");
                 Card toPlay = game.stringToCard(a);
-                if (game.canPlayCard(toPlay)) {
-                    game.playCard(toPlay);
-                    if (toPlay.getId() == 4) {
-                        Object[] options = {"Blue", "Green", "Red", "Yellow"};
-                        int col = JOptionPane.showOptionDialog(panel, "What color would you like? Please select below.", "Choose color", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[3]);
-                        if (col == -1) {
-                            JOptionPane.showMessageDialog(panel, "A random color will now be chosen for you as you have failed to follow instructions");
-                            col = (int) (Math.random() * 4);
-                        }
-                        game.doSpecialMove(options[col].toString());
-                    }
-                } else {
+                while (!game.canPlayCard(toPlay)) {
                     JOptionPane.showMessageDialog(panel, "That card can't be played.");
+                }
+                game.playCard(toPlay);
+                if (toPlay.getId() == 4) {
+                    Object[] options = {"Blue", "Green", "Red", "Yellow"};
+                    int col = JOptionPane.showOptionDialog(panel, "What color would you like? Please select below.", "Choose color", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[3]);
+                    if (col == -1) {
+                        JOptionPane.showMessageDialog(panel, "A random color will now be chosen for you as you have failed to follow instructions");
+                        col = (int) (Math.random() * 4);
+                    }
+                    game.doSpecialMove(options[col].toString());
                 }
                 panel.updateCardElements();
                 game.nextPlayer();
                 if (botGame && game.getPlayer() == 1) {
                     System.out.println("Bots turn");
                     game.botPlayCard();
-                } else {
-                    System.out.println("player" + game.getPlayer());
+                } else if (!botGame) {
                     panel.playerScreen("player" + game.getPlayer());
 //                    JOptionPane.showMessageDialog(panel, "Player " + (game.getPlayer() + 1) + "'s turn. Click OK to continue.");
                 }
