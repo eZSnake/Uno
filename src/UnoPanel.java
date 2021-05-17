@@ -290,7 +290,10 @@ public class UnoPanel extends JPanel {
         } else {
             StringBuilder cardsLeftAsString = new StringBuilder("        Cards left: ");
             for (int i = 0; i < listener.getPlayerCount(); i++) {
-                cardsLeftAsString.append("Player ").append(i + 1).append(": ").append(listener.pCardsLeft(i)).append(" - ");
+                cardsLeftAsString.append("Player ").append(i + 1).append(": ").append(listener.pCardsLeft(i));
+                if (i < listener.getPlayerCount() - 1) {
+                    cardsLeftAsString.append(" - ");
+                }
             }
             pCardsLeft.setText(cardsLeftAsString.toString());
         }
