@@ -245,7 +245,6 @@ public class UnoPanel extends JPanel {
     }
     //TODO Maybe refresh only elements when bot plays and everything when player plays
     public void updateCards(int player) {
-        //TODO Card overflow when having over 9 cards on hand
         bottomCards.removeAll();
         bottomCards.setLayout(new GridLayout(2, 1));
         cards = playerCards(player);
