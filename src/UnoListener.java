@@ -64,11 +64,12 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
                 panel.repaint();
                 break;
             default:
+                updateWholeScreen();
                 Card toPlay = game.stringToCard(a);
-                while (!game.canPlayCard(toPlay)) {
+                if (!game.canPlayCard(toPlay)) {
                     //TODO Only show it once then wait for next card input
                     JOptionPane.showMessageDialog(panel, "That card can't be played.");
-                    toPlay = game.stringToCard(a);
+                    break;
                 }
                 game.playCard(toPlay);
                 if (toPlay.getId() == 4) {

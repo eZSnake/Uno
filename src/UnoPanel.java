@@ -153,7 +153,10 @@ public class UnoPanel extends JPanel {
         left.add(goMenu);
         StringBuilder cardsLeftAsString = new StringBuilder("        Cards left: ");
         for (int i = 0; i < listener.getPlayerCount(); i++) {
-            cardsLeftAsString.append("Player ").append(i + 1).append(": ").append(listener.pCardsLeft(i)).append(" - ");
+            cardsLeftAsString.append("Player ").append(i + 1).append(": ").append(listener.pCardsLeft(i));
+            if (i < listener.getPlayerCount() - 1) {
+                cardsLeftAsString.append(" - ");
+            }
         }
         pCardsLeft = new JLabel(cardsLeftAsString.toString());
         pCardsLeft.setFont(new Font("Arial", Font.PLAIN, 20));
@@ -206,7 +209,8 @@ public class UnoPanel extends JPanel {
             Image img = playerHand.getCard(i).getImage().getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
             card.setIcon(new ImageIcon(img));
             card.addActionListener(listener);
-            card.setVerticalTextPosition(SwingConstants.BOTTOM);
+            card.setVerticalTextPosition(JLabel.CENTER);
+            card.setHorizontalAlignment(JLabel.CENTER);
             card.setSize(targetWidth, targetHeight);
             cards.add(card);
         }
@@ -284,7 +288,7 @@ public class UnoPanel extends JPanel {
     }
 
     public void updateCardElements() {
-        System.out.println("Updating card elements");
+//        System.out.println("Updating card elements");
         if (listener.isBotGame()) {
             pCardsLeft.setText("        Cards left: Bot's cards: " + listener.pCardsLeft(1) + " - Player's cards: " + listener.pCardsLeft(0));
         } else {
@@ -330,10 +334,10 @@ public class UnoPanel extends JPanel {
     }
 
     public void playerScreen(String player) {
-        System.out.println(player);
+        System.out.println("Showing " + player + " and updating");
         screen.show(c, player);
-        updateCardElements();
-        updateCards(Integer.parseInt(player.substring(player.length() - 1)));
+//        updateCardElements();
+//        updateCards(Integer.parseInt(player.substring(player.length() - 1)));
     }
 
     @Override
