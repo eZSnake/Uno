@@ -200,7 +200,7 @@ public class UnoPanel extends JPanel {
         int div = 20;
         Hand playerHand = listener.getPlayerHand(player);
         //TODO Optimize size changeing
-        if (playerHand.length() > 9) {
+        if (playerHand.length() > 14) {
             div += 2 * playerHand.length() + 4;
         }
         int targetWidth = dims.getWidth() / div, targetHeight = targetWidth * 143 / 100;
@@ -209,8 +209,7 @@ public class UnoPanel extends JPanel {
             Image img = playerHand.getCard(i).getImage().getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
             card.setIcon(new ImageIcon(img));
             card.addActionListener(listener);
-            card.setVerticalTextPosition(JLabel.CENTER);
-            card.setHorizontalAlignment(JLabel.CENTER);
+            card.setFont(new Font(card.getFont().toString(), Font.PLAIN, 0));
             card.setSize(targetWidth, targetHeight);
             cards.add(card);
         }
@@ -290,9 +289,9 @@ public class UnoPanel extends JPanel {
     public void updateCardElements() {
 //        System.out.println("Updating card elements");
         if (listener.isBotGame()) {
-            pCardsLeft.setText("        Cards left: Bot's cards: " + listener.pCardsLeft(1) + " - Player's cards: " + listener.pCardsLeft(0));
+            pCardsLeft.setText("        Cards left:  Bot's cards: " + listener.pCardsLeft(1) + " - Player's cards: " + listener.pCardsLeft(0));
         } else {
-            StringBuilder cardsLeftAsString = new StringBuilder("        Cards left: ");
+            StringBuilder cardsLeftAsString = new StringBuilder("        Cards left:  ");
             for (int i = 0; i < listener.getPlayerCount(); i++) {
                 cardsLeftAsString.append("Player ").append(i + 1).append(": ").append(listener.pCardsLeft(i));
                 if (i < listener.getPlayerCount() - 1) {
