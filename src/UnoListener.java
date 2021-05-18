@@ -79,6 +79,8 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
                         col = (int) (Math.random() * 4);
                     }
                     game.doSpecialMove(options[col].toString());
+                } else {
+                    game.doSpecialMove(null);
                 }
                 panel.updateCardElements();
                 game.nextPlayer();

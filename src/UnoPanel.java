@@ -31,6 +31,7 @@ public class UnoPanel extends JPanel {
     }
 
     public void setBotGame() {
+        //Adds single player screen to container to paly against bot
         c.add(botPlayingScreen());
         c.add(playerBotWins(), "playerWin");
         c.add(botWins(), "botWin");
@@ -38,7 +39,7 @@ public class UnoPanel extends JPanel {
     }
 
     public void setPlayerGame() {
-        //Add player screens
+        //Adds player screens to the container to play against others
         for (int i = 0; i < listener.getPlayerCount(); i++) {
             c.add(playerPlayingScreen(i), "player" + i);
             c.add(playerNWins(i), "player" + i + "Win");
@@ -47,11 +48,13 @@ public class UnoPanel extends JPanel {
     }
 
     public void resetC() {
+        //Resets container
         c.removeAll();
         c.add(menu());
     }
 
     public static JPanel menu() {
+        //Creates menu screen
         JPanel menu = new JPanel();
         menu.setLayout(new BorderLayout());
         //Choose if you play against bot or real people
@@ -91,6 +94,7 @@ public class UnoPanel extends JPanel {
     }
 
     public static JPanel botPlayingScreen() {
+        //Creates screen for a player to play against the bot
         JPanel botPlayingScreen = new JPanel();
         botPlayingScreen.setLayout(new BorderLayout());
         //Top of the screen
@@ -140,6 +144,7 @@ public class UnoPanel extends JPanel {
     }
 
     public static JPanel playerPlayingScreen(int player) {
+        //Creates playing screen for specified player
         JPanel playerPlayingScreen = new JPanel();
         playerPlayingScreen.setLayout(new BorderLayout());
         //Top of the screen
@@ -196,6 +201,7 @@ public class UnoPanel extends JPanel {
     }
 
     public static JPanel playerCards(int player) {
+        //Sets cards on hand for specified player
         JPanel cards = new JPanel();
         int div = 20;
         Hand playerHand = listener.getPlayerHand(player);
@@ -214,6 +220,40 @@ public class UnoPanel extends JPanel {
             cards.add(card);
         }
         return cards;
+    }
+
+    public void updateCardElements() {
+//        System.out.println("Updating card elements");
+        if (listener.isBotGame()) {
+            pCardsLeft.setText("        Cards left:  Bot's cards: " + listener.pCardsLeft(1) + " - Player's cards: " + listener.pCardsLeft(0));
+        } else {
+            StringBuilder cardsLeftAsString = new StringBuilder("        Cards left:  ");
+            for (int i = 0; i < listener.getPlayerCount(); i++) {
+                cardsLeftAsString.append("Player ").append(i + 1).append(": ").append(listener.pCardsLeft(i));
+                if (i < listener.getPlayerCount() - 1) {
+                    cardsLeftAsString.append(" - ");
+                }
+            }
+            pCardsLeft.setText(cardsLeftAsString.toString());
+        }
+        cardsLeft.setText("        Cards in drawpile: " + listener.getCardsLeft());
+
+        int targetWidth = dims.getWidth() / 15, targetHeight = targetWidth * 143 / 100;
+        Image img = listener.getPlacePile().getImage().getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
+        placePile.setIcon(new ImageIcon(img));
+        repaint();
+    }
+    //TODO Maybe refresh only elements when bot plays and everything when player plays
+    public void updateCards(int player) {
+        //TODO Card overflow when having over 9 cards on hand
+        bottomCards.removeAll();
+        bottomCards.setLayout(new GridLayout(2, 1));
+        cards = playerCards(player);
+        bottomCards.add(cards);
+        JButton draw = new JButton("Draw");
+        draw.addActionListener(listener);
+        bottomCards.add(draw);
+        repaint();
     }
 
     public static JPanel allCards() {
@@ -284,40 +324,6 @@ public class UnoPanel extends JPanel {
         text.setEditable(false);
         tieGame.add(text);
         return tieGame;
-    }
-
-    public void updateCardElements() {
-//        System.out.println("Updating card elements");
-        if (listener.isBotGame()) {
-            pCardsLeft.setText("        Cards left:  Bot's cards: " + listener.pCardsLeft(1) + " - Player's cards: " + listener.pCardsLeft(0));
-        } else {
-            StringBuilder cardsLeftAsString = new StringBuilder("        Cards left:  ");
-            for (int i = 0; i < listener.getPlayerCount(); i++) {
-                cardsLeftAsString.append("Player ").append(i + 1).append(": ").append(listener.pCardsLeft(i));
-                if (i < listener.getPlayerCount() - 1) {
-                    cardsLeftAsString.append(" - ");
-                }
-            }
-            pCardsLeft.setText(cardsLeftAsString.toString());
-        }
-        cardsLeft.setText("        Cards in drawpile: " + listener.getCardsLeft());
-
-        int targetWidth = dims.getWidth() / 15, targetHeight = targetWidth * 143 / 100;
-        Image img = listener.getPlacePile().getImage().getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
-        placePile.setIcon(new ImageIcon(img));
-        repaint();
-    }
-    //TODO Maybe refresh only elements when bot plays and everything when player plays
-    public void updateCards(int player) {
-        //TODO Card overflow when having over 9 cards on hand
-        bottomCards.removeAll();
-        bottomCards.setLayout(new GridLayout(2, 1));
-        cards = playerCards(player);
-        bottomCards.add(cards);
-        JButton draw = new JButton("Draw");
-        draw.addActionListener(listener);
-        bottomCards.add(draw);
-        repaint();
     }
 
     public void nextScreen() {
