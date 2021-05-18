@@ -332,6 +332,8 @@ public class UnoPanel extends JPanel {
     public void playerScreen(String player) {
         System.out.println(player);
         screen.show(c, player);
+        updateCardElements();
+        updateCards(Integer.parseInt(player.substring(player.length() - 1)));
     }
 
     @Override

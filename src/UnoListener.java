@@ -24,6 +24,7 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
         switch (a) {
             case "Bot":
                 //TODO Don't switch to bot's screen
+                //TODO Don't have bot play 4 cards in a row
                 botGame = true;
                 game = new UnoGraphicsGame(this, 2);
                 panel.setBotGame();
@@ -31,7 +32,6 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
                 panel.repaint();
                 break;
             case "Players: ":
-                //TODO Initializing of player only game not working (screens only?) -> DONE
                 //TODO Implement switching screens for players -> DONE
                 //TODO Player 1 screen not displaying info properly
                 //TODO Currently crashes after drawing card?
@@ -53,6 +53,7 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
                     game.botPlayCard();
                 } else if (!botGame) {
                     panel.playerScreen("player" + game.getPlayer());
+                    //TODO Crashes everything
 //                    JOptionPane.showMessageDialog(panel, "Player " + (game.getPlayer() + 1) + "'s turn. Click OK to continue.");
                 }
                 updateWholeScreen();
@@ -65,7 +66,9 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
             default:
                 Card toPlay = game.stringToCard(a);
                 while (!game.canPlayCard(toPlay)) {
+                    //TODO Only show it once then wait for next card input
                     JOptionPane.showMessageDialog(panel, "That card can't be played.");
+                    toPlay = game.stringToCard(a);
                 }
                 game.playCard(toPlay);
                 if (toPlay.getId() == 4) {
