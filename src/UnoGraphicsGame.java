@@ -33,7 +33,6 @@ public class UnoGraphicsGame { //implements Game
     }
 
     public void playCard(Card toPlay) {
-        //TODO Bot not playing if played +2 then drew
         skip = false;
         placePile = toPlay;
         hands[player].removeCard(toPlay);

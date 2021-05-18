@@ -23,7 +23,6 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
         String a = e.getActionCommand();
         switch (a) {
             case "Bot":
-                //TODO Don't switch to bot's screen
                 //TODO Don't have bot play 4 cards in a row
                 botGame = true;
                 game = new UnoGraphicsGame(2);
@@ -52,7 +51,7 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
                     game.botPlayCard();
                 } else if (!botGame) {
                     panel.playerScreen("player" + game.getPlayer());
-                    //TODO Crashes everything
+                    //TODO Crashes everything (can't click buttons after)
 //                    JOptionPane.showMessageDialog(panel, "Player " + (game.getPlayer() + 1) + "'s turn. Click OK to continue.");
                 }
                 updateWholeScreen();
@@ -66,7 +65,7 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
                 updateWholeScreen();
                 Card toPlay = game.stringToCard(a);
                 if (!game.canPlayCard(toPlay)) {
-                    //TODO Don't make it crash everything
+                    //TODO Don't make it crash everything (can't click buttons after)
                     JOptionPane.showMessageDialog(panel, "That card can't be played.");
                     break;
                 }
