@@ -48,7 +48,6 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
                     game.draw();
                 }
                 panel.updateCardElements();
-                game.nextPlayer();
                 if (botGame && game.getPlayer() == 1) {
                     game.botPlayCard();
                 } else if (!botGame) {
@@ -67,7 +66,7 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
                 updateWholeScreen();
                 Card toPlay = game.stringToCard(a);
                 if (!game.canPlayCard(toPlay)) {
-                    //TODO Only show it once then wait for next card input
+                    //TODO Don't make it crash everything
                     JOptionPane.showMessageDialog(panel, "That card can't be played.");
                     break;
                 }

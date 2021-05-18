@@ -6,7 +6,7 @@ public class UnoGraphicsGame { //implements Game
     private boolean rev = false, skip = false, botTurn = false; // botHasPlayed = false, playerHasPlayed = false;
     private final BasicBot bot = new BasicBot();
     private int player = 0, players = 0;
-//TODO Maybe make it one game file for both bot and not -> only have a bot initialized if true or always have it run -> DONE
+
     public UnoGraphicsGame(UnoListener listener, int players) {
         this.players = players;
         deck = new Deck();
@@ -36,7 +36,6 @@ public class UnoGraphicsGame { //implements Game
 
     public void playCard(Card toPlay) {
         //TODO Bot not playing if played +2 then drew
-        //TODO +4 giving to wrong person?
         skip = false;
         placePile = toPlay;
         hands[player].removeCard(toPlay);
@@ -50,6 +49,7 @@ public class UnoGraphicsGame { //implements Game
     }
 
     public void botPlayCard() {
+        //TODO Bot doesn't play if skip/switch card is on top of pile
         skip = false;
         try {Thread.sleep(50);} catch(InterruptedException ignored) {}
         if (!canPlayACard()) {
@@ -64,11 +64,11 @@ public class UnoGraphicsGame { //implements Game
             }
             playCard(toPlay);
             doSpecialMove(col);
+            nextPlayer();
             if (getPlayer() == 1) {
                 botPlayCard();
             }
         }
-        nextPlayer();
     }
 
     public void doSpecialMove(String col) {
