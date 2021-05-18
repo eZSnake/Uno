@@ -10,7 +10,7 @@ import java.awt.event.ComponentListener;
 public class UnoListener implements ActionListener, ChangeListener, ComponentListener {
     private UnoPanel panel;
     private int playerCount = 2;
-    private UnoGraphicsGame game = new UnoGraphicsGame(this, 2); //TODO remove everything after = for full implementation
+    private UnoGraphicsGame game = new UnoGraphicsGame(2); //TODO remove everything after = for full implementation
     private boolean botGame = false;
 
     public UnoListener(UnoPanel panel) {
@@ -26,7 +26,7 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
                 //TODO Don't switch to bot's screen
                 //TODO Don't have bot play 4 cards in a row
                 botGame = true;
-                game = new UnoGraphicsGame(this, 2);
+                game = new UnoGraphicsGame(2);
                 panel.setBotGame();
                 panel.nextScreen();
                 panel.repaint();
@@ -35,7 +35,7 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
                 //TODO Implement switching screens for players -> DONE
                 //TODO Player 1 screen not displaying info properly
                 //TODO Currently crashes after drawing card?
-                game = new UnoGraphicsGame(this, playerCount);
+                game = new UnoGraphicsGame(playerCount);
                 panel.setPlayerGame();
                 panel.playerScreen("player0");
                 panel.repaint();

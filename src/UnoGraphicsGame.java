@@ -1,5 +1,4 @@
 public class UnoGraphicsGame { //implements Game
-    private UnoListener listener;
     private final Deck deck;
     private Card placePile;
     private final Hand[] hands;
@@ -7,7 +6,7 @@ public class UnoGraphicsGame { //implements Game
     private final BasicBot bot = new BasicBot();
     private int player = 0, players = 0;
 
-    public UnoGraphicsGame(UnoListener listener, int players) {
+    public UnoGraphicsGame(int players) {
         this.players = players;
         deck = new Deck();
         deck.shuffle(players);
@@ -19,7 +18,6 @@ public class UnoGraphicsGame { //implements Game
             }
         }
         placePile = deck.deal();
-        this.listener = listener;
     }
 
     public void draw(int extPlayer) {
@@ -49,7 +47,7 @@ public class UnoGraphicsGame { //implements Game
     }
 
     public void botPlayCard() {
-        //TODO Bot doesn't play if skip/switch card is on top of pile
+        //TODO Bot doesn't play if skip/(any) switch card is on top of pile
         skip = false;
         try {Thread.sleep(50);} catch(InterruptedException ignored) {}
         if (!canPlayACard()) {
