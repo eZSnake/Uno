@@ -8,7 +8,7 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 
 public class UnoListener implements ActionListener, ChangeListener, ComponentListener {
-    private UnoPanel panel;
+    private final UnoPanel panel;
     private int playerCount = 2;
     private UnoGraphicsGame game = new UnoGraphicsGame(2); //TODO remove everything after = for full implementation?
     private boolean botGame = false;

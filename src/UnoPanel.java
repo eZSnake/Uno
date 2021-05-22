@@ -76,11 +76,12 @@ public class UnoPanel extends JPanel {
         buttons.add(player);
         menu.add(buttons, BorderLayout.SOUTH);
         //Welcome text at top of screen
-        JTextArea welcome = new JTextArea("Welcome to the game of Uno.\nEach player starts with 7 cards and first with 0 left wins.\nThe same color can go on the same color, " +
-                "the same number can go on the same number, and wish cards can go on any card.\nIf you can't go, you draw a card.");
+        String tab = "    ";
+        JTextArea welcome = new JTextArea(tab + "Welcome to the game of Uno.\n" + tab + "Each player starts with 7 cards and first with 0 left wins.\n" + tab + "The same color can go on the same color, " +
+                "the same number can go on the same number, and wish cards can go on any card.\n" + tab + "If you can't go, you will have to draw a card.");
         welcome.setFont(new Font("Arial", Font.PLAIN, 20));
         welcome.setEditable(false);
-        welcome.setAlignmentX(500);
+//        welcome.setAllignmentX(500);
         menu.add(welcome, BorderLayout.NORTH);
         //Image of back of Uno card at center
         Image back = null;
