@@ -1,8 +1,8 @@
-public class UnoGraphicsGame { //implements Game
+public class UnoGraphicsGame {
     private final Deck deck;
     private Card placePile;
     private final Hand[] hands;
-    private boolean rev = false, skip = false; // botHasPlayed = false, playerHasPlayed = false;
+    private boolean rev = false, skip = false;
     private final BasicBot bot = new BasicBot();
     private int player = 0, players = 0;
 
@@ -33,15 +33,14 @@ public class UnoGraphicsGame { //implements Game
     }
 
     public void playCard(Card toPlay) {
-        skip = false;
+        //Puts a card on top of the place pile
         placePile = toPlay;
         hands[player].removeCard(toPlay);
         switchSkip();
     }
 
     public void botPlayCard() {
-        //TODO Bot doesn't play if skip/(any) switch card is on top of pile
-        skip = false;
+        //Bot plays a card if it can otherwise it draws one
         try {Thread.sleep(50);} catch(InterruptedException ignored) {}
         if (!canPlayACard()) {
             System.out.println("Bot drawing");

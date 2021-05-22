@@ -20,10 +20,9 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
     @Override
     public void actionPerformed(ActionEvent e) {
         setWinnerScreen();
-        String a = e.getActionCommand();
-        switch (a) {
+        String button = e.getActionCommand();
+        switch (button) {
             case "Bot":
-                //TODO Don't have bot play 4 cards in a row
                 botGame = true;
                 game = new UnoGraphicsGame(2);
                 panel.setBotGame();
@@ -34,7 +33,6 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
                 //TODO Implement switching screens for players -> DONE
                 //TODO Player 1 screen not displaying info properly
                 //TODO Currently crashes after drawing card?
-                //TODO Not going to next player if card that skips is on top
                 botGame = false;
                 game = new UnoGraphicsGame(playerCount);
                 panel.setPlayerGame();
@@ -65,7 +63,7 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
                 break;
             default:
                 updateWholeScreen();
-                Card toPlay = game.stringToCard(a);
+                Card toPlay = game.stringToCard(button);
                 if (!game.canPlayCard(toPlay)) {
                     //TODO Don't make it crash everything (can't click buttons after)
                     JOptionPane.showMessageDialog(panel, "That card can't be played.");
