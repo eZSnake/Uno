@@ -34,6 +34,8 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
                 //TODO Implement switching screens for players -> DONE
                 //TODO Player 1 screen not displaying info properly
                 //TODO Currently crashes after drawing card?
+                //TODO Not going to next player if card that skips is on top
+                botGame = false;
                 game = new UnoGraphicsGame(playerCount);
                 panel.setPlayerGame();
                 panel.playerScreen("player0");

@@ -2,7 +2,7 @@ public class UnoGraphicsGame { //implements Game
     private final Deck deck;
     private Card placePile;
     private final Hand[] hands;
-    private boolean rev = false, skip = false, botTurn = false; // botHasPlayed = false, playerHasPlayed = false;
+    private boolean rev = false, skip = false; // botHasPlayed = false, playerHasPlayed = false;
     private final BasicBot bot = new BasicBot();
     private int player = 0, players = 0;
 
@@ -37,12 +37,6 @@ public class UnoGraphicsGame { //implements Game
         placePile = toPlay;
         hands[player].removeCard(toPlay);
         switchSkip();
-        if (placePile instanceof Switch) {
-            if (!((Switch) placePile).getHasSwitched()) {
-                rev = !rev;
-                ((Switch) placePile).setHasSwitched(true);
-            }
-        }
     }
 
     public void botPlayCard() {
@@ -87,15 +81,14 @@ public class UnoGraphicsGame { //implements Game
         int nextPlayer;
         if (!rev && !skip) {
             nextPlayer = Math.floorMod(player + 1, hands.length);
-            botTurn = !botTurn;
         } else if (!rev){
             nextPlayer = Math.floorMod(player + 2, hands.length);
         } else if (!skip) {
             nextPlayer = Math.floorMod(player - 1, hands.length);
-            botTurn = !botTurn;
         } else {
             nextPlayer = Math.floorMod(player - 2, hands.length);
         }
+        skip = false;
         player = nextPlayer;
     }
 
@@ -126,6 +119,12 @@ public class UnoGraphicsGame { //implements Game
         if (placePile instanceof Switch && !((Switch) placePile).getHasSwitched()) {
             rev = !rev;
             ((Switch) placePile).setHasSwitched(true);
+        }
+        if (placePile instanceof Switch) {
+            if (!((Switch) placePile).getHasSwitched()) {
+                rev = !rev;
+                ((Switch) placePile).setHasSwitched(true);
+            }
         }
     }
 
