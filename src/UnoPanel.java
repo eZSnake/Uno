@@ -11,6 +11,7 @@ public class UnoPanel extends JPanel {
     private static JLabel pCardsLeft, cardsLeft, placePile;
     private static UnoListener listener;
     private static JPanel cards, bottomCards;
+    private static final String tab = "    ";
 
     public static void main(String[] args) {
         JFrame window = new JFrame("Uno");
@@ -76,7 +77,6 @@ public class UnoPanel extends JPanel {
         buttons.add(player);
         menu.add(buttons, BorderLayout.SOUTH);
         //Welcome text at top of screen
-        String tab = "    ";
         JTextArea welcome = new JTextArea(tab + "Welcome to the game of Uno.\n" + tab + "Each player starts with 7 cards and first with 0 left wins.\n" + tab + "The same color can go on the same color, " +
                 "the same number can go on the same number, and wish cards can go on any card.\n" + tab + "If you can't go, you will have to draw a card.");
         welcome.setFont(new Font("Arial", Font.PLAIN, 20));
@@ -215,6 +215,7 @@ public class UnoPanel extends JPanel {
             JButton card = new JButton(playerHand.getCard(i).toString());
             Image img = playerHand.getCard(i).getImage().getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
             card.setIcon(new ImageIcon(img));
+            //TODO check execution time (seems to take > 5s )
             card.addActionListener(listener);
             card.setFont(new Font(card.getFont().toString(), Font.PLAIN, 0));
             card.setSize(targetWidth, targetHeight);
@@ -226,9 +227,9 @@ public class UnoPanel extends JPanel {
     public void updateCardElements() {
 //        System.out.println("Updating card elements");
         if (listener.isBotGame()) {
-            pCardsLeft.setText("        Cards left:  Bot's cards: " + listener.pCardsLeft(1) + " - Player's cards: " + listener.pCardsLeft(0));
+            pCardsLeft.setText(tab + tab +"Cards left:  Bot's cards: " + listener.pCardsLeft(1) + " - Player's cards: " + listener.pCardsLeft(0));
         } else {
-            StringBuilder cardsLeftAsString = new StringBuilder("        Cards left:  ");
+            StringBuilder cardsLeftAsString = new StringBuilder(tab + tab + "Cards left:  ");
             for (int i = 0; i < listener.getPlayerCount(); i++) {
                 cardsLeftAsString.append("Player ").append(i + 1).append(": ").append(listener.pCardsLeft(i));
                 if (i < listener.getPlayerCount() - 1) {
@@ -237,7 +238,7 @@ public class UnoPanel extends JPanel {
             }
             pCardsLeft.setText(cardsLeftAsString.toString());
         }
-        cardsLeft.setText("        Cards in drawpile: " + listener.getCardsLeft());
+        cardsLeft.setText(tab + tab + "Cards in drawpile: " + listener.getCardsLeft());
 
         int targetWidth = dims.getWidth() / 15, targetHeight = targetWidth * 143 / 100;
         Image img = listener.getPlacePile().getImage().getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
@@ -246,6 +247,7 @@ public class UnoPanel extends JPanel {
     }
     //TODO Maybe refresh only elements when bot plays and everything when player plays
     public void updateCards(int player) {
+        bottomCards.setVisible(false);
         bottomCards.removeAll();
         bottomCards.setLayout(new GridLayout(2, 1));
         cards = playerCards(player);
@@ -253,6 +255,7 @@ public class UnoPanel extends JPanel {
         JButton draw = new JButton("Draw");
         draw.addActionListener(listener);
         bottomCards.add(draw);
+        bottomCards.setVisible(true);
         repaint();
     }
 

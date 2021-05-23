@@ -41,7 +41,9 @@ public class UnoGraphicsGame {
 
     public void botPlayCard() {
         //Bot plays a card if it can otherwise it draws one
-        try {Thread.sleep(50);} catch(InterruptedException ignored) {}
+        System.out.println("Waiting for a bit");
+        try {Thread.sleep(5000);} catch(InterruptedException ignored) {}
+        System.out.println("resuming execution");
         if (!canPlayACard()) {
             System.out.println("Bot drawing");
             draw();
@@ -128,13 +130,8 @@ public class UnoGraphicsGame {
     }
 
     public boolean canPlayCard(Card toPlay) {
-        //Convert string to card fisrt
-        for (int i = 0; i < hands[player].length(); i++) {
-            if (toPlay.getId() == 4 || toPlay.getColor().equals(placePile.getColor()) || toPlay.getNum() == placePile.getNum()) {
-                return true;
-            }
-        }
-        return false;
+        //Checks if card can be played
+        return toPlay.getId() == 4 || toPlay.getColor().equals(placePile.getColor()) || toPlay.getNum() == placePile.getNum();
     }
 
     public Card stringToCard(String conv) {
@@ -143,8 +140,10 @@ public class UnoGraphicsGame {
         for (int i = 0; i < hands[player].length(); i++) {
             if (hands[player].getCard(i).toString().equals(conv)) {
                 card = hands[player].getCard(i);
+                return card;
             }
         }
+        System.out.println("FATAL - in stringToCard - card not member of hand");
         return card;
     }
 

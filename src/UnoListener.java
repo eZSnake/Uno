@@ -62,11 +62,17 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
                 panel.repaint();
                 break;
             default:
+                System.out.println("updating screen");
                 updateWholeScreen();
+                System.out.println("done updating screen");
                 Card toPlay = game.stringToCard(button);
                 if (!game.canPlayCard(toPlay)) {
                     //TODO Don't make it crash everything (can't click buttons after)
+                    //TODO don't use canPlayCard here but check if the selected card can be played
                     JOptionPane.showMessageDialog(panel, "That card can't be played.");
+                    System.out.println("updating hand");
+                    panel.updateCards(game.getPlayer());
+                    System.out.println("done updating hand");
                     break;
                 }
                 game.playCard(toPlay);
@@ -93,6 +99,7 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
                 updateWholeScreen();
                 break;
         }
+        System.out.println("Done with this round, next..." + e);
     }
 
     @Override
