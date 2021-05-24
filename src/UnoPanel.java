@@ -206,6 +206,7 @@ public class UnoPanel extends JPanel {
         JPanel cards = new JPanel();
         int div = 20;
         Hand playerHand = listener.getPlayerHand(player);
+        System.out.println(playerHand.toString());
         //TODO Optimize size changeing
         if (playerHand.length() > 14) {
             div += 2 * playerHand.length() + 4;
@@ -247,6 +248,7 @@ public class UnoPanel extends JPanel {
     }
     //TODO Maybe refresh only elements when bot plays and everything when player plays
     public void updateCards(int player) {
+        System.out.println("Updating cards for " + player);
         bottomCards.setVisible(false);
         bottomCards.removeAll();
         bottomCards.setLayout(new GridLayout(2, 1));

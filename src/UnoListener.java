@@ -31,7 +31,7 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
                 break;
             case "Players: ":
                 //TODO Implement switching screens for players -> DONE
-                //TODO Player 1 screen not displaying info properly
+                //TODO Only last player screen displaying properly
                 botGame = false;
                 game = new UnoGraphicsGame(playerCount);
                 panel.setPlayerGame();
@@ -94,7 +94,6 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
                     panel.playerScreen("player" + game.getPlayer());
 //                    JOptionPane.showMessageDialog(panel, "Player " + (game.getPlayer() + 1) + "'s turn. Click OK to continue.");
                 }
-                updateWholeScreen();
                 break;
         }
         System.out.println("Done with this round, next..." + e);
