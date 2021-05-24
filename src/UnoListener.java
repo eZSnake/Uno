@@ -32,7 +32,6 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
             case "Players: ":
                 //TODO Implement switching screens for players -> DONE
                 //TODO Player 1 screen not displaying info properly
-                //TODO Currently crashes after drawing card?
                 botGame = false;
                 game = new UnoGraphicsGame(playerCount);
                 panel.setPlayerGame();
@@ -67,8 +66,6 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
                 System.out.println("done updating screen");
                 Card toPlay = game.stringToCard(button);
                 if (!game.canPlayCard(toPlay)) {
-                    //TODO Don't make it crash everything (can't click buttons after)
-                    //TODO don't use canPlayCard here but check if the selected card can be played
                     JOptionPane.showMessageDialog(panel, "That card can't be played.");
                     System.out.println("updating hand");
                     panel.updateCards(game.getPlayer());
@@ -93,6 +90,7 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
                     System.out.println("Bots turn");
                     game.botPlayCard();
                 } else if (!botGame) {
+                    //TODO Only updates the screen of the last player
                     panel.playerScreen("player" + game.getPlayer());
 //                    JOptionPane.showMessageDialog(panel, "Player " + (game.getPlayer() + 1) + "'s turn. Click OK to continue.");
                 }

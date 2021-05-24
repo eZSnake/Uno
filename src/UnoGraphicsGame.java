@@ -4,7 +4,7 @@ public class UnoGraphicsGame {
     private final Hand[] hands;
     private boolean rev = false, skip = false;
     private final BasicBot bot = new BasicBot();
-    private int player = 0, players = 0;
+    private int player = 0, players;
 
     public UnoGraphicsGame(int players) {
         this.players = players;
@@ -93,16 +93,6 @@ public class UnoGraphicsGame {
         player = nextPlayer;
     }
 
-    private boolean canPlayACard() {
-        //Checks if a player has a card to play
-        for (int i = 0; i < hands[player].length(); i++) {
-            if (hands[player].getCard(i).isPlayable(placePile)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     private void switchSkip() {
         //Checks to make sure that skips and switches aren't done more than once if another card isn't placed on top
         if (placePile instanceof Skip && !((Skip) placePile).getHasSkipped()) {
@@ -127,6 +117,16 @@ public class UnoGraphicsGame {
                 ((Switch) placePile).setHasSwitched(true);
             }
         }
+    }
+
+    private boolean canPlayACard() {
+        //Checks if a player has a card to play
+        for (int i = 0; i < hands[player].length(); i++) {
+            if (hands[player].getCard(i).isPlayable(placePile)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean canPlayCard(Card toPlay) {
