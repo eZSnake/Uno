@@ -89,6 +89,7 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
                 if (botGame && game.getPlayer() == 1) {
                     System.out.println("Bots turn");
                     game.botPlayCard();
+                    updateWholeScreen();
                 } else if (!botGame) {
                     //TODO Only updates the screen of the last player
                     panel.playerScreen("player" + game.getPlayer());
