@@ -13,6 +13,7 @@ public class UnoPanel extends JPanel {
     private static UnoListener listener;
     private JPanel cards;
     private ArrayList<JPanel> botCards = new ArrayList<>();
+    private ArrayList<JLabel> playerCardsLeft = new ArrayList<>(), drawCardsLeft = new ArrayList<>();
     private static final String tab = "    ";
     private static int targetWidth, targetHeight;
 
@@ -29,7 +30,7 @@ public class UnoPanel extends JPanel {
         c.add(menu());
         window.setContentPane(c);
 
-        window.setLocation(300,300);
+        window.setLocation(0,300);
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setVisible(true);
     }
@@ -47,6 +48,7 @@ public class UnoPanel extends JPanel {
         //TODO Correctly implement placePile being 'global'
         targetWidth = dims.getWidth() / 15;
         targetHeight = targetWidth * 143 / 100;
+        System.out.println(listener.getPlacePile().toString());
         placePile = new JLabel(new ImageIcon(listener.getPlacePile().getImage().getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH)));
         for (int i = 0; i < listener.getPlayerCount(); i++) {
             c.add(playerPlayingScreen(i), "player" + i);
@@ -179,7 +181,9 @@ public class UnoPanel extends JPanel {
         }
         pCardsLeft = new JLabel(cardsLeftAsString.toString());
         pCardsLeft.setFont(new Font("Arial", Font.PLAIN, 20));
-        left.add("playercards", pCardsLeft);
+        playerCardsLeft.add(pCardsLeft);
+        left.add("playercards", playerCardsLeft.get(player));
+//        left.add("playercards", pCardsLeft);
         JLabel currPlayer = new JLabel(tab + tab + "Current player: " + (player + 1));
         currPlayer.setFont(new Font("Arial", Font.PLAIN, 20));
         left.add(currPlayer);
@@ -196,7 +200,8 @@ public class UnoPanel extends JPanel {
         right.add(new JLabel(new ImageIcon(back)));
         cardsLeft = new JLabel(tab + tab + "Cards in drawpile: " + listener.getCardsLeft());
         cardsLeft.setFont(new Font("Arial", Font.PLAIN, 20));
-        right.add("cardsleft", cardsLeft);
+        drawCardsLeft.add(cardsLeft);
+        right.add("cardsleft", drawCardsLeft.get(player));
         top.add(right);
         playerPlayingScreen.add(top, BorderLayout.NORTH);
         //Center (card on place pile)
@@ -226,11 +231,12 @@ public class UnoPanel extends JPanel {
         Hand playerHand = listener.getPlayerHand(player);
         System.out.println(playerHand.toString());
         //TODO Optimize size changeing
-        if (playerHand.length() > 14) {
-            div += 2 * playerHand.length() + 4;
+        if (playerHand.length() % 14 == 0) {
+            div += 2 * playerHand.length();
         }
         targetWidth = dims.getWidth() / div;
         targetHeight = targetWidth * 143 / 100;
+        //TODO Only remove card that was played and add new cards
         for (int i = 0; i < playerHand.length(); i++) {
             JButton card = new JButton(playerHand.getCard(i).toString());
             Image img = playerHand.getCard(i).getImage().getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
@@ -247,8 +253,9 @@ public class UnoPanel extends JPanel {
 
     public void updateCardElements() {
 //        System.out.println("Updating card elements");
+        pCardsLeft = playerCardsLeft.get(listener.getPlayer());
         if (listener.isBotGame()) {
-            pCardsLeft.setText(tab + tab +"Cards left:  Bot's cards: " + listener.pCardsLeft(1) + " - Player's cards: " + listener.pCardsLeft(0));
+            pCardsLeft.setText(tab + tab + "Cards left:  Bot's cards: " + listener.pCardsLeft(1) + " - Player's cards: " + listener.pCardsLeft(0));
         } else {
             StringBuilder cardsLeftAsString = new StringBuilder(tab + tab + "Cards left:  ");
             for (int i = 0; i < listener.getPlayerCount(); i++) {
@@ -259,6 +266,7 @@ public class UnoPanel extends JPanel {
             }
             pCardsLeft.setText(cardsLeftAsString.toString());
         }
+        cardsLeft = drawCardsLeft.get(listener.getPlayer());
         cardsLeft.setText(tab + tab + "Cards in drawpile: " + listener.getCardsLeft());
 
         targetWidth = dims.getWidth() / 15;
@@ -271,6 +279,7 @@ public class UnoPanel extends JPanel {
         System.out.println("Updating cards for " + player);
         JPanel toUpdate = botCards.get(player);
         toUpdate.setVisible(false);
+//        toUpdate.remove(cards); //makes everything very wonky
         toUpdate.removeAll();
         toUpdate.setLayout(new GridLayout(2, 1));
         cards = playerCards(player);

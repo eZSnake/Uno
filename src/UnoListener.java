@@ -125,6 +125,10 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
         return game.getPlayerHand(plyr);
     }
 
+    public int getPlayer() {
+        return game.getPlayer();
+    }
+
     public Deck getDeck() {
         return game.getDeck();
     }
