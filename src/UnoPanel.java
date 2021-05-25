@@ -5,15 +5,15 @@ import java.io.File;
 import java.io.IOException;
 
 public class UnoPanel extends JPanel {
-    private static Container c;
-    private static CardLayout screen;
-    private static PanelDims dims;
-    private  JLabel pCardsLeft, cardsLeft, placePile;
-    private static UnoListener listener;
-    private  JPanel cards, bottomCards;
-    private static final String tab = "    ";
+    private Container c;
+    private CardLayout screen;
+    private PanelDims dims;
+    private JLabel pCardsLeft, cardsLeft, placePile;
+    private UnoListener listener;
+    private JPanel cards, bottomCards;
+    private final String tab = "    ";
 
-    public static void main(String[] args) {
+    public UnoPanel() {
         JFrame window = new JFrame("Uno");
         UnoPanel panel = new UnoPanel();
         listener = new UnoListener(panel);
@@ -54,7 +54,7 @@ public class UnoPanel extends JPanel {
         c.add(menu());
     }
 
-    public static JPanel menu() {
+    public JPanel menu() {
         //Creates menu screen
         JPanel menu = new JPanel();
         menu.setLayout(new BorderLayout());
@@ -262,7 +262,7 @@ public class UnoPanel extends JPanel {
         repaint();
     }
 
-    public static JPanel allCards() {
+    public JPanel allCards() {
         JPanel cards = new JPanel();
         Deck deck = listener.getDeck();
         for (Card card : deck.getCards()) {
@@ -274,7 +274,7 @@ public class UnoPanel extends JPanel {
         return cards;
     }
 
-    public static JPanel playerBotWins() {
+    public JPanel playerBotWins() {
         JPanel playerBotWins = new JPanel();
         playerBotWins.setLayout(new BoxLayout(playerBotWins, BoxLayout.Y_AXIS));
         JButton goMenu = new JButton("Menu");
@@ -287,7 +287,7 @@ public class UnoPanel extends JPanel {
         return playerBotWins;
     }
 
-    public static JPanel playerNWins(int player) {
+    public JPanel playerNWins(int player) {
         JPanel playerNWins = new JPanel();
         playerNWins.setLayout(new BoxLayout(playerNWins, BoxLayout.Y_AXIS));
         JButton goMenu = new JButton("Menu");
@@ -300,7 +300,7 @@ public class UnoPanel extends JPanel {
         return playerNWins;
     }
 
-    public static JPanel botWins() {
+    public JPanel botWins() {
         JPanel botWins = new JPanel();
         botWins.setLayout(new BoxLayout(botWins, BoxLayout.Y_AXIS));
         JButton goMenu = new JButton("Menu");
@@ -319,7 +319,7 @@ public class UnoPanel extends JPanel {
         return botWins;
     }
 
-    public static JPanel tieGame() {
+    public JPanel tieGame() {
         JPanel tieGame = new JPanel();
         tieGame.setLayout(new BoxLayout(tieGame, BoxLayout.Y_AXIS));
         JButton goMenu = new JButton("Menu");
