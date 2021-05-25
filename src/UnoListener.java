@@ -44,7 +44,7 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
                 } else {
                     game.draw();
                 }
-                panel.updateCardElements();
+//                updateWholeScreen();
                 if (botGame && game.getPlayer() == 1) {
                     game.botPlayCard();
                 } else if (!botGame) {
@@ -84,13 +84,12 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
                     game.doSpecialMove(null);
                 }
                 setWinnerScreen();
-                panel.updateCardElements();
+//                updateWholeScreen();
                 //TODO Not removing card element sometimes when playing vs bot
                 game.nextPlayer();
                 if (botGame && game.getPlayer() == 1) {
                     System.out.println("Bots turn");
                     game.botPlayCard();
-                    setWinnerScreen();
                 } else if (!botGame) {
                     //TODO Only updates the screen of the last player
                     panel.playerScreen("player" + game.getPlayer());
@@ -175,7 +174,7 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
                     break;
             }
         }
-        panel.removeAll();
+        panel.revalidate();
         panel.repaint();
     }
 

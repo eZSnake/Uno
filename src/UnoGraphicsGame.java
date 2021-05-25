@@ -42,7 +42,7 @@ public class UnoGraphicsGame {
     public void botPlayCard() {
         //Bot plays a card if it can otherwise it draws one
         System.out.println("Waiting for a bit");
-        try {Thread.sleep(5000);} catch(InterruptedException ignored) {}
+        try {Thread.sleep(500);} catch(InterruptedException ignored) {}
         System.out.println("resuming execution");
         if (!canPlayACard()) {
             System.out.println("Bot drawing");

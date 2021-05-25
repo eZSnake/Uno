@@ -8,9 +8,9 @@ public class UnoPanel extends JPanel {
     private static Container c;
     private static CardLayout screen;
     private static PanelDims dims;
-    private static JLabel pCardsLeft, cardsLeft, placePile;
+    private  JLabel pCardsLeft, cardsLeft, placePile;
     private static UnoListener listener;
-    private static JPanel cards, bottomCards;
+    private  JPanel cards, bottomCards;
     private static final String tab = "    ";
 
     public static void main(String[] args) {
@@ -32,7 +32,7 @@ public class UnoPanel extends JPanel {
     }
 
     public void setBotGame() {
-        //Adds single player screen to container to paly against bot
+        //Adds single player screen to container to play against bot
         c.add(botPlayingScreen());
         c.add(playerBotWins(), "playerWin");
         c.add(botWins(), "botWin");
@@ -81,7 +81,7 @@ public class UnoPanel extends JPanel {
                 "the same number can go on the same number, and wish cards can go on any card.\n" + tab + "If you can't go, you will have to draw a card.");
         welcome.setFont(new Font("Arial", Font.PLAIN, 20));
         welcome.setEditable(false);
-//        welcome.setAllignmentX(500);
+//        welcome.setAlignmentX(500);
         menu.add(welcome, BorderLayout.NORTH);
         //Image of back of Uno card at center
         Image back = null;
@@ -94,7 +94,7 @@ public class UnoPanel extends JPanel {
         return menu;
     }
 
-    public static JPanel botPlayingScreen() {
+    public JPanel botPlayingScreen() {
         //Creates screen for a player to play against the bot
         JPanel botPlayingScreen = new JPanel();
         botPlayingScreen.setLayout(new BorderLayout());
@@ -144,8 +144,9 @@ public class UnoPanel extends JPanel {
         return botPlayingScreen;
     }
 
-    public static JPanel playerPlayingScreen(int player) {
+    public JPanel playerPlayingScreen(int player) {
         //Creates playing screen for specified player
+        System.out.println("Setting layout for player " + player);
         JPanel playerPlayingScreen = new JPanel();
         playerPlayingScreen.setLayout(new BorderLayout());
         //Top of the screen
@@ -201,7 +202,7 @@ public class UnoPanel extends JPanel {
         return playerPlayingScreen;
     }
 
-    public static JPanel playerCards(int player) {
+    public JPanel playerCards(int player) {
         //Sets cards on hand for specified player
         JPanel cards = new JPanel();
         int div = 20;
