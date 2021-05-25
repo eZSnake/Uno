@@ -201,8 +201,8 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
     }
 
     private void updateWholeScreen() {
+        setWinnerScreen();
         panel.updateCardElements();
         panel.updateCards(game.getPlayer());
-        setWinnerScreen();
     }
 }
