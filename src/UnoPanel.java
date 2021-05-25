@@ -44,6 +44,9 @@ public class UnoPanel extends JPanel {
 
     public void setPlayerGame() {
         //Adds player screens to the container to play against others
+        targetWidth = dims.getWidth() / 15;
+        targetHeight = targetWidth * 143 / 100;
+        placePile = new JLabel(new ImageIcon(listener.getPlacePile().getImage().getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH)));
         for (int i = 0; i < listener.getPlayerCount(); i++) {
             c.add(playerPlayingScreen(i), "player" + i);
             c.add(playerNWins(i), "player" + i + "Win");
@@ -196,10 +199,10 @@ public class UnoPanel extends JPanel {
         top.add(right);
         playerPlayingScreen.add(top, BorderLayout.NORTH);
         //Center (card on place pile)
-        targetWidth = dims.getWidth() / 15;
-        targetHeight = targetWidth * 143 / 100;
-        Image img = listener.getPlacePile().getImage().getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
-        placePile = new JLabel(new ImageIcon(img));
+//        targetWidth = dims.getWidth() / 15;
+//        targetHeight = targetWidth * 143 / 100;
+//        Image img = listener.getPlacePile().getImage().getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
+//        placePile = new JLabel(new ImageIcon(img));
         playerPlayingScreen.add(placePile, BorderLayout.CENTER);
         //Bottom (cards on hand and draw)
         JPanel bottomCards = new JPanel();
@@ -259,8 +262,7 @@ public class UnoPanel extends JPanel {
 
         targetWidth = dims.getWidth() / 15;
         targetHeight = targetWidth * 143 / 100;
-        Image img = listener.getPlacePile().getImage().getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
-        placePile.setIcon(new ImageIcon(img));
+        placePile.setIcon(new ImageIcon(listener.getPlacePile().getImage().getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH)));
         repaint();
     }
     //TODO Maybe refresh only elements when bot plays and everything when player plays
