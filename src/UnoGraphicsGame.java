@@ -64,6 +64,7 @@ public class UnoGraphicsGame {
     }
 
     public void doSpecialMove(String col) {
+        //TODO Plus 4 applying to wrong person if in reverse (check +4 file)
         placePile.specialMove(deck, hands, player, col);
     }
 
@@ -136,16 +137,15 @@ public class UnoGraphicsGame {
 
     public Card stringToCard(String conv) {
         //Converts an inputted string to a card on the hand of the current player
-        Card card = null;
-        for (int i = 0; i < hands[player].length(); i++) {
-            if (hands[player].getCard(i).toString().equals(conv)) {
-                card = hands[player].getCard(i);
-                return card;
+        try {
+            for (int i = 0; i < hands[player].length(); i++) {
+                if (hands[player].getCard(i).toString().equals(conv)) {
+                    return hands[player].getCard(i);
+                }
             }
-        }
-        //TODO Clean up
-        System.out.println("FATAL - in stringToCard - card not member of hand");
-        return card;
+            throw new Exception("FATAL - in stringToCard - card not member of hand");
+        } catch (Exception ignored) {}
+        return null;
     }
 
     //Methods to pass along information to the listener class and beyond
