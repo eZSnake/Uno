@@ -3,14 +3,16 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class UnoPanel extends JPanel {
     private static Container c;
     private static CardLayout screen;
     private static PanelDims dims;
-    private  JLabel pCardsLeft, cardsLeft, placePile;
+    private JLabel pCardsLeft, cardsLeft, placePile, currPlayer;
     private static UnoListener listener;
-    private  JPanel cards, bottomCards;
+    private JPanel cards;
+    private ArrayList<JPanel> botCards = new ArrayList<>();
     private static final String tab = "    ";
 
     public static void main(String[] args) {
@@ -52,6 +54,7 @@ public class UnoPanel extends JPanel {
         //Resets container
         c.removeAll();
         c.add(menu());
+        botCards.clear();
     }
 
     public static JPanel menu() {
@@ -132,14 +135,15 @@ public class UnoPanel extends JPanel {
         placePile = new JLabel(new ImageIcon(img));
         botPlayingScreen.add(placePile, BorderLayout.CENTER);
         //Bottom (cards on hand and draw)
-        bottomCards = new JPanel();
+        JPanel bottomCards = new JPanel();
         bottomCards.setLayout(new GridLayout(2, 1));
         JButton draw = new JButton("Draw");
         draw.addActionListener(listener);
         cards = playerCards(0);
         bottomCards.add(cards);
         bottomCards.add(draw);
-        botPlayingScreen.add(bottomCards, BorderLayout.SOUTH);
+        botCards.add(bottomCards);
+        botPlayingScreen.add(botCards.get(0), BorderLayout.SOUTH);
 
         return botPlayingScreen;
     }
@@ -154,7 +158,7 @@ public class UnoPanel extends JPanel {
         top.setLayout(new GridLayout(1, 2));
         //Left top (cards left and go to menu
         JPanel left = new JPanel();
-        left.setLayout(new GridLayout(2, 1));
+        left.setLayout(new GridLayout(3, 1));
         JButton goMenu = new JButton("Menu");
         goMenu.addActionListener(listener);
         left.add(goMenu);
@@ -168,6 +172,9 @@ public class UnoPanel extends JPanel {
         pCardsLeft = new JLabel(cardsLeftAsString.toString());
         pCardsLeft.setFont(new Font("Arial", Font.PLAIN, 20));
         left.add("playercards", pCardsLeft);
+        currPlayer = new JLabel(tab + tab + "Current player: " + (player + 1));
+        currPlayer.setFont(new Font("Arial", Font.PLAIN, 20));
+        left.add(currPlayer);
         top.add(left);
         //Top right (cards left in draw pile w/ pic)
         JPanel right = new JPanel();
@@ -190,14 +197,15 @@ public class UnoPanel extends JPanel {
         placePile = new JLabel(new ImageIcon(img));
         playerPlayingScreen.add(placePile, BorderLayout.CENTER);
         //Bottom (cards on hand and draw)
-        bottomCards = new JPanel();
+        JPanel bottomCards = new JPanel();
         bottomCards.setLayout(new GridLayout(2, 1));
         JButton draw = new JButton("Draw");
         draw.addActionListener(listener);
         cards = playerCards(player);
         bottomCards.add(cards);
         bottomCards.add(draw);
-        playerPlayingScreen.add(bottomCards, BorderLayout.SOUTH);
+        botCards.add(bottomCards);
+        playerPlayingScreen.add(botCards.get(player), BorderLayout.SOUTH);
 
         return playerPlayingScreen;
     }
@@ -250,15 +258,16 @@ public class UnoPanel extends JPanel {
     //TODO Maybe refresh only elements when bot plays and everything when player plays
     public void updateCards(int player) {
         System.out.println("Updating cards for " + player);
-        bottomCards.setVisible(false);
-        bottomCards.removeAll();
-        bottomCards.setLayout(new GridLayout(2, 1));
+        JPanel toUpdate = botCards.get(player);
+        toUpdate.setVisible(false);
+        toUpdate.removeAll();
+        toUpdate.setLayout(new GridLayout(2, 1));
         cards = playerCards(player);
-        bottomCards.add(cards);
+        toUpdate.add(cards);
         JButton draw = new JButton("Draw");
         draw.addActionListener(listener);
-        bottomCards.add(draw);
-        bottomCards.setVisible(true);
+        toUpdate.add(draw);
+        toUpdate.setVisible(true);
         repaint();
     }
 
@@ -347,8 +356,6 @@ public class UnoPanel extends JPanel {
     public void playerScreen(String player) {
         System.out.println("Showing " + player + " and updating");
         screen.show(c, player);
-//        updateCardElements();
-//        updateCards(Integer.parseInt(player.substring(player.length() - 1)));
     }
 
     @Override
