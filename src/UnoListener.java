@@ -19,7 +19,6 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        setWinnerScreen();
         String button = e.getActionCommand();
         switch (button) {
             case "Bot":
@@ -61,9 +60,9 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
                 panel.repaint();
                 break;
             default:
-                System.out.println("updating screen");
-                updateWholeScreen();
-                System.out.println("done updating screen");
+//                System.out.println("updating screen");
+//                updateWholeScreen();
+//                System.out.println("done updating screen");
                 Card toPlay = game.stringToCard(button);
                 if (!game.canPlayCard(toPlay)) {
                     JOptionPane.showMessageDialog(panel, "That card can't be played.");
@@ -78,23 +77,28 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
                     int col = JOptionPane.showOptionDialog(panel, "What color would you like? Please select below.", "Choose color", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[3]);
                     if (col == -1) {
                         JOptionPane.showMessageDialog(panel, "A random color will now be chosen for you as you have failed to follow instructions");
-                        col = (int) (Math.random() * 4);
+                        col = (int)(Math.random() * 4);
                     }
                     game.doSpecialMove(options[col].toString());
                 } else {
                     game.doSpecialMove(null);
                 }
+                setWinnerScreen();
                 panel.updateCardElements();
+                //TODO Not removing card element sometimes when playing vs bot
                 game.nextPlayer();
                 if (botGame && game.getPlayer() == 1) {
                     System.out.println("Bots turn");
                     game.botPlayCard();
-                    updateWholeScreen();
+                    setWinnerScreen();
                 } else if (!botGame) {
                     //TODO Only updates the screen of the last player
                     panel.playerScreen("player" + game.getPlayer());
 //                    JOptionPane.showMessageDialog(panel, "Player " + (game.getPlayer() + 1) + "'s turn. Click OK to continue.");
                 }
+                System.out.println("updating screen");
+                updateWholeScreen();
+                System.out.println("done updating screen");
                 break;
         }
         System.out.println("Done with this round, next..." + e);
