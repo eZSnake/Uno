@@ -9,7 +9,7 @@ public class UnoPanel extends JPanel {
     private static Container c;
     private static CardLayout screen;
     private static PanelDims dims;
-    private JLabel pCardsLeft, cardsLeft, placePile, currPlayer;
+    private JLabel pCardsLeft, cardsLeft, placePile;
     private static UnoListener listener;
     private JPanel cards;
     private ArrayList<JPanel> botCards = new ArrayList<>();
@@ -110,7 +110,7 @@ public class UnoPanel extends JPanel {
         JButton goMenu = new JButton("Menu");
         goMenu.addActionListener(listener);
         left.add(goMenu);
-        pCardsLeft = new JLabel("        Cards left: Bot's cards: " + listener.pCardsLeft(1) + " - Player's cards: " + listener.pCardsLeft(0));
+        pCardsLeft = new JLabel(tab + tab + "Cards left: Bot's cards: " + listener.pCardsLeft(1) + " - Player's cards: " + listener.pCardsLeft(0));
         pCardsLeft.setFont(new Font("Arial", Font.PLAIN, 20));
         left.add("playercards", pCardsLeft);
         top.add(left);
@@ -123,7 +123,7 @@ public class UnoPanel extends JPanel {
             back = ImageIO.read(new File("UnoCards/back.png")).getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
         } catch (IOException ignored) {}
         right.add(new JLabel(new ImageIcon(back)));
-        cardsLeft = new JLabel("        Cards in drawpile: " + listener.getCardsLeft());
+        cardsLeft = new JLabel(tab + tab + "Cards in drawpile: " + listener.getCardsLeft());
         cardsLeft.setFont(new Font("Arial", Font.PLAIN, 20));
         right.add("cardsleft", cardsLeft);
         top.add(right);
@@ -162,7 +162,7 @@ public class UnoPanel extends JPanel {
         JButton goMenu = new JButton("Menu");
         goMenu.addActionListener(listener);
         left.add(goMenu);
-        StringBuilder cardsLeftAsString = new StringBuilder("        Cards left: ");
+        StringBuilder cardsLeftAsString = new StringBuilder(tab + tab + "Cards left: ");
         for (int i = 0; i < listener.getPlayerCount(); i++) {
             cardsLeftAsString.append("Player ").append(i + 1).append(": ").append(listener.pCardsLeft(i));
             if (i < listener.getPlayerCount() - 1) {
@@ -172,7 +172,7 @@ public class UnoPanel extends JPanel {
         pCardsLeft = new JLabel(cardsLeftAsString.toString());
         pCardsLeft.setFont(new Font("Arial", Font.PLAIN, 20));
         left.add("playercards", pCardsLeft);
-        currPlayer = new JLabel(tab + tab + "Current player: " + (player + 1));
+        JLabel currPlayer = new JLabel(tab + tab + "Current player: " + (player + 1));
         currPlayer.setFont(new Font("Arial", Font.PLAIN, 20));
         left.add(currPlayer);
         top.add(left);
@@ -185,7 +185,7 @@ public class UnoPanel extends JPanel {
             back = ImageIO.read(new File("UnoCards/back.png")).getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
         } catch (IOException ignored) {}
         right.add(new JLabel(new ImageIcon(back)));
-        cardsLeft = new JLabel("        Cards in drawpile: " + listener.getCardsLeft());
+        cardsLeft = new JLabel(tab + tab + "Cards in drawpile: " + listener.getCardsLeft());
         cardsLeft.setFont(new Font("Arial", Font.PLAIN, 20));
         right.add("cardsleft", cardsLeft);
         top.add(right);
