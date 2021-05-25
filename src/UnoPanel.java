@@ -44,6 +44,7 @@ public class UnoPanel extends JPanel {
 
     public void setPlayerGame() {
         //Adds player screens to the container to play against others
+        //TODO Correctly implement placePile being 'global'
         targetWidth = dims.getWidth() / 15;
         targetHeight = targetWidth * 143 / 100;
         placePile = new JLabel(new ImageIcon(listener.getPlacePile().getImage().getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH)));
