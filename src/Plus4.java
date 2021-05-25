@@ -17,6 +17,7 @@ public class Plus4 extends Card {
     }
 
     public void specialMove(Deck deck, Hand[] hands, int currPlayer, String col) {
+        //TODO Being applied to wrong person if in reverse; maybe also have nextPlayer in call
 //        System.out.print("What would you like to change the color to? ");
 //        if (col.equals("")) {
 //            col = TextIO.getlnString().toLowerCase();
