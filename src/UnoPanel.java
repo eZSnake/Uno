@@ -14,6 +14,7 @@ public class UnoPanel extends JPanel {
     private JPanel cards;
     private ArrayList<JPanel> botCards = new ArrayList<>();
     private static final String tab = "    ";
+    private static int targetWidth, targetHeight;
 
     public static void main(String[] args) {
         JFrame window = new JFrame("Uno");
@@ -88,7 +89,8 @@ public class UnoPanel extends JPanel {
         menu.add(welcome, BorderLayout.NORTH);
         //Image of back of Uno card at center
         Image back = null;
-        int targetWidth = dims.getWidth() / 5, targetHeight = targetWidth * 143 / 100;
+        targetWidth = dims.getWidth() / 5;
+        targetHeight = targetWidth * 143 / 100;
         try {
             back = ImageIO.read(new File("UnoCards/back.png")).getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
         } catch (IOException ignored) {}
@@ -118,7 +120,8 @@ public class UnoPanel extends JPanel {
         JPanel right = new JPanel();
         right.setLayout(new GridLayout(2, 1));
         Image back = null;
-        int targetWidth = dims.getWidth() / 20, targetHeight = targetWidth * 143 / 100;
+        targetWidth = dims.getWidth() / 20;
+        targetHeight = targetWidth * 143 / 100;
         try {
             back = ImageIO.read(new File("UnoCards/back.png")).getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
         } catch (IOException ignored) {}
@@ -155,6 +158,7 @@ public class UnoPanel extends JPanel {
         playerPlayingScreen.setLayout(new BorderLayout());
         //Top of the screen
         JPanel top = new JPanel();
+        top = new JPanel();
         top.setLayout(new GridLayout(1, 2));
         //Left top (cards left and go to menu
         JPanel left = new JPanel();
@@ -180,7 +184,8 @@ public class UnoPanel extends JPanel {
         JPanel right = new JPanel();
         right.setLayout(new GridLayout(2, 1));
         Image back = null;
-        int targetWidth = dims.getWidth() / 20, targetHeight = targetWidth * 143 / 100;
+        targetWidth = dims.getWidth() / 20;
+        targetHeight = targetWidth * 143 / 100;
         try {
             back = ImageIO.read(new File("UnoCards/back.png")).getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
         } catch (IOException ignored) {}
@@ -220,7 +225,8 @@ public class UnoPanel extends JPanel {
         if (playerHand.length() > 14) {
             div += 2 * playerHand.length() + 4;
         }
-        int targetWidth = dims.getWidth() / div, targetHeight = targetWidth * 143 / 100;
+        targetWidth = dims.getWidth() / div;
+        targetHeight = targetWidth * 143 / 100;
         for (int i = 0; i < playerHand.length(); i++) {
             JButton card = new JButton(playerHand.getCard(i).toString());
             Image img = playerHand.getCard(i).getImage().getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
@@ -231,6 +237,7 @@ public class UnoPanel extends JPanel {
             card.setSize(targetWidth, targetHeight);
             cards.add(card);
         }
+
         return cards;
     }
 
@@ -250,7 +257,8 @@ public class UnoPanel extends JPanel {
         }
         cardsLeft.setText(tab + tab + "Cards in drawpile: " + listener.getCardsLeft());
 
-        int targetWidth = dims.getWidth() / 15, targetHeight = targetWidth * 143 / 100;
+        targetWidth = dims.getWidth() / 15;
+        targetHeight = targetWidth * 143 / 100;
         Image img = listener.getPlacePile().getImage().getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
         placePile.setIcon(new ImageIcon(img));
         repaint();
@@ -320,7 +328,8 @@ public class UnoPanel extends JPanel {
         text.setEditable(false);
         botWins.add(text);
         Image robot = null;
-        int targetWidth = dims.getWidth() / 8, targetHeight = targetWidth * 143 / 100;
+        targetWidth = dims.getWidth() / 8;
+        targetHeight = targetWidth * 143 / 100;
         try {
             robot = ImageIO.read(new File("UnoCards/robot.jpg")).getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
         } catch (IOException ignored) {}
@@ -339,6 +348,10 @@ public class UnoPanel extends JPanel {
         text.setEditable(false);
         tieGame.add(text);
         return tieGame;
+    }
+
+    public void setTop() {
+
     }
 
     public void nextScreen() {
