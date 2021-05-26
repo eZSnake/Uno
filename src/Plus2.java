@@ -13,7 +13,11 @@ public class Plus2 extends Card {
     }
 
     public void specialMove(Deck deck, Hand[] hands, int currPlayer, boolean rev, String col) {
-        currPlayer = Math.floorMod(currPlayer - 1, hands.length);
+        if (rev) {
+            currPlayer = Math.floorMod(currPlayer - 1, hands.length);
+        } else {
+            currPlayer = Math.floorMod(currPlayer + 1, hands.length);
+        }
         for (int i = 0; i < 2; i++) {
             hands[currPlayer].addCard(deck.deal());
         }

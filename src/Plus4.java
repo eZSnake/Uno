@@ -2,7 +2,6 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.util.Locale;
 
 public class Plus4 extends Card {
     private boolean hasSkipped;
@@ -31,7 +30,11 @@ public class Plus4 extends Card {
             img = ImageIO.read(new File("UnoCards/" + col.toLowerCase() + "plus4.jpg"));
         } catch (IOException ignored) {}
         setImage(img);
-        currPlayer = Math.floorMod(currPlayer - 1, hands.length);
+        if (rev) {
+            currPlayer = Math.floorMod(currPlayer - 1, hands.length);
+        } else {
+            currPlayer = Math.floorMod(currPlayer + 1, hands.length);
+        }
         for (int i = 0; i < 4; i++) {
             hands[currPlayer].addCard(deck.deal());
         }

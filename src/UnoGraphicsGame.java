@@ -112,12 +112,6 @@ public class UnoGraphicsGame {
             rev = !rev;
             ((Switch) placePile).setHasSwitched(true);
         }
-        if (placePile instanceof Switch) {
-            if (!((Switch) placePile).getHasSwitched()) {
-                rev = !rev;
-                ((Switch) placePile).setHasSwitched(true);
-            }
-        }
     }
 
     private boolean canPlayACard() {
