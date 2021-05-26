@@ -12,8 +12,6 @@ public class Skip extends Card {
         return getColor() + " Skip";
     }
 
-    public void specialMove(Deck deck, Hand[] hands, int currPlayer, String col) { }
-
     public boolean getHasSkipped() {
         return hasSkipped;
     }

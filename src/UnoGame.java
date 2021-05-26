@@ -66,7 +66,7 @@ public class UnoGame {  //Eike Rehwald
             if (hands[player].length() <= 0) {
                 break;
             }
-            placePile.specialMove(deck, hands, player, "");
+            placePile.specialMove(deck, hands, player, rev, "");
             switchSkip();
             player = nextPlayer(player, hands.length);
         }

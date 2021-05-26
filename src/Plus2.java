@@ -12,12 +12,8 @@ public class Plus2 extends Card {
         return getColor() + " +2";
     }
 
-    public void specialMove(Deck deck, Hand[] hands, int currPlayer, String col) {
-        if (currPlayer < hands.length-1) {
-            currPlayer++;
-        } else {
-            currPlayer = 0;
-        }
+    public void specialMove(Deck deck, Hand[] hands, int currPlayer, boolean rev, String col) {
+        currPlayer = Math.floorMod(currPlayer - 1, hands.length);
         for (int i = 0; i < 2; i++) {
             hands[currPlayer].addCard(deck.deal());
         }

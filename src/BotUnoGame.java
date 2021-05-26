@@ -86,7 +86,7 @@ public class BotUnoGame {  //Eike Rehwald
             } else {
                 col = "";
             }
-            placePile.specialMove(deck, hands, player, col);
+            placePile.specialMove(deck, hands, player, rev, col);
             switchSkip();
             if (placePile instanceof Switch) {
                 if (!((Switch) placePile).getHasSwitched()) {

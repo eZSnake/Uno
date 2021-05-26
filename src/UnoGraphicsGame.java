@@ -65,7 +65,7 @@ public class UnoGraphicsGame {
 
     public void doSpecialMove(String col) {
         //TODO Plus 4 applying to wrong person if in reverse (check +4 file)
-        placePile.specialMove(deck, hands, player, col);
+        placePile.specialMove(deck, hands, player, rev, col);
     }
 
     private boolean roundPlayable() {

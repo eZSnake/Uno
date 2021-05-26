@@ -29,7 +29,6 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
                 panel.repaint();
                 break;
             case "Players: ":
-                //TODO Only last player screen displaying properly
                 botGame = false;
                 game = new UnoGraphicsGame(playerCount);
                 panel.setPlayerGame();

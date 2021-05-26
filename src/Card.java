@@ -14,7 +14,7 @@ public abstract class Card {
 
     public abstract String toString();
 
-    public abstract void specialMove(Deck deck, Hand[] hands, int currPlayer, String col);
+    public void specialMove(Deck deck, Hand[] hands, int currPlayer, boolean rev, String col) {}
 
     public int getNum() {
         return num;

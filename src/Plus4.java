@@ -16,8 +16,7 @@ public class Plus4 extends Card {
         return getColor() + " +4 and Change Color";
     }
 
-    public void specialMove(Deck deck, Hand[] hands, int currPlayer, String col) {
-        //TODO Being applied to wrong person if in reverse; maybe also have nextPlayer in call
+    public void specialMove(Deck deck, Hand[] hands, int currPlayer, boolean rev, String col) {
 //        System.out.print("What would you like to change the color to? ");
 //        if (col.equals("")) {
 //            col = TextIO.getlnString().toLowerCase();
@@ -32,11 +31,7 @@ public class Plus4 extends Card {
             img = ImageIO.read(new File("UnoCards/" + col.toLowerCase() + "plus4.jpg"));
         } catch (IOException ignored) {}
         setImage(img);
-        if (currPlayer < hands.length-1) {
-            currPlayer++;
-        } else {
-            currPlayer = 0;
-        }
+        currPlayer = Math.floorMod(currPlayer - 1, hands.length);
         for (int i = 0; i < 4; i++) {
             hands[currPlayer].addCard(deck.deal());
         }

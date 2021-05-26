@@ -12,7 +12,7 @@ public class ChangeCol extends Card {
         return getColor() + " Change Color";
     }
 
-    public void specialMove(Deck deck, Hand[] hands, int currPlayer, String col) {
+    public void specialMove(Deck deck, Hand[] hands, int currPlayer, boolean rev, String col) {
 //        System.out.print("What would you like to change the color to? ");
 //        if (col.equals("")) {
 //            col = TextIO.getlnString().toLowerCase();
