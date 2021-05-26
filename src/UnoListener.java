@@ -188,16 +188,13 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
     }
 
     @Override
-    public void componentMoved(ComponentEvent e) {
-    }
+    public void componentMoved(ComponentEvent e) { }
 
     @Override
-    public void componentShown(ComponentEvent e) {
-    }
+    public void componentShown(ComponentEvent e) { }
 
     @Override
-    public void componentHidden(ComponentEvent e) {
-    }
+    public void componentHidden(ComponentEvent e) { }
 
     private void updateWholeScreen() {
         setWinnerScreen();

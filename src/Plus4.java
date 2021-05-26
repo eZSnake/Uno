@@ -15,6 +15,7 @@ public class Plus4 extends Card {
         return getColor() + " +4 and Change Color";
     }
 
+    @Override
     public void specialMove(Deck deck, Hand[] hands, int currPlayer, boolean rev, String col) {
 //        System.out.print("What would you like to change the color to? ");
 //        if (col.equals("")) {

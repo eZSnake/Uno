@@ -12,6 +12,7 @@ public class Plus2 extends Card {
         return getColor() + " +2";
     }
 
+    @Override
     public void specialMove(Deck deck, Hand[] hands, int currPlayer, boolean rev, String col) {
         if (rev) {
             currPlayer = Math.floorMod(currPlayer - 1, hands.length);

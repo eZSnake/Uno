@@ -5,7 +5,7 @@ public abstract class Card {
     private String color;
     private Image image;
 
-    public Card(String col, int id, int num, Image img) {
+    protected Card(String col, int id, int num, Image img) {
         color = col;
         this.id = id;
         this.num = num;
