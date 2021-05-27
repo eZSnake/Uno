@@ -14,7 +14,7 @@ public class UnoPanel extends JPanel {
     private JPanel cards;
     private ArrayList<JPanel> botCards = new ArrayList<>();
     private ArrayList<JLabel> playerCardsLeft = new ArrayList<>(), drawCardsLeft = new ArrayList<>(), placePileCard = new ArrayList<>();
-    private static final String tab = "    ";
+    private static final String tab = "    ", ARIAL = "Arial";
     private static int targetWidth, targetHeight;
     private static Image back;
 
@@ -77,13 +77,13 @@ public class UnoPanel extends JPanel {
         buttons.setLayout(new GridLayout(3, 1));
         JButton bot = new JButton("Bot");
         bot.addActionListener(listener);
-        bot.setFont(new Font("Arial", Font.PLAIN, 20));
+        bot.setFont(new Font(ARIAL, Font.PLAIN, 20));
         buttons.add(bot);
         JPanel player = new JPanel();
         player.setLayout(new GridLayout(1, 2));
         JButton players = new JButton("Players: ");
         players.addActionListener(listener);
-        players.setFont(new Font("Arial", Font.PLAIN, 20));
+        players.setFont(new Font(ARIAL, Font.PLAIN, 20));
         player.add(players);
         JSlider playerCount = new JSlider(2, 4, 2);
         playerCount.addChangeListener(listener);
@@ -93,13 +93,13 @@ public class UnoPanel extends JPanel {
         buttons.add(player);
         JTextArea info = new JTextArea(tab + tab + "The game takes a bit to start. Pressing the button again makes you draw a card right away. So don't do it.");
         info.setEditable(false);
-        info.setFont(new Font("Arial", Font.PLAIN, 15));
+        info.setFont(new Font(ARIAL, Font.ITALIC, 15));
         buttons.add(info);
         menu.add(buttons, BorderLayout.SOUTH);
         //Welcome text at top of screen
         JTextArea welcome = new JTextArea(tab + "Welcome to the game of Uno.\n" + tab + "Each player starts with 7 cards and first with 0 left wins.\n" + tab + "The same color can go on the same color, " +
                 "the same number can go on the same number, and wish cards can go on any card.\n" + tab + "If you can't go, you will have to draw a card.");
-        welcome.setFont(new Font("Arial", Font.PLAIN, 20));
+        welcome.setFont(new Font(ARIAL, Font.PLAIN, 20));
         welcome.setEditable(false);
         menu.add(welcome, BorderLayout.NORTH);
         //Image of back of Uno card at center
@@ -125,11 +125,11 @@ public class UnoPanel extends JPanel {
         goMenu.addActionListener(listener);
         left.add(goMenu);
         pCardsLeft = new JLabel(tab + tab + "Cards left:  Bot's cards: " + listener.pCardsLeft(1) + " - Player's cards: " + listener.pCardsLeft(0));
-        pCardsLeft.setFont(new Font("Arial", Font.PLAIN, 20));
+        pCardsLeft.setFont(new Font(ARIAL, Font.PLAIN, 20));
         playerCardsLeft.add(pCardsLeft);
         left.add("playercards", playerCardsLeft.get(0));
         botsPlay = new JLabel(tab + tab + "Bot's play: " + listener.botsPlay());
-        botsPlay.setFont(new Font("Arial", Font.PLAIN, 20));
+        botsPlay.setFont(new Font(ARIAL, Font.PLAIN, 20));
         left.add("botsplay", botsPlay);
         top.add(left);
         //Top right (cards left in draw pile w/ pic)
@@ -139,7 +139,7 @@ public class UnoPanel extends JPanel {
         targetHeight = targetWidth * 143 / 100;
         right.add(new JLabel(new ImageIcon(back.getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH))));
         cardsLeft = new JLabel(tab + tab + "Cards in drawpile: " + listener.getCardsLeft());
-        cardsLeft.setFont(new Font("Arial", Font.PLAIN, 20));
+        cardsLeft.setFont(new Font(ARIAL, Font.PLAIN, 20));
         drawCardsLeft.add(cardsLeft);
         right.add("cardsleft", drawCardsLeft.get(0));
         top.add(right);
@@ -155,6 +155,7 @@ public class UnoPanel extends JPanel {
         JPanel bottomCards = new JPanel();
         bottomCards.setLayout(new GridLayout(2, 1));
         JButton draw = new JButton("Draw");
+        draw.setFont(new Font(ARIAL, Font.BOLD, 40));
         draw.addActionListener(listener);
         cards = playerCards(0);
         bottomCards.add(cards);
@@ -187,11 +188,11 @@ public class UnoPanel extends JPanel {
             }
         }
         pCardsLeft = new JLabel(cardsLeftAsString.toString());
-        pCardsLeft.setFont(new Font("Arial", Font.PLAIN, 20));
+        pCardsLeft.setFont(new Font(ARIAL, Font.PLAIN, 20));
         playerCardsLeft.add(pCardsLeft);
         left.add("playercards", playerCardsLeft.get(player));
         JLabel currPlayer = new JLabel(tab + tab + "Current player: " + (player + 1));
-        currPlayer.setFont(new Font("Arial", Font.PLAIN, 20));
+        currPlayer.setFont(new Font(ARIAL, Font.PLAIN, 20));
         left.add(currPlayer);
         top.add(left);
         //Top right (cards left in draw pile w/ pic)
@@ -201,7 +202,7 @@ public class UnoPanel extends JPanel {
         targetHeight = targetWidth * 143 / 100;
         right.add(new JLabel(new ImageIcon(back.getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH))));
         cardsLeft = new JLabel(tab + tab + "Cards in drawpile: " + listener.getCardsLeft());
-        cardsLeft.setFont(new Font("Arial", Font.PLAIN, 20));
+        cardsLeft.setFont(new Font(ARIAL, Font.PLAIN, 20));
         drawCardsLeft.add(cardsLeft);
         right.add("cardsleft", drawCardsLeft.get(player));
         top.add(right);
@@ -218,6 +219,7 @@ public class UnoPanel extends JPanel {
         bottomCards.setLayout(new GridLayout(2, 1));
         JButton draw = new JButton("Draw");
         draw.addActionListener(listener);
+        draw.setFont(new Font(ARIAL, Font.BOLD, 40));
         cards = playerCards(player);
         bottomCards.add(cards);
         bottomCards.add(draw);
@@ -299,7 +301,7 @@ public class UnoPanel extends JPanel {
         goMenu.addActionListener(listener);
         playerBotWins.add(goMenu);
         JTextArea text = new JTextArea("        You win!\n        Congratulations!\n        But can you do it again?");
-        text.setFont(new Font("Arial", Font.PLAIN, 50));
+        text.setFont(new Font(ARIAL, Font.PLAIN, 50));
         text.setEditable(false);
         playerBotWins.add(text);
         return playerBotWins;
@@ -312,7 +314,7 @@ public class UnoPanel extends JPanel {
         goMenu.addActionListener(listener);
         playerNWins.add(goMenu);
         JTextArea text = new JTextArea("        Player " + (player + 1) + " wins!\n        Congratulations!\n        But can this feat be repeated?");
-        text.setFont(new Font("Arial", Font.PLAIN, 50));
+        text.setFont(new Font(ARIAL, Font.PLAIN, 50));
         text.setEditable(false);
         playerNWins.add(text);
         return playerNWins;
@@ -325,7 +327,7 @@ public class UnoPanel extends JPanel {
         goMenu.addActionListener(listener);
         botWins.add(goMenu);
         JTextArea text = new JTextArea("        The bot wins!\n        Better luck next time!\n        *Robot Noises*");
-        text.setFont(new Font("Arial", Font.PLAIN, 50));
+        text.setFont(new Font(ARIAL, Font.PLAIN, 50));
         text.setEditable(false);
         botWins.add(text);
         Image robot = null;
@@ -345,7 +347,7 @@ public class UnoPanel extends JPanel {
         goMenu.addActionListener(listener);
         tieGame.add(goMenu);
         JTextArea text = new JTextArea("        The game is a tie!\n        There are no more cards to draw or play!\n        Better luck next time!");
-        text.setFont(new Font("Arial", Font.PLAIN, 50));
+        text.setFont(new Font(ARIAL, Font.PLAIN, 50));
         text.setEditable(false);
         tieGame.add(text);
         return tieGame;
