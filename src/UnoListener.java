@@ -59,9 +59,6 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
                 panel.repaint();
                 break;
             default:
-//                System.out.println("updating screen");
-//                updateWholeScreen();
-//                System.out.println("done updating screen");
                 Card toPlay = game.stringToCard(button);
                 if (!game.canPlayCard(toPlay)) {
                     JOptionPane.showMessageDialog(panel, "That card can't be played.");
@@ -82,7 +79,9 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
                 } else {
                     game.doSpecialMove(null);
                 }
-                setWinnerScreen();
+                if (setWinnerScreen()) {
+                    break;
+                }
 //                updateWholeScreen();
                 //TODO Not removing card element sometimes when playing vs bot
                 game.nextPlayer();
@@ -145,40 +144,50 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
         return botGame;
     }
 
-    private void setWinnerScreen() {
+    private boolean setWinnerScreen() {
+        boolean switched = false;
         if (botGame) {
             switch (game.determineWinner()) {
                 case 0:
                     panel.showScreen("playerWin");
+                    switched = true;
                     break;
                 case 1:
                     panel.showScreen("botWin");
+                    switched = true;
                     break;
                 case 4:
                     panel.showScreen("tieGame");
+                    switched = true;
                     break;
             }
         } else {
             switch (game.determineWinner()) {
                 case 0:
                     panel.showScreen("player0Win");
+                    switched = true;
                     break;
                 case 1:
                     panel.showScreen("player1Win");
+                    switched = true;
                     break;
                 case 2:
                     panel.showScreen("player2Win");
+                    switched = true;
                     break;
                 case 3:
                     panel.showScreen("player3Win");
+                    switched = true;
                     break;
                 case 4:
                     panel.showScreen("tieGame");
+                    switched = true;
                     break;
             }
         }
         panel.revalidate();
         panel.repaint();
+        return switched;
     }
 
     @Override
@@ -198,8 +207,9 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
     public void componentHidden(ComponentEvent e) { }
 
     private void updateWholeScreen() {
-        setWinnerScreen();
-        panel.updateCardElements();
-        panel.updateCards(game.getPlayer());
+        if (!setWinnerScreen()) {
+            panel.updateCardElements();
+            panel.updateCards(game.getPlayer());
+        }
     }
 }
