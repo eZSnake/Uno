@@ -22,6 +22,7 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
         String button = e.getActionCommand();
         switch (button) {
             case "Bot":
+                //TODO Starts w/ 6-8 cards instead of 7-7
                 botGame = true;
                 game = new UnoGraphicsGame(2);
                 panel.setBotGame();

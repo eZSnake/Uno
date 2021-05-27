@@ -168,16 +168,16 @@ public class Deck {
 
     public Card deal() {
         cardsDealt++;
-        return cards[cardsDealt-1];
+        return cards[cardsDealt - 1];
     }
 
     public int cardsLeft() {
-        return 108-cardsDealt;
+        return 108 - cardsDealt;
     }
 
     public void printDeck() {
         for (int i = 0; i < 108; i++) {
-            System.out.println(cards[i].toString());
+            System.out.println((i + 1) + ": " + cards[i].toString());
         }
     }
 
