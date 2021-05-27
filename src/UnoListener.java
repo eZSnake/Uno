@@ -22,7 +22,6 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
         String button = e.getActionCommand();
         switch (button) {
             case "Bot":
-                //TODO Starts w/ 6-8 cards instead of 7-7 ... sometimes?
                 botGame = true;
                 game = new UnoGraphicsGame(2);
                 panel.setBotGame();
@@ -37,13 +36,14 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
                 panel.repaint();
                 break;
             case "Draw":
-                //TODO Card overflow when having over 9 cards on hand
                 if (botGame) {
+                    game.resetBotsPlay();
                     game.draw(0);
                 } else {
                     game.draw();
                 }
 //                updateWholeScreen();
+//                try {Thread.sleep(500);} catch(InterruptedException ignored) {}
                 if (botGame && game.getPlayer() == 1) {
                     game.botPlayCard();
                 } else if (!botGame) {
@@ -61,10 +61,11 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
                 Card toPlay = game.stringToCard(button);
                 if (!game.canPlayCard(toPlay)) {
                     JOptionPane.showMessageDialog(panel, "That card can't be played.");
-//                    System.out.println("updating hand");
                     panel.updateCards(game.getPlayer());
-//                    System.out.println("done updating hand");
                     break;
+                }
+                if (!(toPlay.toString().contains("+") || toPlay.toString().contains("Skip"))) {
+                    game.resetBotsPlay();
                 }
                 game.playCard(toPlay);
                 if (toPlay.getId() == 4) {
@@ -82,18 +83,16 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
                     break;
                 }
 //                updateWholeScreen();
+//                try {Thread.sleep(500);} catch(InterruptedException ignored) {}
                 //TODO Refresh screen btwn player and bot play
                 game.nextPlayer();
                 if (botGame && game.getPlayer() == 1) {
-//                    System.out.println("Bots turn");
                     game.botPlayCard();
                 } else if (!botGame) {
                     JOptionPane.showMessageDialog(panel, "Player " + (game.getPlayer() + 1) + "'s turn. Click OK to continue.");
                     panel.playerScreen("player" + game.getPlayer());
                 }
-//                System.out.println("updating screen");
                 updateWholeScreen();
-//                System.out.println("done updating screen");
                 break;
         }
 //        System.out.println("Done with this round, next..." + e);
@@ -124,10 +123,6 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
 
     public int getPlayer() {
         return game.getPlayer();
-    }
-
-    public Deck getDeck() {
-        return game.getDeck();
     }
 
     public Card getPlacePile() {

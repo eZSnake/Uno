@@ -42,27 +42,31 @@ public class UnoGraphicsGame {
 
     public void botPlayCard() {
         //Bot plays a card if it can otherwise it draws one
-//        System.out.println("Waiting for a bit");
-//        try {Thread.sleep(500);} catch(InterruptedException ignored) {}
-//        System.out.println("resuming execution");
         if (!canPlayACard()) {
-//            System.out.println("Bot drawing");
+            if (botsPlay.contains("+") || botsPlay.contains("Skip")) {
+                botsPlay += ", Draw";
+            } else {
+                botsPlay = "Draw";
+            }
             draw();
-            botsPlay = "Draw";
         } else {
             String col = null;
             Card toPlay = bot.playCard(hands[1], placePile);
-//            System.out.println("Bot's play: " + toPlay);
             if (toPlay.getId() == 4) {
                 col = bot.chooseColor(hands[1]);
             }
-            if (botsPlay.contains("Plus") || botsPlay.contains("Skip")) {
+            if (botsPlay.contains("+") || botsPlay.contains("Skip")) {
+                botsPlay += ", ";
                 if (toPlay.getId() == 4) {
-                    botsPlay += col + " ";
+                    botsPlay += col;
                 }
-                botsPlay += ", " + toPlay;
+                botsPlay += toPlay;
             } else {
-                botsPlay = toPlay.toString();
+                if (toPlay.getId() == 4) {
+                    botsPlay += col + " " + toPlay;
+                } else {
+                    botsPlay = toPlay.toString();
+                }
             }
             playCard(toPlay);
             doSpecialMove(col);
@@ -74,6 +78,7 @@ public class UnoGraphicsGame {
     }
 
     public void doSpecialMove(String col) {
+        //Executes special move
         placePile.specialMove(deck, hands, player, rev, col);
     }
 
@@ -164,10 +169,6 @@ public class UnoGraphicsGame {
         return hands[plyr];
     }
 
-    public Deck getDeck() {
-        return deck;
-    }
-
     public Card getPlacePile() {
         return placePile;
     }
@@ -178,6 +179,10 @@ public class UnoGraphicsGame {
 
     public String getBotsPlay() {
         return botsPlay;
+    }
+
+    public void resetBotsPlay() {
+        botsPlay = "";
     }
 
     public int determineWinner() {
