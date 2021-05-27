@@ -5,6 +5,7 @@ public class UnoGraphicsGame {
     private boolean rev = false, skip = false;
     private final BasicBot bot = new BasicBot();
     private int player = 0, players;
+    private String botsPlay = "";
 
     public UnoGraphicsGame(int players) {
         this.players = players;
@@ -41,18 +42,27 @@ public class UnoGraphicsGame {
 
     public void botPlayCard() {
         //Bot plays a card if it can otherwise it draws one
-        System.out.println("Waiting for a bit");
-        try {Thread.sleep(500);} catch(InterruptedException ignored) {}
-        System.out.println("resuming execution");
+//        System.out.println("Waiting for a bit");
+//        try {Thread.sleep(500);} catch(InterruptedException ignored) {}
+//        System.out.println("resuming execution");
         if (!canPlayACard()) {
-            System.out.println("Bot drawing");
+//            System.out.println("Bot drawing");
             draw();
+            botsPlay = "Draw";
         } else {
             String col = null;
             Card toPlay = bot.playCard(hands[1], placePile);
-            System.out.println("Bot's play: " + toPlay);
+//            System.out.println("Bot's play: " + toPlay);
             if (toPlay.getId() == 4) {
                 col = bot.chooseColor(hands[1]);
+            }
+            if (botsPlay.contains("Plus") || botsPlay.contains("Skip")) {
+                if (toPlay.getId() == 4) {
+                    botsPlay += col + " ";
+                }
+                botsPlay += ", " + toPlay;
+            } else {
+                botsPlay = toPlay.toString();
             }
             playCard(toPlay);
             doSpecialMove(col);
@@ -64,7 +74,6 @@ public class UnoGraphicsGame {
     }
 
     public void doSpecialMove(String col) {
-        //TODO Plus 4 applying to wrong person if in reverse (check +4 file)
         placePile.specialMove(deck, hands, player, rev, col);
     }
 
@@ -165,6 +174,10 @@ public class UnoGraphicsGame {
 
     public int getPlayer() {
         return player;
+    }
+
+    public String getBotsPlay() {
+        return botsPlay;
     }
 
     public int determineWinner() {

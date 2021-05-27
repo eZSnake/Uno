@@ -9,13 +9,14 @@ public class UnoPanel extends JPanel {
     private static Container c;
     private static CardLayout screen;
     private static PanelDims dims;
-    private JLabel pCardsLeft, cardsLeft, placePile;
+    private JLabel pCardsLeft, cardsLeft, placePile, botsPlay;
     private static UnoListener listener;
     private JPanel cards;
     private ArrayList<JPanel> botCards = new ArrayList<>();
     private ArrayList<JLabel> playerCardsLeft = new ArrayList<>(), drawCardsLeft = new ArrayList<>(), placePileCard = new ArrayList<>();
     private static final String tab = "    ";
     private static int targetWidth, targetHeight;
+    private static Image back;
 
     public static void main(String[] args) {
         JFrame window = new JFrame("Uno");
@@ -23,6 +24,12 @@ public class UnoPanel extends JPanel {
         listener = new UnoListener(panel);
         window.setSize(1920,1080);
         dims = new PanelDims(window.getWidth(), window.getHeight());
+
+        targetWidth = dims.getWidth() / 5;
+        targetHeight = targetWidth * 143 / 100;
+        try {
+            back = ImageIO.read(new File("UnoCards/back.png")).getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
+        } catch (IOException ignored) {}
 
         screen = new CardLayout();
         c = window.getContentPane();
@@ -41,6 +48,7 @@ public class UnoPanel extends JPanel {
         c.add(playerBotWins(), "playerWin");
         c.add(botWins(), "botWin");
         c.add(tieGame(), "tieGame");
+        revalidate();
     }
 
     public void setPlayerGame() {
@@ -90,17 +98,11 @@ public class UnoPanel extends JPanel {
                 "the same number can go on the same number, and wish cards can go on any card.\n" + tab + "If you can't go, you will have to draw a card.");
         welcome.setFont(new Font("Arial", Font.PLAIN, 20));
         welcome.setEditable(false);
-//        welcome.setAlignmentX(500);
         menu.add(welcome, BorderLayout.NORTH);
         //Image of back of Uno card at center
-        Image back = null;
-        targetWidth = dims.getWidth() / 5;
-        targetHeight = targetWidth * 143 / 100;
-        try {
-            back = ImageIO.read(new File("UnoCards/back.png")).getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
-        } catch (IOException ignored) {}
         JLabel picLabel = new JLabel(new ImageIcon(back));
         menu.add(picLabel, BorderLayout.CENTER);
+
         return menu;
     }
 
@@ -113,7 +115,7 @@ public class UnoPanel extends JPanel {
         top.setLayout(new GridLayout(1, 2));
         //Left top (cards left and go to menu
         JPanel left = new JPanel();
-        left.setLayout(new GridLayout(2, 1));
+        left.setLayout(new GridLayout(3, 1));
         JButton goMenu = new JButton("Menu");
         goMenu.addActionListener(listener);
         left.add(goMenu);
@@ -121,16 +123,16 @@ public class UnoPanel extends JPanel {
         pCardsLeft.setFont(new Font("Arial", Font.PLAIN, 20));
         playerCardsLeft.add(pCardsLeft);
         left.add("playercards", playerCardsLeft.get(0));
+        botsPlay = new JLabel(tab + tab + "Bot's play: " + listener.botsPlay());
+        botsPlay.setFont(new Font("Arial", Font.PLAIN, 20));
+        left.add("botsplay", botsPlay);
         top.add(left);
         //Top right (cards left in draw pile w/ pic)
         JPanel right = new JPanel();
         right.setLayout(new GridLayout(2, 1));
-        Image back = null;
         targetWidth = dims.getWidth() / 20;
         targetHeight = targetWidth * 143 / 100;
-        try {
-            back = ImageIO.read(new File("UnoCards/back.png")).getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
-        } catch (IOException ignored) {}
+        back = back.getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
         right.add(new JLabel(new ImageIcon(back)));
         cardsLeft = new JLabel(tab + tab + "Cards in drawpile: " + listener.getCardsLeft());
         cardsLeft.setFont(new Font("Arial", Font.PLAIN, 20));
@@ -166,7 +168,6 @@ public class UnoPanel extends JPanel {
         playerPlayingScreen.setLayout(new BorderLayout());
         //Top of the screen
         JPanel top = new JPanel();
-        top = new JPanel();
         top.setLayout(new GridLayout(1, 2));
         //Left top (cards left and go to menu
         JPanel left = new JPanel();
@@ -185,7 +186,6 @@ public class UnoPanel extends JPanel {
         pCardsLeft.setFont(new Font("Arial", Font.PLAIN, 20));
         playerCardsLeft.add(pCardsLeft);
         left.add("playercards", playerCardsLeft.get(player));
-//        left.add("playercards", pCardsLeft);
         JLabel currPlayer = new JLabel(tab + tab + "Current player: " + (player + 1));
         currPlayer.setFont(new Font("Arial", Font.PLAIN, 20));
         left.add(currPlayer);
@@ -193,12 +193,9 @@ public class UnoPanel extends JPanel {
         //Top right (cards left in draw pile w/ pic)
         JPanel right = new JPanel();
         right.setLayout(new GridLayout(2, 1));
-        Image back = null;
         targetWidth = dims.getWidth() / 20;
         targetHeight = targetWidth * 143 / 100;
-        try {
-            back = ImageIO.read(new File("UnoCards/back.png")).getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
-        } catch (IOException ignored) {}
+        back = back.getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
         right.add(new JLabel(new ImageIcon(back)));
         cardsLeft = new JLabel(tab + tab + "Cards in drawpile: " + listener.getCardsLeft());
         cardsLeft.setFont(new Font("Arial", Font.PLAIN, 20));
@@ -228,14 +225,12 @@ public class UnoPanel extends JPanel {
     }
 
     public JPanel playerCards(int player) {
-        //Sets cards on hand for specified player
         JPanel cards = new JPanel();
         int div = 20;
         Hand playerHand = listener.getPlayerHand(player);
-        System.out.println(playerHand.toString());
-        //TODO Optimize size changeing
-        if (playerHand.length() % 14 == 0) {
-            div += 2 * playerHand.length();
+        //TODO Optimize size changeing!!!
+        if (playerHand.length() > 13) {
+            div += (playerHand.length() / 7) * playerHand.length();
         }
         targetWidth = dims.getWidth() / div;
         targetHeight = targetWidth * 143 / 100;
@@ -255,10 +250,10 @@ public class UnoPanel extends JPanel {
     }
 
     public void updateCardElements() {
-//        System.out.println("Updating card elements");
         pCardsLeft = playerCardsLeft.get(listener.getPlayer());
         if (listener.isBotGame()) {
             pCardsLeft.setText(tab + tab + "Cards left:  Bot's cards: " + listener.pCardsLeft(1) + " - Player's cards: " + listener.pCardsLeft(0));
+            botsPlay.setText(tab + tab + "Bot's play: " + listener.botsPlay());
         } else {
             StringBuilder cardsLeftAsString = new StringBuilder(tab + tab + "Cards left:  ");
             for (int i = 0; i < listener.getPlayerCount(); i++) {
@@ -280,7 +275,6 @@ public class UnoPanel extends JPanel {
     }
     //TODO Maybe refresh only elements when bot plays and everything when player plays
     public void updateCards(int player) {
-        System.out.println("Updating cards for " + player);
         JPanel toUpdate = botCards.get(player);
         toUpdate.setVisible(false);
 //        toUpdate.remove(cards); //makes everything very wonky
@@ -293,18 +287,6 @@ public class UnoPanel extends JPanel {
         toUpdate.add(draw);
         toUpdate.setVisible(true);
         repaint();
-    }
-
-    public static JPanel allCards() {
-        JPanel cards = new JPanel();
-        Deck deck = listener.getDeck();
-        for (Card card : deck.getCards()) {
-            Image img = card.getImage().getScaledInstance(100, 143, Image.SCALE_SMOOTH);
-            JLabel image = new JLabel(new ImageIcon(img));
-            cards.add(image);
-//            System.out.println(card);
-        }
-        return cards;
     }
 
     public static JPanel playerBotWins() {
@@ -379,13 +361,7 @@ public class UnoPanel extends JPanel {
     }
 
     public void playerScreen(String player) {
-        System.out.println("Showing " + player + " and updating");
         screen.show(c, player);
-    }
-
-    @Override
-    public void paintComponents(Graphics g) {
-        super.paintComponents(g);
     }
 
     public void setPanelDims(int width, int height) {

@@ -12,7 +12,6 @@ public class BasicBot {
             }
         }
         //Uncomment to see the cards the bot chooses from
-//        System.out.println(playableCards);
         return playableCards.get((int)(playableCards.size() * Math.random()));
     }
 
@@ -26,10 +25,13 @@ public class BasicBot {
             switch (col) {
                 case "Blue":
                     blueCards++;
+                    break;
                 case "Green":
                     greenCards++;
+                    break;
                 case "Red":
                     redCards++;
+                    break;
                 default:
                     yellowCards++;
             }
