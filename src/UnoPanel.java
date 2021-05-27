@@ -100,6 +100,8 @@ public class UnoPanel extends JPanel {
         welcome.setEditable(false);
         menu.add(welcome, BorderLayout.NORTH);
         //Image of back of Uno card at center
+        targetWidth = dims.getWidth() / 5;
+        targetHeight = targetWidth * 143 / 100;
         JLabel picLabel = new JLabel(new ImageIcon(back));
         menu.add(picLabel, BorderLayout.CENTER);
 
