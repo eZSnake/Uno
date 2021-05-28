@@ -1,4 +1,4 @@
-Simple text-based Uno game with possibility of playing vs a bot
+Simple Uno game with the possibility of playing against a bot
 
 To play the text-based game, execute the UnoRunner file
 
