@@ -2,7 +2,8 @@ public class UnoGame {  //Eike Rehwald
     private final Deck deck;
     private Card placePile;
     private final Hand[] hands;
-    private boolean rev = false, skip = false;
+    private boolean rev = false;
+    private boolean skip = false;
 
     public UnoGame(int players) {
         deck = new Deck();
@@ -66,7 +67,7 @@ public class UnoGame {  //Eike Rehwald
             if (hands[player].length() <= 0) {
                 break;
             }
-            placePile.specialMove(deck, hands, player, "");
+            placePile.specialMove(deck, hands, player, rev, "");
             switchSkip();
             player = nextPlayer(player, hands.length);
         }

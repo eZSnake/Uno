@@ -1,16 +1,15 @@
+import java.awt.*;
+
 public class Switch extends Card {
     private boolean hasSwitched;
 
-    public Switch(String col) {
-        super(col, 1, -1);
+    public Switch(String col, Image img) {
+        super(col, 1, -1, img);
         hasSwitched = false;
     }
 
     public String toString() {
         return getColor() + " Switch";
-    }
-
-    public void specialMove(Deck deck, Hand[] hands, int currPlayer, String col) {
     }
 
     public boolean getHasSwitched() {

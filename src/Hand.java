@@ -14,6 +14,10 @@ public class Hand {
         hand.remove(index);
     }
 
+    public void removeCard(Card c) {
+        hand.remove(c);
+    }
+
     public Card getCard(int index) {
         return hand.get(index);
     }
@@ -26,18 +30,18 @@ public class Hand {
     }
 
     public String toString(Card placePile) {
-        StringBuilder ret = new StringBuilder();
+        StringBuilder handCards = new StringBuilder();
         for (int i = 0; i < hand.size()-1; i++) {
             if (Star && hand.get(i).isPlayable(placePile)) {
-                ret.append("(*) ");
+                handCards.append("(*) ");
             }
-            ret.append("Card " + (i+1) + ": " + hand.get(i)).append("\n");
+            handCards.append("Card ").append(i + 1).append(": ").append(hand.get(i)).append("\n");
         }
         if (Star && hand.get(hand.size()-1).isPlayable(placePile)) {
-            ret.append("(*) ");
+            handCards.append("(*) ");
         }
-        ret.append("Card " + hand.size() + ": " + hand.get(hand.size()-1));
-        return ret.toString();
+        handCards.append("Card ").append(hand.size()).append(": ").append(hand.get(hand.size() - 1));
+        return handCards.toString();
     }
 
     public int length() {
