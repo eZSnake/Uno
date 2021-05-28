@@ -147,7 +147,7 @@ public class UnoPanel extends JPanel {
         targetWidth = dims.getWidth() / 20;
         targetHeight = targetWidth * 143 / 100;
         right.add(new JLabel(new ImageIcon(back.getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH))));
-        cardsLeft = new JLabel(tab + tab + "Cards in drawpile: " + listener.getCardsLeft());
+        cardsLeft = new JLabel("Cards in drawpile: " + listener.getCardsLeft());
         cardsLeft.setFont(new Font(ARIAL, Font.PLAIN, 20));
         drawCardsLeft.add(cardsLeft);
         JPanel centDrawCardsLeft = new JPanel();
@@ -214,7 +214,7 @@ public class UnoPanel extends JPanel {
         targetWidth = dims.getWidth() / 20;
         targetHeight = targetWidth * 143 / 100;
         right.add(new JLabel(new ImageIcon(back.getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH))));
-        cardsLeft = new JLabel(tab + tab + "Cards in drawpile: " + listener.getCardsLeft());
+        cardsLeft = new JLabel("Cards in drawpile: " + listener.getCardsLeft());
         cardsLeft.setFont(new Font(ARIAL, Font.PLAIN, 20));
         drawCardsLeft.add(cardsLeft);
         JPanel centDrawCardsLeft = new JPanel();
