@@ -85,11 +85,14 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
 //                updateWholeScreen();
 //                try {Thread.sleep(500);} catch(InterruptedException ignored) {}
                 //TODO Refresh screen btwn player and bot play
+                int prevPlayer = game.getPlayer();
                 game.nextPlayer();
                 if (botGame && game.getPlayer() == 1) {
                     game.botPlayCard();
                 } else if (!botGame) {
-                    JOptionPane.showMessageDialog(panel, "Player " + (game.getPlayer() + 1) + "'s turn. Click OK to continue.");
+                    if (game.getPlayer() != prevPlayer) {
+                        JOptionPane.showMessageDialog(panel, "Player " + (game.getPlayer() + 1) + "'s turn. Click OK to continue.");
+                    }
                     panel.playerScreen("player" + game.getPlayer());
                 }
                 updateWholeScreen();
