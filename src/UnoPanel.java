@@ -259,7 +259,6 @@ public class UnoPanel extends JPanel {
             JButton card = new JButton(playerHand.getCard(i).toString());
             Image img = playerHand.getCard(i).getImage().getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
             card.setIcon(new ImageIcon(img));
-            //TODO check execution time (seems to take > 5s )
             card.addActionListener(listener);
             card.setFont(new Font(card.getFont().toString(), Font.PLAIN, 0));
             card.setSize(targetWidth, targetHeight);
@@ -271,8 +270,16 @@ public class UnoPanel extends JPanel {
 
     public void updateCardElements() {
         pCardsLeft = playerCardsLeft.get(listener.getPlayer());
+        for (int i = 0; i < listener.getPlayerCount(); i++) {
+            if (listener.pCardsLeft(i) <= 3) {
+                pCardsLeft.setForeground(Color.RED);
+                break;
+            } else {
+                pCardsLeft.setForeground(Color.BLACK);
+            }
+        }
         if (listener.isBotGame()) {
-            pCardsLeft.setText(tab + tab + "Cards left:  Bot's cards: " + listener.pCardsLeft(1) + " - Player's cards: " + listener.pCardsLeft(0));
+            pCardsLeft.setText("Cards left:  Bot's cards: " + listener.pCardsLeft(1) + " - Player's cards: " + listener.pCardsLeft(0));
             botsPlay.setText(tab + tab + "Bot's play: " + listener.botsPlay());
         } else {
             StringBuilder cardsLeftAsString = new StringBuilder(tab + tab + "Cards left:  ");
@@ -323,6 +330,7 @@ public class UnoPanel extends JPanel {
         winTxt.add(text, BorderLayout.CENTER);
         winTxt.setBackground(none);
         playerBotWins.add(winTxt);
+
         return playerBotWins;
     }
 
@@ -339,6 +347,7 @@ public class UnoPanel extends JPanel {
         winTxt.add(text, BorderLayout.CENTER);
         winTxt.setBackground(none);
         playerNWins.add(winTxt);
+
         return playerNWins;
     }
 
@@ -362,6 +371,7 @@ public class UnoPanel extends JPanel {
             robot = ImageIO.read(new File("UnoCards/robot.jpg")).getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
         } catch (IOException ignored) {}
         botWins.add(new JLabel(new ImageIcon(robot)));
+
         return botWins;
     }
 
@@ -378,6 +388,7 @@ public class UnoPanel extends JPanel {
         winTxt.add(text, BorderLayout.CENTER);
         winTxt.setBackground(none);
         tieGame.add(winTxt);
+
         return tieGame;
     }
 
