@@ -1,4 +1,5 @@
-Simple text-based Uno game with possibility of playing vs bot
+Simple text-based Uno game with possibility of playing vs a bot
 
-Currently working on implementing a GUI to play
-(At the moment only works vs bot)
+To play the text-based game, execute the UnoRunner file
+
+To play the game with a GUI, execute the UnoPanel file
