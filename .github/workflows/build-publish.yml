@@ -4,6 +4,10 @@
 name: Uno Game Builder
 
 on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
   release:
     types: [created]
 
