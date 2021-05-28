@@ -30,11 +30,13 @@ jobs:
         settings-path: ${{ github.workspace }} # location for the settings.xml file
 
     - name: compile Java
-      run: javac src/UnoPanel.java 
+      run: 
+        cd src
+        javac -d ../out UnoPanel.java 
       
     - name: Publish to GitHub Packages
       uses: actions/upload-artifact@v2
       with:
-        path: path/to/artifact/ # or path/to/artifact
+        path: out/ # or path/to/artifact
       env:
         GITHUB_TOKEN: ${{ github.token }}
