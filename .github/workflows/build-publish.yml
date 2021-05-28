@@ -31,8 +31,7 @@ jobs:
 
     - name: compile Java
       run: 
-        cd src
-        javac -d ../out UnoPanel.java 
+        cd src && javac -d ../out UnoPanel.java 
       
     - name: Publish to GitHub Packages
       uses: actions/upload-artifact@v2
