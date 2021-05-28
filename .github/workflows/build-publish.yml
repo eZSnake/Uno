@@ -33,9 +33,14 @@ jobs:
       run: 
         cd src && javac -d ../out UnoPanel.java 
       
-    - name: Publish to GitHub Packages
-      uses: actions/upload-artifact@v2
+    - name: Archive Release
+      uses: thedoctor0/zip-release@master
       with:
-        path: out/ # or path/to/artifact
-      env:
-        GITHUB_TOKEN: ${{ github.token }}
+        filename: 'UnoPanel.zip'
+        exclusions: '*.git* /src/* .editorconfig'
+        
+    - name: Upload Release
+      uses: ncipollo/release-action@v1
+      with:
+        artifacts: "release.zip"
+        token: ${{ secrets.GITHUB_TOKEN }}
