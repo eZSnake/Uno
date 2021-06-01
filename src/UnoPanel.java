@@ -239,17 +239,7 @@ public class UnoPanel extends JPanel {
         JButton draw = new JButton("Draw");
         draw.addActionListener(listener);
         draw.setFont(new Font(ARIAL, Font.BOLD, 40));
-        cards = new JPanel();
-        Hand playerHand = listener.getPlayerHand(player);
-        for (int i = 0; i < playerHand.length(); i++) {
-            JButton card = new JButton(playerHand.getCard(i).toString());
-            img = playerHand.getCard(i).getImage().getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
-            card.setIcon(new ImageIcon(img));
-            card.addActionListener(listener);
-            card.setFont(new Font(card.getFont().toString(), Font.PLAIN, 0));
-            card.setSize(targetWidth, targetHeight);
-            cards.add(card);
-        }
+        cards = playerCards(player);
         bottomCards.add(cards);
         bottomCards.add(draw);
         botCards.add(bottomCards);
@@ -259,8 +249,7 @@ public class UnoPanel extends JPanel {
     }
 
     public JPanel playerCards(int player) {
-//        JPanel newCards = new JPanel();
-        JPanel newCards = cards;
+        JPanel newCards = new JPanel();
         int div = 20;
         Hand playerHand = listener.getPlayerHand(player);
         //TODO Optimize size changeing!!!
@@ -274,16 +263,7 @@ public class UnoPanel extends JPanel {
         if (toRemove != -1) {
             newCards.remove(toRemove);
         }
-//        for (int i = 0; i < playerHand.length(); i++) {
-//            JButton card = new JButton(playerHand.getCard(i).toString());
-//            Image img = playerHand.getCard(i).getImage().getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
-//            card.setIcon(new ImageIcon(img));
-//            card.addActionListener(listener);
-//            card.setFont(new Font(card.getFont().toString(), Font.PLAIN, 0));
-//            card.setSize(targetWidth, targetHeight);
-//            newCards.add(card);
-//        }
-        for (int i = 0; i < listener.newCardsAdded(); i++) {
+        for (int i = 0; i < playerHand.length(); i++) {
             JButton card = new JButton(playerHand.getCard(i).toString());
             Image img = playerHand.getCard(i).getImage().getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
             card.setIcon(new ImageIcon(img));
@@ -292,6 +272,15 @@ public class UnoPanel extends JPanel {
             card.setSize(targetWidth, targetHeight);
             newCards.add(card);
         }
+//        for (int i = 0; i < listener.newCardsAdded(); i++) {
+//            JButton card = new JButton(playerHand.getCard(i).toString());
+//            Image img = playerHand.getCard(i).getImage().getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
+//            card.setIcon(new ImageIcon(img));
+//            card.addActionListener(listener);
+//            card.setFont(new Font(card.getFont().toString(), Font.PLAIN, 0));
+//            card.setSize(targetWidth, targetHeight);
+//            newCards.add(card);
+//        }
 
         return newCards;
     }
@@ -334,7 +323,6 @@ public class UnoPanel extends JPanel {
         setPanelDims(window.getWidth(), window.getHeight());
         JPanel toUpdate = botCards.get(player);
         toUpdate.setVisible(false);
-//        toUpdate.remove(cards); //makes everything very wonky
         toUpdate.removeAll();
         toUpdate.setLayout(new GridLayout(2, 1));
         cards = playerCards(player);
