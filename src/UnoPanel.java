@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class UnoPanel extends JPanel {
+    private static JFrame window;
     private static Container c;
     private static CardLayout screen;
     private static PanelDims dims;
@@ -20,7 +21,7 @@ public class UnoPanel extends JPanel {
     private static final Color none = new Color(255, 255, 255, 200);
 
     public static void main(String[] args) {
-        JFrame window = new JFrame("Uno");
+        window = new JFrame("Uno");
         UnoPanel panel = new UnoPanel();
         listener = new UnoListener(panel);
         window.setSize(1920,1080);
@@ -238,7 +239,17 @@ public class UnoPanel extends JPanel {
         JButton draw = new JButton("Draw");
         draw.addActionListener(listener);
         draw.setFont(new Font(ARIAL, Font.BOLD, 40));
-        cards = playerCards(player);
+        cards = new JPanel();
+        Hand playerHand = listener.getPlayerHand(player);
+        for (int i = 0; i < playerHand.length(); i++) {
+            JButton card = new JButton(playerHand.getCard(i).toString());
+            img = playerHand.getCard(i).getImage().getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
+            card.setIcon(new ImageIcon(img));
+            card.addActionListener(listener);
+            card.setFont(new Font(card.getFont().toString(), Font.PLAIN, 0));
+            card.setSize(targetWidth, targetHeight);
+            cards.add(card);
+        }
         bottomCards.add(cards);
         bottomCards.add(draw);
         botCards.add(bottomCards);
@@ -248,7 +259,8 @@ public class UnoPanel extends JPanel {
     }
 
     public JPanel playerCards(int player) {
-        JPanel cards = new JPanel();
+//        JPanel newCards = new JPanel();
+        JPanel newCards = cards;
         int div = 20;
         Hand playerHand = listener.getPlayerHand(player);
         //TODO Optimize size changeing!!!
@@ -258,20 +270,34 @@ public class UnoPanel extends JPanel {
         targetWidth = dims.getWidth() / div;
         targetHeight = targetWidth * 143 / 100;
         //TODO Only remove card that was played and add new cards
-        for (int i = 0; i < playerHand.length(); i++) {
+        int toRemove = listener.getPlayedCard();
+        if (toRemove != -1) {
+            newCards.remove(toRemove);
+        }
+//        for (int i = 0; i < playerHand.length(); i++) {
+//            JButton card = new JButton(playerHand.getCard(i).toString());
+//            Image img = playerHand.getCard(i).getImage().getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
+//            card.setIcon(new ImageIcon(img));
+//            card.addActionListener(listener);
+//            card.setFont(new Font(card.getFont().toString(), Font.PLAIN, 0));
+//            card.setSize(targetWidth, targetHeight);
+//            newCards.add(card);
+//        }
+        for (int i = 0; i < listener.newCardsAdded(); i++) {
             JButton card = new JButton(playerHand.getCard(i).toString());
             Image img = playerHand.getCard(i).getImage().getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
             card.setIcon(new ImageIcon(img));
             card.addActionListener(listener);
             card.setFont(new Font(card.getFont().toString(), Font.PLAIN, 0));
             card.setSize(targetWidth, targetHeight);
-            cards.add(card);
+            newCards.add(card);
         }
 
-        return cards;
+        return newCards;
     }
 
     public void updateCardElements() {
+        setPanelDims(window.getWidth(), window.getHeight());
         pCardsLeft = playerCardsLeft.get(listener.getPlayer());
         for (int i = 0; i < listener.getPlayerCount(); i++) {
             if (listener.pCardsLeft(i) <= 3) {
@@ -305,6 +331,7 @@ public class UnoPanel extends JPanel {
     }
     //TODO Maybe refresh only elements when bot plays and everything when player plays
     public void updateCards(int player) {
+        setPanelDims(window.getWidth(), window.getHeight());
         JPanel toUpdate = botCards.get(player);
         toUpdate.setVisible(false);
 //        toUpdate.remove(cards); //makes everything very wonky
@@ -312,10 +339,12 @@ public class UnoPanel extends JPanel {
         toUpdate.setLayout(new GridLayout(2, 1));
         cards = playerCards(player);
         toUpdate.add(cards);
-        JButton draw = new JButton("Draw");
-        draw.setFont(new Font(ARIAL, Font.BOLD, 40));
-        draw.addActionListener(listener);
-        toUpdate.add(draw);
+        if (listener.getCardsLeft() != 0) {
+            JButton draw = new JButton("Draw");
+            draw.setFont(new Font(ARIAL, Font.BOLD, 40));
+            draw.addActionListener(listener);
+            toUpdate.add(draw);
+        }
         toUpdate.setVisible(true);
         repaint();
     }

@@ -7,11 +7,12 @@ import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 
-public class UnoListener implements ActionListener, ChangeListener, ComponentListener {
+public class UnoListener implements ActionListener, ChangeListener {
     private final UnoPanel panel;
     private int playerCount = 2;
     private UnoGraphicsGame game = new UnoGraphicsGame(2); //TODO remove everything after = for full implementation?
     private boolean botGame = false;
+    private Card toPlay;
 
     public UnoListener(UnoPanel panel) {
         this.panel = panel;
@@ -42,8 +43,9 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
                 } else {
                     game.draw();
                 }
-//                updateWholeScreen();
-//                try {Thread.sleep(500);} catch(InterruptedException ignored) {}
+                if (setWinnerScreen()) {
+                    break;
+                }
                 if (botGame && game.getPlayer() == 1) {
                     game.botPlayCard();
                 } else if (!botGame) {
@@ -59,7 +61,7 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
                 panel.repaint();
                 break;
             default:
-                Card toPlay = game.stringToCard(button);
+                toPlay = game.stringToCard(button);
                 if (!game.canPlayCard(toPlay)) {
                     JOptionPane.showMessageDialog(panel, "That card can't be played.");
                     panel.updateCards(game.getPlayer());
@@ -83,9 +85,6 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
                 if (setWinnerScreen()) {
                     break;
                 }
-//                updateWholeScreen();
-//                try {Thread.sleep(500);} catch(InterruptedException ignored) {}
-                //TODO Refresh screen btwn player and bot play
                 int prevPlayer = game.getPlayer();
                 game.nextPlayer();
                 if (botGame && game.getPlayer() == 1) {
@@ -100,7 +99,6 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
                 updateWholeScreen();
                 break;
         }
-//        System.out.println("Done with this round, next..." + e);
     }
 
     @Override
@@ -144,6 +142,14 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
 
     public String botsPlay() {
         return game.getBotsPlay();
+    }
+
+    public int getPlayedCard() {
+        return game.getIndexOfCard(toPlay);
+    }
+
+    public int newCardsAdded() {
+        return game.newCardsAdded();
     }
 
     private boolean setWinnerScreen() {
@@ -191,22 +197,6 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
         panel.repaint();
         return switched;
     }
-
-    @Override
-    public void componentResized(ComponentEvent e) {
-        Component c = (Component) e.getSource();
-        panel.setPanelDims(c.getWidth(), c.getHeight());
-        panel.repaint();
-    }
-
-    @Override
-    public void componentMoved(ComponentEvent e) { }
-
-    @Override
-    public void componentShown(ComponentEvent e) { }
-
-    @Override
-    public void componentHidden(ComponentEvent e) { }
 
     private void updateWholeScreen() {
         if (!setWinnerScreen()) {

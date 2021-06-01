@@ -5,10 +5,12 @@ public class UnoGraphicsGame {
     private boolean rev = false, skip = false;
     private final BasicBot bot = new BasicBot();
     private int player = 0, players;
+    private int[] handLengths;
     private String botsPlay = "";
 
     public UnoGraphicsGame(int players) {
         this.players = players;
+        handLengths = new int[players];
         deck = new Deck();
         deck.shuffle(players);
         hands = new Hand[players];
@@ -17,6 +19,7 @@ public class UnoGraphicsGame {
             for (int j = 0; j < 7; j++) {
                 hands[i].addCard(deck.deal());
             }
+            handLengths[i] = hands[i].length();
         }
         placePile = deck.deal();
     }
@@ -26,6 +29,7 @@ public class UnoGraphicsGame {
         if (extPlayer == player) {
             hands[player].addCard(deck.deal());
         }
+        updateHandLengths();
         nextPlayer();
     }
 
@@ -38,6 +42,7 @@ public class UnoGraphicsGame {
         placePile = toPlay;
         hands[player].removeCard(toPlay);
         switchSkip();
+        updateHandLengths();
     }
 
     public void botPlayCard() {
@@ -90,6 +95,12 @@ public class UnoGraphicsGame {
             }
         }
         return deck.cardsLeft() >= 0;
+    }
+
+    private void updateHandLengths() {
+        for (int i = 0; i < hands.length; i++) {
+            handLengths[i] = hands[i].length();
+        }
     }
 
     public void nextPlayer() {
@@ -175,6 +186,22 @@ public class UnoGraphicsGame {
 
     public int getPlayer() {
         return player;
+    }
+
+    public int getIndexOfCard(Card toIndex) {
+        for (int i = 0; i < hands[player].length(); i++) {
+            if (hands[player].getCard(i) == toIndex) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public int newCardsAdded() {
+        if (hands[player].length() < handLengths[player]) {
+            return 0;
+        }
+        return hands[player].length() - handLengths[player];
     }
 
     public String getBotsPlay() {
