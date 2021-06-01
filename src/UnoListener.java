@@ -47,6 +47,7 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
                 if (botGame && game.getPlayer() == 1) {
                     game.botPlayCard();
                 } else if (!botGame) {
+                    panel.showScreen("blank");
                     JOptionPane.showMessageDialog(panel, "Player " + (game.getPlayer() + 1) + "'s turn. Click OK to continue.");
                     panel.playerScreen("player" + game.getPlayer());
                 }
@@ -91,6 +92,7 @@ public class UnoListener implements ActionListener, ChangeListener, ComponentLis
                     game.botPlayCard();
                 } else if (!botGame) {
                     if (game.getPlayer() != prevPlayer) {
+                        panel.showScreen("blank");
                         JOptionPane.showMessageDialog(panel, "Player " + (game.getPlayer() + 1) + "'s turn. Click OK to continue.");
                     }
                     panel.playerScreen("player" + game.getPlayer());

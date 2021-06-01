@@ -11,7 +11,7 @@ public class UnoPanel extends JPanel {
     private static PanelDims dims;
     private JLabel pCardsLeft, cardsLeft, placePile, botsPlay;
     private static UnoListener listener;
-    private JPanel cards;
+    private JPanel cards, blank = new JPanel();
     private ArrayList<JPanel> botCards = new ArrayList<>();
     private ArrayList<JLabel> playerCardsLeft = new ArrayList<>(), drawCardsLeft = new ArrayList<>(), placePileCard = new ArrayList<>();
     private static final String tab = "    ", ARIAL = "Arial";
@@ -51,6 +51,7 @@ public class UnoPanel extends JPanel {
 
     public void setPlayerGame() {
         //Adds player screens to the container to play against others
+        c.add(blank, "blank");
         for (int i = 0; i < listener.getPlayerCount(); i++) {
             c.add(playerPlayingScreen(i), "player" + i);
             c.add(playerNWins(i), "player" + i + "Win");
@@ -129,6 +130,7 @@ public class UnoPanel extends JPanel {
         JPanel left = new JPanel();
         left.setLayout(new GridLayout(3, 1));
         JButton goMenu = new JButton("Menu");
+        goMenu.setFont(new Font(ARIAL, Font.PLAIN, 30));
         goMenu.addActionListener(listener);
         left.add(goMenu);
         pCardsLeft = new JLabel("\nCards left:  Bot's cards: " + listener.pCardsLeft(1) + " - Player's cards: " + listener.pCardsLeft(0));
@@ -190,6 +192,7 @@ public class UnoPanel extends JPanel {
         left.setLayout(new GridLayout(3, 1));
         JButton goMenu = new JButton("Menu");
         goMenu.addActionListener(listener);
+        goMenu.setFont(new Font(ARIAL, Font.PLAIN, 30));
         left.add(goMenu);
         StringBuilder cardsLeftAsString = new StringBuilder("Cards left:  ");
         for (int i = 0; i < listener.getPlayerCount(); i++) {
@@ -322,6 +325,7 @@ public class UnoPanel extends JPanel {
         playerBotWins.setLayout(new BoxLayout(playerBotWins, BoxLayout.Y_AXIS));
         JButton goMenu = new JButton("Menu");
         goMenu.addActionListener(listener);
+        goMenu.setFont(new Font(ARIAL, Font.PLAIN, 30));
         playerBotWins.add(goMenu);
         JTextArea text = new JTextArea("You win!\nCongratulations!\nBut can you do it again?");
         text.setFont(new Font(ARIAL, Font.PLAIN, 50));
@@ -339,6 +343,7 @@ public class UnoPanel extends JPanel {
         playerNWins.setLayout(new BoxLayout(playerNWins, BoxLayout.Y_AXIS));
         JButton goMenu = new JButton("Menu");
         goMenu.addActionListener(listener);
+        goMenu.setFont(new Font(ARIAL, Font.PLAIN, 30));
         playerNWins.add(goMenu);
         JTextArea text = new JTextArea("Player " + (player + 1) + " wins!\nCongratulations!\nBut can this feat be repeated?");
         text.setFont(new Font(ARIAL, Font.PLAIN, 50));
@@ -356,6 +361,7 @@ public class UnoPanel extends JPanel {
         botWins.setLayout(new BoxLayout(botWins, BoxLayout.Y_AXIS));
         JButton goMenu = new JButton("Menu");
         goMenu.addActionListener(listener);
+        goMenu.setFont(new Font(ARIAL, Font.PLAIN, 30));
         botWins.add(goMenu);
         JTextArea text = new JTextArea("The bot wins!\nBetter luck next time!\n*Robot Noises*");
         text.setFont(new Font(ARIAL, Font.PLAIN, 50));
@@ -380,6 +386,7 @@ public class UnoPanel extends JPanel {
         tieGame.setLayout(new BoxLayout(tieGame, BoxLayout.Y_AXIS));
         JButton goMenu = new JButton("Menu");
         goMenu.addActionListener(listener);
+        goMenu.setFont(new Font(ARIAL, Font.PLAIN, 30));
         tieGame.add(goMenu);
         JTextArea text = new JTextArea("The game is a tie!\nThere are no more cards to draw or play!\nBetter luck next time!");
         text.setFont(new Font(ARIAL, Font.PLAIN, 50));
