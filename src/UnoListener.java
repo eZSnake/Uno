@@ -24,16 +24,22 @@ public class UnoListener implements ActionListener, ChangeListener {
         switch (button) {
             case "Bot":
                 botGame = true;
+                game.setBotGame(true);
                 game = new UnoGraphicsGame(2);
                 panel.setBotGame();
-                panel.nextScreen();
+                panel.showScreen("player");
                 panel.repaint();
                 break;
             case "Players: ":
                 botGame = false;
+                game.setBotGame(true);
                 game = new UnoGraphicsGame(playerCount);
                 panel.setPlayerGame();
                 panel.playerScreen("player0");
+                panel.repaint();
+                break;
+            case "Stats":
+                panel.goToStats();
                 panel.repaint();
                 break;
             case "Draw":
@@ -49,6 +55,7 @@ public class UnoListener implements ActionListener, ChangeListener {
                 if (botGame && game.getPlayer() == 1) {
                     game.botPlayCard();
                 } else if (!botGame) {
+                    panel.updatePlayerCards(getPlayer());
                     panel.showScreen("blank");
                     JOptionPane.showMessageDialog(panel, "Player " + (game.getPlayer() + 1) + "'s turn. Click OK to continue.");
                     panel.playerScreen("player" + game.getPlayer());
@@ -82,6 +89,8 @@ public class UnoListener implements ActionListener, ChangeListener {
                 } else {
                     game.doSpecialMove(null);
                 }
+                panel.removeCard(getPlayer());
+                panel.updatePlayerCards(getPlayer());
                 if (setWinnerScreen()) {
                     break;
                 }
@@ -146,6 +155,10 @@ public class UnoListener implements ActionListener, ChangeListener {
 
     public int getPlayedCard() {
         return game.getIndexOfCard(toPlay);
+    }
+
+    public void removeCard() {
+        game.removeCard(toPlay);
     }
 
     public int newCardsAdded() {

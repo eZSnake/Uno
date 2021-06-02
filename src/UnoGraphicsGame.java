@@ -2,12 +2,12 @@ public class UnoGraphicsGame {
     private final Deck deck;
     private Card placePile;
     private final Hand[] hands;
-    private boolean rev = false, skip = false;
+    private boolean rev = false, skip = false, botGame;
     private final BasicBot bot = new BasicBot();
     private int player = 0, players;
     private int[] handLengths;
     private String botsPlay = "";
-
+//TODO Create stats page w/ one side for PvP and one for PvE showing num of wins and percentage and games played
     public UnoGraphicsGame(int players) {
         this.players = players;
         handLengths = new int[players];
@@ -29,7 +29,6 @@ public class UnoGraphicsGame {
         if (extPlayer == player) {
             hands[player].addCard(deck.deal());
         }
-        updateHandLengths();
         nextPlayer();
     }
 
@@ -40,9 +39,10 @@ public class UnoGraphicsGame {
     public void playCard(Card toPlay) {
         //Puts a card on top of the place pile
         placePile = toPlay;
-        hands[player].removeCard(toPlay);
+        if (botGame && player == 1) {
+            hands[player].removeCard(toPlay);
+        }
         switchSkip();
-        updateHandLengths();
     }
 
     public void botPlayCard() {
@@ -97,10 +97,8 @@ public class UnoGraphicsGame {
         return deck.cardsLeft() >= 0;
     }
 
-    private void updateHandLengths() {
-        for (int i = 0; i < hands.length; i++) {
-            handLengths[i] = hands[i].length();
-        }
+    private void updateHandLength() {
+        handLengths[player] = hands[player].length();
     }
 
     public void nextPlayer() {
@@ -197,11 +195,16 @@ public class UnoGraphicsGame {
         return -1;
     }
 
+    public void removeCard(Card toRemove) {
+        hands[player].removeCard(toRemove);
+    }
+
     public int newCardsAdded() {
-        if (hands[player].length() < handLengths[player]) {
-            return 0;
-        }
-        return hands[player].length() - handLengths[player];
+        System.out.println("Current: " + hands[player].length() + " - Previous: " + handLengths[player]);
+        int diff = hands[player].length() - handLengths[player];
+        System.out.println("Amt of new cards (game): " + diff);
+        updateHandLength();
+        return diff;
     }
 
     public String getBotsPlay() {
@@ -210,6 +213,10 @@ public class UnoGraphicsGame {
 
     public void resetBotsPlay() {
         botsPlay = "";
+    }
+
+    public void setBotGame(boolean isBotGame) {
+        botGame = isBotGame;
     }
 
     public int determineWinner() {
