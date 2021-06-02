@@ -355,16 +355,19 @@ public class UnoPanel extends JPanel {
     public static JPanel stats() {
         //TODO Fix look so everything is not side by side
         JPanel stats = new JPanel();
+        stats.setLayout(new BorderLayout());
         JButton goMenu = new JButton("Menu");
         goMenu.addActionListener(listener);
         goMenu.setFont(new Font(ARIAL, Font.PLAIN, 30));
-        stats.add(goMenu);
+        stats.add(goMenu, BorderLayout.NORTH);
         JPanel totStats = new JPanel();
         totStats.setLayout(new GridLayout(2, 1));
         //Total games played
+        JPanel centTotGames = new JPanel();
         JLabel totGames = new JLabel("Total games played: " + statCounts[0]);
         totGames.setFont(new Font(ARIAL, Font.PLAIN, 40));
-        totStats.add(totGames, BorderLayout.NORTH);
+        centTotGames.add(totGames, BorderLayout.CENTER);
+        totStats.add(centTotGames, BorderLayout.NORTH);
         //Stats for individual game categories
         JPanel indivStats = new JPanel();
         indivStats.setLayout(new GridLayout(1, 2));
@@ -404,21 +407,22 @@ public class UnoPanel extends JPanel {
         playerStats.add(player4Wins);
         JLabel playerTie = new JLabel("The game was tied " + statCounts[10] + " times which is " + (statCounts[10] / Math.max(statCounts[2], 1)) * 100 + "% of all games against others.");
         playerTie.setFont(new Font(ARIAL, Font.PLAIN, 20));
-        botStats.add(playerTie);
+        playerStats.add(playerTie);
         indivStats.add(playerStats);
+        indivStats.setBackground(none);
         totStats.add(indivStats, BorderLayout.SOUTH);
-        stats.add(totStats, BorderLayout.SOUTH);
+        stats.add(totStats, BorderLayout.CENTER);
 
         return stats;
     }
 
     public static JPanel playerBotWins() {
         JPanel playerBotWins = new JPanel();
-        playerBotWins.setLayout(new BoxLayout(playerBotWins, BoxLayout.Y_AXIS));
+        playerBotWins.setLayout(new BorderLayout());
         JButton goMenu = new JButton("Menu");
         goMenu.addActionListener(listener);
         goMenu.setFont(new Font(ARIAL, Font.PLAIN, 30));
-        playerBotWins.add(goMenu);
+        playerBotWins.add(goMenu, BorderLayout.NORTH);
         JTextArea text = new JTextArea("You win!\nCongratulations!\nBut can you do it again?");
         text.setFont(new Font(ARIAL, Font.PLAIN, 50));
         text.setEditable(false);
@@ -432,11 +436,11 @@ public class UnoPanel extends JPanel {
 
     public static JPanel playerNWins(int player) {
         JPanel playerNWins = new JPanel();
-        playerNWins.setLayout(new BoxLayout(playerNWins, BoxLayout.Y_AXIS));
+        playerNWins.setLayout(new BorderLayout());
         JButton goMenu = new JButton("Menu");
         goMenu.addActionListener(listener);
         goMenu.setFont(new Font(ARIAL, Font.PLAIN, 30));
-        playerNWins.add(goMenu);
+        playerNWins.add(goMenu, BorderLayout.NORTH);
         JTextArea text = new JTextArea("Player " + (player + 1) + " wins!\nCongratulations!\nBut can this feat be repeated?");
         text.setFont(new Font(ARIAL, Font.PLAIN, 50));
         text.setEditable(false);
@@ -450,11 +454,11 @@ public class UnoPanel extends JPanel {
 
     public static JPanel botWins() {
         JPanel botWins = new JPanel();
-        botWins.setLayout(new BoxLayout(botWins, BoxLayout.Y_AXIS));
+        botWins.setLayout(new BorderLayout());
         JButton goMenu = new JButton("Menu");
         goMenu.addActionListener(listener);
         goMenu.setFont(new Font(ARIAL, Font.PLAIN, 30));
-        botWins.add(goMenu);
+        botWins.add(goMenu, BorderLayout.NORTH);
         JTextArea text = new JTextArea("The bot wins!\nBetter luck next time!\n*Robot Noises*");
         text.setFont(new Font(ARIAL, Font.PLAIN, 50));
         text.setEditable(false);
@@ -468,18 +472,18 @@ public class UnoPanel extends JPanel {
         try {
             robot = ImageIO.read(new File("UnoCards/robot.jpg")).getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
         } catch (IOException ignored) {}
-        botWins.add(new JLabel(new ImageIcon(robot)));
+        botWins.add(new JLabel(new ImageIcon(robot)), BorderLayout.SOUTH);
 
         return botWins;
     }
 
     public static JPanel tieGame() {
         JPanel tieGame = new JPanel();
-        tieGame.setLayout(new BoxLayout(tieGame, BoxLayout.Y_AXIS));
+        tieGame.setLayout(new BorderLayout());
         JButton goMenu = new JButton("Menu");
         goMenu.addActionListener(listener);
         goMenu.setFont(new Font(ARIAL, Font.PLAIN, 30));
-        tieGame.add(goMenu);
+        tieGame.add(goMenu, BorderLayout.NORTH);
         JTextArea text = new JTextArea("The game is a tie!\nThere are no more cards to draw or play!\nBetter luck next time!");
         text.setFont(new Font(ARIAL, Font.PLAIN, 50));
         text.setEditable(false);

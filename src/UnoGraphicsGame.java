@@ -200,9 +200,7 @@ public class UnoGraphicsGame {
     }
 
     public int newCardsAdded() {
-        System.out.println("Current: " + hands[player].length() + " - Previous: " + handLengths[player]);
         int diff = hands[player].length() - handLengths[player];
-        System.out.println("Amt of new cards (game): " + diff);
         updateHandLength();
         return diff;
     }
