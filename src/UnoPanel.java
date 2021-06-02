@@ -353,14 +353,18 @@ public class UnoPanel extends JPanel {
     }
 
     public static JPanel stats() {
+        //TODO Fix look so everything is not side by side
         JPanel stats = new JPanel();
         JButton goMenu = new JButton("Menu");
         goMenu.addActionListener(listener);
         goMenu.setFont(new Font(ARIAL, Font.PLAIN, 30));
         stats.add(goMenu);
+        JPanel totStats = new JPanel();
+        totStats.setLayout(new GridLayout(2, 1));
         //Total games played
         JLabel totGames = new JLabel("Total games played: " + statCounts[0]);
-        stats.add(totGames);
+        totGames.setFont(new Font(ARIAL, Font.PLAIN, 40));
+        totStats.add(totGames, BorderLayout.NORTH);
         //Stats for individual game categories
         JPanel indivStats = new JPanel();
         indivStats.setLayout(new GridLayout(1, 2));
@@ -368,30 +372,42 @@ public class UnoPanel extends JPanel {
         JPanel botStats = new JPanel();
         botStats.setLayout(new GridLayout(4, 1));
         JLabel totBotGames = new JLabel("Total games played against the bot: " + statCounts[1]);
+        totBotGames.setFont(new Font(ARIAL, Font.PLAIN, 30));
         botStats.add(totBotGames);
         JLabel playerWins = new JLabel("The player has won " + statCounts[3] + " times which is " + (statCounts[3] / Math.max(statCounts[1], 1)) * 100 + "% of all games against the bot.");
+        playerWins.setFont(new Font(ARIAL, Font.PLAIN, 20));
         botStats.add(playerWins);
         JLabel botWins = new JLabel("The bot has won " + statCounts[4] + " times which is " + (statCounts[4] / Math.max(statCounts[1], 1)) * 100 + "% of all games against it.");
+        botWins.setFont(new Font(ARIAL, Font.PLAIN, 20));
         botStats.add(botWins);
         JLabel botTie = new JLabel("The game was tied " + statCounts[5] + " times which is " + (statCounts[5] / Math.max(statCounts[1], 1)) * 100 + "% of all games against the bot.");
+        botTie.setFont(new Font(ARIAL, Font.PLAIN, 20));
         botStats.add(botTie);
+        indivStats.add(botStats);
         //Stats for games against other players
         JPanel playerStats = new JPanel();
         playerStats.setLayout(new GridLayout(6, 1));
         JLabel totPlayerGames = new JLabel("Total games played against other players: " + statCounts[2]);
+        totPlayerGames.setFont(new Font(ARIAL, Font.PLAIN, 30));
         playerStats.add(totPlayerGames);
         JLabel player1Wins = new JLabel("Player 1 has won " + statCounts[6] + " times which is " + (statCounts[6] / Math.max(statCounts[2], 1)) * 100 + "% of all games against others.");
+        player1Wins.setFont(new Font(ARIAL, Font.PLAIN, 20));
         playerStats.add(player1Wins);
         JLabel player2Wins = new JLabel("Player 2 has won " + statCounts[7] + " times which is " + (statCounts[7] / Math.max(statCounts[2], 1)) * 100 + "% of all games against others.");
+        player2Wins.setFont(new Font(ARIAL, Font.PLAIN, 20));
         playerStats.add(player2Wins);
         JLabel player3Wins = new JLabel("Player 3 has won " + statCounts[8] + " times which is " + (statCounts[8] / Math.max(statCounts[2], 1)) * 100 + "% of all games against others.");
+        player3Wins.setFont(new Font(ARIAL, Font.PLAIN, 20));
         playerStats.add(player3Wins);
         JLabel player4Wins = new JLabel("Player 4 has won " + statCounts[9] + " times which is " + (statCounts[9] / Math.max(statCounts[2], 1)) * 100 + "% of all games against others.");
+        player4Wins.setFont(new Font(ARIAL, Font.PLAIN, 20));
         playerStats.add(player4Wins);
         JLabel playerTie = new JLabel("The game was tied " + statCounts[10] + " times which is " + (statCounts[10] / Math.max(statCounts[2], 1)) * 100 + "% of all games against others.");
+        playerTie.setFont(new Font(ARIAL, Font.PLAIN, 20));
         botStats.add(playerTie);
-
-        stats.add(indivStats);
+        indivStats.add(playerStats);
+        totStats.add(indivStats, BorderLayout.SOUTH);
+        stats.add(totStats, BorderLayout.SOUTH);
 
         return stats;
     }
