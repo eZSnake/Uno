@@ -12,7 +12,7 @@ public class UnoPanel extends JPanel {
     private static PanelDims dims;
     private JLabel pCardsLeft, cardsLeft, placePile, botsPlay;
     private static UnoListener listener;
-    private JPanel blank = new JPanel();
+    private final JPanel blank = new JPanel();
     private ArrayList<JPanel> botCards = new ArrayList<>(), pCards = new ArrayList<>();
     private ArrayList<JLabel> playerCardsLeft = new ArrayList<>(), drawCardsLeft = new ArrayList<>(), placePileCard = new ArrayList<>();
     private static int[] statCounts = new int[11]; //0: tot games; 1: bot games; 2: player games; 3: player wins; 4: bot wins; 5: bot game ties; 6: player 1 wins; 7: player 2 wins; 8: player 3 wins; 9: player 3 wins; 10: player game tie
