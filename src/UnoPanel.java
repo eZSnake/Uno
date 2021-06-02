@@ -15,9 +15,10 @@ public class UnoPanel extends JPanel {
     private JPanel blank = new JPanel();
     private ArrayList<JPanel> botCards = new ArrayList<>(), pCards = new ArrayList<>();
     private ArrayList<JLabel> playerCardsLeft = new ArrayList<>(), drawCardsLeft = new ArrayList<>(), placePileCard = new ArrayList<>();
-    private static int[] statCounts = new int[11]; //0: tot games; 1: bot games; 2: player games; 3: player wins; 4: bot wins; 5 bot game ties; 6: player 1 wins; 7: player 2 wins; 8: player 3 wins; 9: player 3 wins; 10: player game tie
+    private static int[] statCounts = new int[11]; //0: tot games; 1: bot games; 2: player games; 3: player wins; 4: bot wins; 5: bot game ties; 6: player 1 wins; 7: player 2 wins; 8: player 3 wins; 9: player 3 wins; 10: player game tie
     private static final String tab = "    ", ARIAL = "Arial";
     private static int targetWidth, targetHeight;
+    private boolean bigger13 = false;
     private static Image back;
     private static final Color none = new Color(255, 255, 255, 200);
 
@@ -261,7 +262,6 @@ public class UnoPanel extends JPanel {
 
     public void removeCard(int player) {
         int toRemove = listener.getPlayedCard();
-        System.out.println(toRemove);
         if (toRemove != -1) {
             pCards.get(player).remove(toRemove);
             listener.removeCard();
@@ -271,33 +271,44 @@ public class UnoPanel extends JPanel {
     public void updatePlayerCards(int player) {
         JPanel newCards = pCards.get(player);
         Hand playerHand = listener.getPlayerHand(player);
-        //TODO Optimize size changeing!!!
+        int div = 20;
         if (playerHand.length() > 13) {
-            targetWidth = dims.getWidth() / (20 + (playerHand.length() / 7) * playerHand.length());
-            targetHeight = targetWidth * 143 / 100;
-            for (int cd = 0; cd < playerHand.length(); cd++) {
-                JButton update = ((JButton) pCards.get(player).getComponent(cd));
-                update.setIcon(new ImageIcon(playerHand.getCard(cd).getImage().getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH)));
-            }
-        } else {
-            targetWidth = dims.getWidth() / 20;
-            targetHeight = targetWidth * 143 / 100;
+            bigger13 = true;
+            div += (playerHand.length() / 7) * playerHand.length();
         }
-        //TODO Only remove card that was played and add new cards
-
-        int amtNewCards = listener.newCardsAdded();
-        if (amtNewCards > 0) {
-            for (int i = amtNewCards; i > 0; i--) {
-                JButton card = new JButton(playerHand.getCard(playerHand.length() - i).toString());
-                Image img = playerHand.getCard(playerHand.length() - i).getImage().getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
+        targetWidth = dims.getWidth() / div;
+        targetHeight = targetWidth * 143 / 100;
+        //TODO Optimize size changeing
+        if (bigger13) {
+            newCards = new JPanel();
+            for (int i = 0; i < playerHand.length(); i++) {
+                JButton card = new JButton(playerHand.getCard(i).toString());
+                Image img = playerHand.getCard(i).getImage().getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
                 card.setIcon(new ImageIcon(img));
                 card.addActionListener(listener);
                 card.setFont(new Font(card.getFont().toString(), Font.PLAIN, 0));
                 card.setSize(targetWidth, targetHeight);
                 newCards.add(card);
             }
-            pCards.set(player, newCards);
+        } else {
+            int amtNewCards = listener.newCardsAdded();
+            if (amtNewCards > 0) {
+                for (int i = amtNewCards; i > 0; i--) {
+                    JButton card = new JButton(playerHand.getCard(playerHand.length() - i).toString());
+                    Image img = playerHand.getCard(playerHand.length() - i).getImage().getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
+                    card.setIcon(new ImageIcon(img));
+                    card.addActionListener(listener);
+                    card.setFont(new Font(card.getFont().toString(), Font.PLAIN, 0));
+                    card.setSize(targetWidth, targetHeight);
+                    newCards.add(card);
+                }
+            }
         }
+        if (playerHand.length() <= 13) {
+            bigger13 = false;
+        }
+
+        pCards.set(player, newCards);
     }
 
     public void updateCardElements() {
@@ -333,7 +344,7 @@ public class UnoPanel extends JPanel {
         placePile.setIcon(new ImageIcon(listener.getPlacePile().getImage().getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH)));
         repaint();
     }
-    //TODO Maybe refresh only elements when bot plays and everything when player plays
+
     public void updateCards(int player) {
         setPanelDims(window.getWidth(), window.getHeight());
         JPanel toUpdate = botCards.get(player);
@@ -353,7 +364,6 @@ public class UnoPanel extends JPanel {
     }
 
     public static JPanel stats() {
-        //TODO Fix look so everything is not side by side
         JPanel stats = new JPanel();
         stats.setLayout(new BorderLayout());
         JButton goMenu = new JButton("Menu");
@@ -377,13 +387,14 @@ public class UnoPanel extends JPanel {
         JLabel totBotGames = new JLabel("Total games played against the bot: " + statCounts[1]);
         totBotGames.setFont(new Font(ARIAL, Font.PLAIN, 30));
         botStats.add(totBotGames);
-        JLabel playerWins = new JLabel("The player has won " + statCounts[3] + " times which is " + (statCounts[3] / Math.max(statCounts[1], 1)) * 100 + "% of all games against the bot.");
+        String cent = " times which is ";
+        JLabel playerWins = new JLabel("The player has won " + statCounts[3] + cent + (statCounts[3] * 10 / Math.max(statCounts[1], 1) * 10) + "% (" + statCounts[3] + "/" + statCounts[1] + ") of all games against the bot.");
         playerWins.setFont(new Font(ARIAL, Font.PLAIN, 20));
         botStats.add(playerWins);
-        JLabel botWins = new JLabel("The bot has won " + statCounts[4] + " times which is " + (statCounts[4] / Math.max(statCounts[1], 1)) * 100 + "% of all games against it.");
+        JLabel botWins = new JLabel("The bot has won " + statCounts[4] + cent + (statCounts[4] * 10 / Math.max(statCounts[1], 1) * 10) + "% (" + statCounts[4] + "/" + statCounts[1] + ") of all games against it.");
         botWins.setFont(new Font(ARIAL, Font.PLAIN, 20));
         botStats.add(botWins);
-        JLabel botTie = new JLabel("The game was tied " + statCounts[5] + " times which is " + (statCounts[5] / Math.max(statCounts[1], 1)) * 100 + "% of all games against the bot.");
+        JLabel botTie = new JLabel("The game was tied " + statCounts[5] + cent + (statCounts[5] * 10 / Math.max(statCounts[1], 1) * 10) + "% (" + statCounts[5] + "/" + statCounts[1] + ") of all games against the bot.");
         botTie.setFont(new Font(ARIAL, Font.PLAIN, 20));
         botStats.add(botTie);
         indivStats.add(botStats);
@@ -393,19 +404,19 @@ public class UnoPanel extends JPanel {
         JLabel totPlayerGames = new JLabel("Total games played against other players: " + statCounts[2]);
         totPlayerGames.setFont(new Font(ARIAL, Font.PLAIN, 30));
         playerStats.add(totPlayerGames);
-        JLabel player1Wins = new JLabel("Player 1 has won " + statCounts[6] + " times which is " + (statCounts[6] / Math.max(statCounts[2], 1)) * 100 + "% of all games against others.");
+        JLabel player1Wins = new JLabel("Player 1 has won " + statCounts[6] + cent + (statCounts[6] * 10 / Math.max(statCounts[2], 1) * 10) + "% (" + statCounts[6] + "/" + statCounts[2] + ") of all games against others.");
         player1Wins.setFont(new Font(ARIAL, Font.PLAIN, 20));
         playerStats.add(player1Wins);
-        JLabel player2Wins = new JLabel("Player 2 has won " + statCounts[7] + " times which is " + (statCounts[7] / Math.max(statCounts[2], 1)) * 100 + "% of all games against others.");
+        JLabel player2Wins = new JLabel("Player 2 has won " + statCounts[7] + cent + (statCounts[7] * 10 / Math.max(statCounts[2], 1) * 10) + "% (" + statCounts[7] + "/" + statCounts[2] + ") of all games against others.");
         player2Wins.setFont(new Font(ARIAL, Font.PLAIN, 20));
         playerStats.add(player2Wins);
-        JLabel player3Wins = new JLabel("Player 3 has won " + statCounts[8] + " times which is " + (statCounts[8] / Math.max(statCounts[2], 1)) * 100 + "% of all games against others.");
+        JLabel player3Wins = new JLabel("Player 3 has won " + statCounts[8] + cent + (statCounts[8] * 10 / Math.max(statCounts[2], 1) * 10) + "% (" + statCounts[8] + "/" + statCounts[2] + ") of all games against others.");
         player3Wins.setFont(new Font(ARIAL, Font.PLAIN, 20));
         playerStats.add(player3Wins);
-        JLabel player4Wins = new JLabel("Player 4 has won " + statCounts[9] + " times which is " + (statCounts[9] / Math.max(statCounts[2], 1)) * 100 + "% of all games against others.");
+        JLabel player4Wins = new JLabel("Player 4 has won " + statCounts[9] + cent + (statCounts[9] * 10 / Math.max(statCounts[2], 1) * 10) + "% (" + statCounts[9] + "/" + statCounts[2] + ") of all games against others.");
         player4Wins.setFont(new Font(ARIAL, Font.PLAIN, 20));
         playerStats.add(player4Wins);
-        JLabel playerTie = new JLabel("The game was tied " + statCounts[10] + " times which is " + (statCounts[10] / Math.max(statCounts[2], 1)) * 100 + "% of all games against others.");
+        JLabel playerTie = new JLabel("The game was tied " + statCounts[10] + cent + (statCounts[10] * 10 / Math.max(statCounts[2], 1) * 10) + "% (" + statCounts[10] + "/" + statCounts[2] + ") of all games against others.");
         playerTie.setFont(new Font(ARIAL, Font.PLAIN, 20));
         playerStats.add(playerTie);
         indivStats.add(playerStats);
@@ -513,16 +524,11 @@ public class UnoPanel extends JPanel {
         return initialCards;
     }
 
-    public void nextScreen() {
-        screen.next(c);
-    }
-
     public void goToMenu() {
         screen.first(c);
     }
 
     public void goToStats() {
-        System.out.println(c.getComponent(c.getComponentCount() - 1));
         screen.show(c, "stats");
     }
 
@@ -532,6 +538,10 @@ public class UnoPanel extends JPanel {
 
     public void playerScreen(String player) {
         screen.show(c, player);
+    }
+
+    public void endResult(int winner) {
+        statCounts[winner]++;
     }
 
     public void setPanelDims(int width, int height) {

@@ -39,9 +39,6 @@ public class UnoGraphicsGame {
     public void playCard(Card toPlay) {
         //Puts a card on top of the place pile
         placePile = toPlay;
-        if (botGame && player == 1) {
-            hands[player].removeCard(toPlay);
-        }
         switchSkip();
     }
 
@@ -75,6 +72,7 @@ public class UnoGraphicsGame {
             }
             playCard(toPlay);
             doSpecialMove(col);
+            hands[1].removeCard(toPlay);
             nextPlayer();
             if (getPlayer() == 1) {
                 botPlayCard();

@@ -91,11 +91,11 @@ public class UnoListener implements ActionListener, ChangeListener {
                 }
                 panel.removeCard(getPlayer());
                 panel.updatePlayerCards(getPlayer());
+                int prevPlayer = game.getPlayer();
+                game.nextPlayer();
                 if (setWinnerScreen()) {
                     break;
                 }
-                int prevPlayer = game.getPlayer();
-                game.nextPlayer();
                 if (botGame && game.getPlayer() == 1) {
                     game.botPlayCard();
                 } else if (!botGame) {
@@ -172,14 +172,17 @@ public class UnoListener implements ActionListener, ChangeListener {
                 case 0:
                     panel.showScreen("playerWin");
                     switched = true;
+                    panel.endResult(3);
                     break;
                 case 1:
                     panel.showScreen("botWin");
                     switched = true;
+                    panel.endResult(4);
                     break;
                 case 4:
                     panel.showScreen("tieGame");
                     switched = true;
+                    panel.endResult(5);
                     break;
             }
         } else {
@@ -187,22 +190,27 @@ public class UnoListener implements ActionListener, ChangeListener {
                 case 0:
                     panel.showScreen("player0Win");
                     switched = true;
+                    panel.endResult(6);
                     break;
                 case 1:
                     panel.showScreen("player1Win");
                     switched = true;
+                    panel.endResult(7);
                     break;
                 case 2:
                     panel.showScreen("player2Win");
                     switched = true;
+                    panel.endResult(8);
                     break;
                 case 3:
                     panel.showScreen("player3Win");
                     switched = true;
+                    panel.endResult(9);
                     break;
                 case 4:
                     panel.showScreen("tieGame");
                     switched = true;
+                    panel.endResult(10);
                     break;
             }
         }

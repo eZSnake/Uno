@@ -20,7 +20,9 @@ public class Plus2 extends Card {
             currPlayer = Math.floorMod(currPlayer + 1, hands.length);
         }
         for (int i = 0; i < 2; i++) {
-            hands[currPlayer].addCard(deck.deal());
+            if (deck.cardsLeft() > 0) {
+                hands[currPlayer].addCard(deck.deal());
+            }
         }
     }
 
