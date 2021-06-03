@@ -7,7 +7,7 @@ public class UnoGraphicsGame {
     private int player = 0, players;
     private int[] handLengths;
     private String botsPlay = "";
-//TODO Create stats page w/ one side for PvP and one for PvE showing num of wins and percentage and games played
+
     public UnoGraphicsGame(int players) {
         this.players = players;
         handLengths = new int[players];

@@ -1,16 +1,13 @@
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 
 public class UnoListener implements ActionListener, ChangeListener {
     private final UnoPanel panel;
     private int playerCount = 2;
-    private UnoGraphicsGame game = new UnoGraphicsGame(2); //TODO remove everything after = for full implementation?
+    private UnoGraphicsGame game = new UnoGraphicsGame(2);
     private boolean botGame = false;
     private Card toPlay;
 
@@ -25,7 +22,8 @@ public class UnoListener implements ActionListener, ChangeListener {
             case "Bot":
                 botGame = true;
                 game.setBotGame(true);
-                game = new UnoGraphicsGame(2);
+                playerCount = 2;
+                game = new UnoGraphicsGame(playerCount);
                 panel.setBotGame();
                 panel.showScreen("player");
                 panel.repaint();
@@ -41,6 +39,9 @@ public class UnoListener implements ActionListener, ChangeListener {
             case "Stats":
                 panel.goToStats();
                 panel.repaint();
+                break;
+            case "Print Hands":
+                panel.printAllHands();
                 break;
             case "Draw":
                 if (botGame) {

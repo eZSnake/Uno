@@ -20,7 +20,7 @@ public class UnoPanel extends JPanel {
     private static int targetWidth, targetHeight;
     private boolean bigger13 = false;
     private static Image back;
-    private static final Color none = new Color(255, 255, 255, 200);
+    private static final Color none = new Color(255, 255, 255, 255);
 
     public static void main(String[] args) {
         window = new JFrame("Uno");
@@ -42,6 +42,7 @@ public class UnoPanel extends JPanel {
 
         window.setLocation(0,0);
         window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        window.setIconImage(back);
         window.setVisible(true);
     }
 
@@ -101,7 +102,10 @@ public class UnoPanel extends JPanel {
         playerCount.addChangeListener(listener);
         playerCount.setMajorTickSpacing(1);
         playerCount.setPaintTicks(true);
+        playerCount.setPaintLabels(true);
+        playerCount.setBackground(none);
         player.add(playerCount);
+        player.setBackground(none);
         buttons.add(player);
         JTextArea info = new JTextArea("The game takes a bit to start. Pressing the button again makes you draw a card right away. So don't do it.");
         info.setEditable(false);
@@ -115,6 +119,7 @@ public class UnoPanel extends JPanel {
         stats.addActionListener(listener);
         stats.setFont(new Font(ARIAL, Font.PLAIN, 25));
         buttons.add(stats);
+        buttons.setBackground(none);
         menu.add(buttons, BorderLayout.SOUTH);
         //Welcome text at top of screen
         JTextArea welcome = new JTextArea("Welcome to the game of Uno.\n" + "Each player starts with 7 cards and first with 0 left wins.\n" + "The same color can go on the same color, " +
@@ -129,7 +134,9 @@ public class UnoPanel extends JPanel {
         targetWidth = dims.getWidth() / 5;
         targetHeight = targetWidth * 143 / 100;
         JLabel picLabel = new JLabel(new ImageIcon(back.getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH)));
+        picLabel.setBackground(none);
         menu.add(picLabel, BorderLayout.CENTER);
+        menu.setBackground(none);
 
         return menu;
     }
@@ -141,7 +148,8 @@ public class UnoPanel extends JPanel {
         //Top of the screen
         JPanel top = new JPanel();
         top.setLayout(new GridLayout(1, 2));
-        //Left top (cards left and go to menu
+        top.setBackground(none);
+        //Left top (cards left and go to menu)
         JPanel left = new JPanel();
         left.setLayout(new GridLayout(3, 1));
         JButton goMenu = new JButton("Menu");
@@ -153,14 +161,20 @@ public class UnoPanel extends JPanel {
         playerCardsLeft.add(pCardsLeft);
         JPanel centPlayerCardsLeft = new JPanel();
         centPlayerCardsLeft.add(playerCardsLeft.get(0), BorderLayout.CENTER);
+        centPlayerCardsLeft.setBackground(none);
         left.add(centPlayerCardsLeft);
         botsPlay = new JLabel(tab + tab + "Bot's play: " + listener.botsPlay());
         botsPlay.setFont(new Font(ARIAL, Font.PLAIN, 20));
         left.add("botsplay", botsPlay);
+        left.setBackground(none);
         top.add(left);
         //Top right (cards left in draw pile w/ pic)
         JPanel right = new JPanel();
-        right.setLayout(new GridLayout(2, 1));
+        right.setLayout(new GridLayout(3, 1));
+        JButton printHands = new JButton("Print Hands");
+        printHands.addActionListener(listener);
+        printHands.setFont(new Font(ARIAL, Font.PLAIN, 30));
+        right.add(printHands);
         targetWidth = dims.getWidth() / 20;
         targetHeight = targetWidth * 143 / 100;
         right.add(new JLabel(new ImageIcon(back.getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH))));
@@ -169,7 +183,9 @@ public class UnoPanel extends JPanel {
         drawCardsLeft.add(cardsLeft);
         JPanel centDrawCardsLeft = new JPanel();
         centDrawCardsLeft.add(drawCardsLeft.get(0), BorderLayout.CENTER);
+        centDrawCardsLeft.setBackground(none);
         right.add(centDrawCardsLeft);
+        right.setBackground(none);
         top.add(right);
         botPlayingScreen.add(top, BorderLayout.NORTH);
         //Center (card on place pile)
@@ -188,8 +204,10 @@ public class UnoPanel extends JPanel {
         pCards.add(initialSet(0));
         bottomCards.add(pCards.get(0));
         bottomCards.add(draw);
+        bottomCards.setBackground(none);
         botCards.add(bottomCards);
         botPlayingScreen.add(botCards.get(0), BorderLayout.SOUTH);
+        botPlayingScreen.setBackground(none);
 
         return botPlayingScreen;
     }
@@ -201,7 +219,8 @@ public class UnoPanel extends JPanel {
         //Top of the screen
         JPanel top = new JPanel();
         top.setLayout(new GridLayout(1, 2));
-        //Left top (cards left and go to menu
+        top.setBackground(none);
+        //Left top (cards left and go to menu)
         JPanel left = new JPanel();
         left.setLayout(new GridLayout(3, 1));
         JButton goMenu = new JButton("Menu");
@@ -220,14 +239,20 @@ public class UnoPanel extends JPanel {
         playerCardsLeft.add(pCardsLeft);
         JPanel centPlayerCardsLeft = new JPanel();
         centPlayerCardsLeft.add(playerCardsLeft.get(player), BorderLayout.CENTER);
+        centPlayerCardsLeft.setBackground(none);
         left.add(centPlayerCardsLeft);
         JLabel currPlayer = new JLabel(tab + tab + "Current player: " + (player + 1));
         currPlayer.setFont(new Font(ARIAL, Font.PLAIN, 20));
         left.add(currPlayer);
+        left.setBackground(none);
         top.add(left);
-        //Top right (cards left in draw pile w/ pic)
+        //Top right (cards left in draw pile w/ pic and debug print button)
         JPanel right = new JPanel();
-        right.setLayout(new GridLayout(2, 1));
+        right.setLayout(new GridLayout(3, 1));
+        JButton printHands = new JButton("Print Hands");
+        printHands.addActionListener(listener);
+        printHands.setFont(new Font(ARIAL, Font.PLAIN, 30));
+        right.add(printHands);
         targetWidth = dims.getWidth() / 20;
         targetHeight = targetWidth * 143 / 100;
         right.add(new JLabel(new ImageIcon(back.getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH))));
@@ -236,7 +261,9 @@ public class UnoPanel extends JPanel {
         drawCardsLeft.add(cardsLeft);
         JPanel centDrawCardsLeft = new JPanel();
         centDrawCardsLeft.add(drawCardsLeft.get(player), BorderLayout.CENTER);
+        centDrawCardsLeft.setBackground(none);
         right.add(centDrawCardsLeft);
+        right.setBackground(none);
         top.add(right);
         playerPlayingScreen.add(top, BorderLayout.NORTH);
         //Center (card on place pile)
@@ -255,8 +282,10 @@ public class UnoPanel extends JPanel {
         pCards.add(initialSet(player));
         bottomCards.add(pCards.get(player));
         bottomCards.add(draw);
+        bottomCards.setBackground(none);
         botCards.add(bottomCards);
         playerPlayingScreen.add(botCards.get(player), BorderLayout.SOUTH);
+        playerPlayingScreen.setBackground(none);
 
         return playerPlayingScreen;
     }
@@ -353,6 +382,7 @@ public class UnoPanel extends JPanel {
         toUpdate.removeAll();
         toUpdate.setLayout(new GridLayout(2, 1));
         updatePlayerCards(player);
+        toUpdate.setBackground(none);
         toUpdate.add(pCards.get(player));
         if (listener.getCardsLeft() != 0) {
             JButton draw = new JButton("Draw");
@@ -539,6 +569,13 @@ public class UnoPanel extends JPanel {
 
     public void playerScreen(String player) {
         screen.show(c, player);
+    }
+
+    public void printAllHands() {
+        for (int i = 0; i < listener.getPlayerCount(); i++) {
+            System.out.println("Player " + (i + 1) + ":\n" + listener.getPlayerHand(i).toString());
+        }
+        System.out.println();
     }
 
     public void endResult(int winner) {
