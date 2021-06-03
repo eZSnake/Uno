@@ -92,7 +92,7 @@ public class UnoGraphicsGame {
                 return false;
             }
         }
-        return deck.cardsLeft() >= 0;
+        return deck.cardsLeft() > 0;
     }
 
     private void updateHandLength() {
@@ -147,6 +147,9 @@ public class UnoGraphicsGame {
 
     public boolean canPlayCard(Card toPlay) {
         //Checks if card can be played
+        if (toPlay == null) {
+            return false;
+        }
         return toPlay.getId() == 4 || toPlay.getColor().equals(placePile.getColor()) || toPlay.getNum() == placePile.getNum();
     }
 
