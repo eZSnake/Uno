@@ -124,7 +124,7 @@ public class UnoPanel extends JPanel {
         //Welcome text at top of screen
         JTextArea welcome = new JTextArea("Welcome to the game of Uno.\n" + "Each player starts with 7 cards and first with 0 left wins.\n" + "The same color can go on the same color, " +
                 "the same number can go on the same number, and wish cards can go on any card.\n" + "If you can't go, you will have to draw a card.");
-        welcome.setFont(new Font(ARIAL, Font.PLAIN, 20));
+        welcome.setFont(new Font(ARIAL, Font.PLAIN, 25));
         welcome.setEditable(false);
         JPanel welcomePan = new JPanel();
         welcomePan.add(welcome, BorderLayout.CENTER);
@@ -515,6 +515,7 @@ public class UnoPanel extends JPanel {
             robot = ImageIO.read(new File("UnoCards/robot.jpg")).getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
         } catch (IOException ignored) {}
         botWins.add(new JLabel(new ImageIcon(robot)), BorderLayout.SOUTH);
+        botWins.setBackground(none);
 
         return botWins;
     }
