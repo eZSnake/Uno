@@ -15,7 +15,7 @@ public class UnoPanel extends JPanel {
     private final JPanel blank = new JPanel();
     private ArrayList<JPanel> botCards = new ArrayList<>(), pCards = new ArrayList<>();
     private ArrayList<JLabel> playerCardsLeft = new ArrayList<>(), drawCardsLeft = new ArrayList<>(), placePileCard = new ArrayList<>();
-    private static int[] statCounts = new int[11]; //0: tot games; 1: bot games; 2: player games; 3: player wins; 4: bot wins; 5: bot game ties; 6: player 1 wins; 7: player 2 wins; 8: player 3 wins; 9: player 3 wins; 10: player game tie
+    private static int[] statCounts = new int[15]; //0: tot games; 1: bot games; 2: player games; 3: player wins; 4: bot wins; 5: bot game ties; 6: player 1 wins; 7: player 2 wins; 8: player 3 wins; 9: player 3 wins; 10: player game tie; 11: player 1 games; 12: player 2 games; 13: player 3 games; 14: player 4 games
     private static final String tab = "    ", ARIAL = "Arial";
     private static int targetWidth, targetHeight;
     private boolean bigger13 = false;
@@ -61,6 +61,7 @@ public class UnoPanel extends JPanel {
         for (int i = 0; i < listener.getPlayerCount(); i++) {
             c.add(playerPlayingScreen(i), "player" + i);
             c.add(playerNWins(i), "player" + i + "Win");
+            statCounts[11 + i]++;
         }
         c.add(tieGame(), "tieGame");
         statCounts[0]++;
@@ -404,16 +405,16 @@ public class UnoPanel extends JPanel {
         JLabel totPlayerGames = new JLabel("Total games played against other players: " + statCounts[2]);
         totPlayerGames.setFont(new Font(ARIAL, Font.PLAIN, 30));
         playerStats.add(totPlayerGames);
-        JLabel player1Wins = new JLabel("Player 1 has won " + statCounts[6] + cent + (statCounts[6] * 10 / Math.max(statCounts[2], 1) * 10) + "% (" + statCounts[6] + "/" + statCounts[2] + ") of all games against others.");
+        JLabel player1Wins = new JLabel("Player 1 has won " + statCounts[6] + cent + (statCounts[6] * 10 / Math.max(statCounts[11], 1) * 10) + "% (" + statCounts[6] + "/" + statCounts[11] + ") of all games against others.");
         player1Wins.setFont(new Font(ARIAL, Font.PLAIN, 20));
         playerStats.add(player1Wins);
-        JLabel player2Wins = new JLabel("Player 2 has won " + statCounts[7] + cent + (statCounts[7] * 10 / Math.max(statCounts[2], 1) * 10) + "% (" + statCounts[7] + "/" + statCounts[2] + ") of all games against others.");
+        JLabel player2Wins = new JLabel("Player 2 has won " + statCounts[7] + cent + (statCounts[7] * 10 / Math.max(statCounts[12], 1) * 10) + "% (" + statCounts[7] + "/" + statCounts[12] + ") of all games against others.");
         player2Wins.setFont(new Font(ARIAL, Font.PLAIN, 20));
         playerStats.add(player2Wins);
-        JLabel player3Wins = new JLabel("Player 3 has won " + statCounts[8] + cent + (statCounts[8] * 10 / Math.max(statCounts[2], 1) * 10) + "% (" + statCounts[8] + "/" + statCounts[2] + ") of all games against others.");
+        JLabel player3Wins = new JLabel("Player 3 has won " + statCounts[8] + cent + (statCounts[8] * 10 / Math.max(statCounts[13], 1) * 10) + "% (" + statCounts[8] + "/" + statCounts[13] + ") of all games against others.");
         player3Wins.setFont(new Font(ARIAL, Font.PLAIN, 20));
         playerStats.add(player3Wins);
-        JLabel player4Wins = new JLabel("Player 4 has won " + statCounts[9] + cent + (statCounts[9] * 10 / Math.max(statCounts[2], 1) * 10) + "% (" + statCounts[9] + "/" + statCounts[2] + ") of all games against others.");
+        JLabel player4Wins = new JLabel("Player 4 has won " + statCounts[9] + cent + (statCounts[9] * 10 / Math.max(statCounts[14], 1) * 10) + "% (" + statCounts[9] + "/" + statCounts[14] + ") of all games against others.");
         player4Wins.setFont(new Font(ARIAL, Font.PLAIN, 20));
         playerStats.add(player4Wins);
         JLabel playerTie = new JLabel("The game was tied " + statCounts[10] + cent + (statCounts[10] * 10 / Math.max(statCounts[2], 1) * 10) + "% (" + statCounts[10] + "/" + statCounts[2] + ") of all games against others.");
