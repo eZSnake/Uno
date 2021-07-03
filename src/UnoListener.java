@@ -8,7 +8,7 @@ public class UnoListener implements ActionListener, ChangeListener {
     private final UnoPanel panel;
     private int playerCount = 2;
     private UnoGraphicsGame game = new UnoGraphicsGame(2);
-    private boolean botGame = false;
+    private boolean botGame = false, stackChangeCol = true, stackPlus = false;
     private Card toPlay;
 
     public UnoListener(UnoPanel panel) {
@@ -39,6 +39,16 @@ public class UnoListener implements ActionListener, ChangeListener {
             case "Stats":
                 panel.goToStats();
                 panel.repaint();
+                break;
+            case "Settings":
+                panel.goToSettings();
+                panel.repaint();
+                break;
+            case "Can't stack Change Color cards on top of each other":
+                panel.setStackChangeCol(stackChangeCol);
+                break;
+            case "Can stack Plus 2 cards on top of each other":
+                panel.setStackPlus(stackPlus);
                 break;
             case "Print Hands":
                 panel.printAllHands();
@@ -113,9 +123,17 @@ public class UnoListener implements ActionListener, ChangeListener {
 
     @Override
     public void stateChanged(ChangeEvent e) {
-        JSlider source = (JSlider) e.getSource();
-        if (!source.getValueIsAdjusting()) {
-            playerCount = source.getValue();
+        if (e.getSource() instanceof JSlider source) {
+            if (!source.getValueIsAdjusting()) {
+                playerCount = source.getValue();
+            }
+        } else {
+            JCheckBox box = (JCheckBox) e.getSource();
+            if (box.getText().equals("Can't stack Change Color cards on top of each other")) {
+                stackChangeCol = !box.isSelected();
+            } else {
+                stackPlus = box.isSelected();
+            }
         }
     }
 
@@ -168,6 +186,9 @@ public class UnoListener implements ActionListener, ChangeListener {
 
     private boolean setWinnerScreen() {
         boolean switched = false;
+        if (game.determineWinner() != -1) {
+            panel.setGameEnded();
+        }
         if (botGame) {
             switch (game.determineWinner()) {
                 case 0:

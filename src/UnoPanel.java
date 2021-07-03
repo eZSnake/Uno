@@ -13,12 +13,13 @@ public class UnoPanel extends JPanel {
     private JLabel pCardsLeft, cardsLeft, placePile, botsPlay;
     private static UnoListener listener;
     private final JPanel blank = new JPanel();
+    private static JPanel gameSettings = new JPanel();
     private ArrayList<JPanel> botCards = new ArrayList<>(), pCards = new ArrayList<>();
     private ArrayList<JLabel> playerCardsLeft = new ArrayList<>(), drawCardsLeft = new ArrayList<>(), placePileCard = new ArrayList<>();
-    private static int[] statCounts = new int[15]; //0: tot games; 1: bot games; 2: player games; 3: player wins; 4: bot wins; 5: bot game ties; 6: player 1 wins; 7: player 2 wins; 8: player 3 wins; 9: player 3 wins; 10: player game tie; 11: player 1 games; 12: player 2 games; 13: player 3 games; 14: player 4 games
+    private static int[] statCounts = new int[16]; //0: tot games; 1: bot games; 2: player games; 3: player wins; 4: bot wins; 5: bot game ties; 6: player 1 wins; 7: player 2 wins; 8: player 3 wins; 9: player 3 wins; 10: player game tie; 11: player 1 games; 12: player 2 games; 13: player 3 games; 14: player 4 games
     private static final String tab = "    ", ARIAL = "Arial";
     private static int targetWidth, targetHeight;
-    private boolean bigger13 = false;
+    private boolean bigger13 = false, stackChangeCol = true, stackPlus = false, gameEnded = false;
     private static Image back;
     private static final Color none = new Color(255, 255, 255, 255);
 
@@ -38,6 +39,8 @@ public class UnoPanel extends JPanel {
         c.setLayout(screen);
         c.add(menu());
         c.add(stats(), "stats");
+        gameSettings = gameSettings();
+        c.add(gameSettings, "settings");
         window.setContentPane(c);
 
         window.setLocation(0,0);
@@ -54,6 +57,7 @@ public class UnoPanel extends JPanel {
         c.add(tieGame(), "tieGame");
         statCounts[0]++;
         statCounts[1]++;
+        gameEnded = false;
     }
 
     public void setPlayerGame() {
@@ -67,6 +71,7 @@ public class UnoPanel extends JPanel {
         c.add(tieGame(), "tieGame");
         statCounts[0]++;
         statCounts[2]++;
+        gameEnded = false;
     }
 
     public void resetC() {
@@ -74,6 +79,7 @@ public class UnoPanel extends JPanel {
         c.removeAll();
         c.add(menu());
         c.add(stats(), "stats");
+        c.add(gameSettings, "settings");
         botCards.clear();
         playerCardsLeft.clear();
         drawCardsLeft.clear();
@@ -87,7 +93,7 @@ public class UnoPanel extends JPanel {
         menu.setLayout(new BorderLayout());
         //Choose if you play against bot or real people
         JPanel buttons = new JPanel();
-        buttons.setLayout(new GridLayout(4, 1));
+        buttons.setLayout(new GridLayout(5, 1));
         JButton bot = new JButton("Bot");
         bot.addActionListener(listener);
         bot.setFont(new Font(ARIAL, Font.PLAIN, 25));
@@ -119,6 +125,10 @@ public class UnoPanel extends JPanel {
         stats.addActionListener(listener);
         stats.setFont(new Font(ARIAL, Font.PLAIN, 25));
         buttons.add(stats);
+        JButton settings = new JButton("Settings");
+        settings.addActionListener(listener);
+        settings.setFont(new Font(ARIAL, Font.PLAIN, 25));
+        buttons.add(settings);
         buttons.setBackground(none);
         menu.add(buttons, BorderLayout.SOUTH);
         //Welcome text at top of screen
@@ -458,6 +468,28 @@ public class UnoPanel extends JPanel {
         return stats;
     }
 
+    public static JPanel gameSettings() {
+        JPanel settings = new JPanel();
+        settings.setLayout(new BorderLayout());
+        JButton goMenu = new JButton("Menu");
+        goMenu.addActionListener(listener);
+        goMenu.setFont(new Font(ARIAL, Font.PLAIN, 30));
+        settings.add(goMenu, BorderLayout.NORTH);
+        JPanel clickSets = new JPanel();
+        clickSets.setLayout(new GridLayout(2, 1));
+        JCheckBox stackChangeCol = new JCheckBox("Can't stack Change Color cards on top of each other");
+        stackChangeCol.addActionListener(listener);
+        stackChangeCol.addChangeListener(listener);
+        clickSets.add(stackChangeCol);
+        JCheckBox stackPlus = new JCheckBox("Can stack Plus 2 cards on top of each other");
+        stackPlus.addActionListener(listener);
+        stackPlus.addChangeListener(listener);
+        clickSets.add(stackPlus);
+        settings.add(clickSets);
+
+        return settings;
+    }
+
     public static JPanel playerBotWins() {
         JPanel playerBotWins = new JPanel();
         playerBotWins.setLayout(new BorderLayout());
@@ -564,6 +596,10 @@ public class UnoPanel extends JPanel {
         screen.show(c, "stats");
     }
 
+    public void goToSettings() {
+        screen.show(c, "settings");
+    }
+
     public void showScreen(String toShow) {
         screen.show(c, toShow);
     }
@@ -581,6 +617,18 @@ public class UnoPanel extends JPanel {
 
     public void endResult(int winner) {
         statCounts[winner]++;
+    }
+
+    public void setGameEnded() { //TODO Maybe also add game started to keep track of aborted games
+        gameEnded = true;
+    }
+
+    public void setStackChangeCol(boolean toSetTo) {
+        stackChangeCol = toSetTo;
+    }
+
+    public void setStackPlus(boolean toSetTo) {
+        stackPlus = toSetTo;
     }
 
     public void setPanelDims(int width, int height) {
