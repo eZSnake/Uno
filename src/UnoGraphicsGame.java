@@ -2,7 +2,7 @@ public class UnoGraphicsGame {
     private final Deck deck;
     private Card placePile;
     private final Hand[] hands;
-    private boolean rev = false, skip = false, botGame;
+    private boolean rev = false, skip = false, botGame, stackChangeCol = true, stackPlus = false;
     private final BasicBot bot = new BasicBot();
     private int player = 0, players;
     private int[] handLengths;
@@ -83,6 +83,7 @@ public class UnoGraphicsGame {
     public void doSpecialMove(String col) {
         //Executes special move
         placePile.specialMove(deck, hands, player, rev, col);
+        //TODO Add case for stacking plus cards so they add together (Just Plus 2 or also 4?)
     }
 
     private boolean roundPlayable() {
@@ -150,7 +151,8 @@ public class UnoGraphicsGame {
         if (toPlay == null) {
             return false;
         }
-        return toPlay.getId() == 4 || toPlay.getColor().equals(placePile.getColor()) || toPlay.getNum() == placePile.getNum();
+        return toPlay.getId() == 4 || toPlay.getColor().equals(placePile.getColor()) || toPlay.getNum() == placePile.getNum() || (toPlay.getId() == 4 && placePile.getId() == 4 && stackChangeCol);
+        //TODO Fix implementation of not stacking Change Col cards
     }
 
     public Card stringToCard(String conv) {
@@ -216,6 +218,14 @@ public class UnoGraphicsGame {
 
     public void setBotGame(boolean isBotGame) {
         botGame = isBotGame;
+    }
+
+    public void setStackChangeCol(boolean toSetTo) {
+        stackChangeCol = toSetTo;
+    }
+
+    public void setStackPlus(boolean toSetTo) {
+        stackPlus = toSetTo;
     }
 
     public int determineWinner() {

@@ -46,9 +46,11 @@ public class UnoListener implements ActionListener, ChangeListener {
                 break;
             case "Can't stack Change Color cards on top of each other":
                 panel.setStackChangeCol(stackChangeCol);
+                game.setStackChangeCol(stackChangeCol);
                 break;
             case "Can stack Plus 2 cards on top of each other":
                 panel.setStackPlus(stackPlus);
+                game.setStackPlus(stackPlus);
                 break;
             case "Print Hands":
                 panel.printAllHands();
