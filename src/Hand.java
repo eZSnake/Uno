@@ -22,6 +22,15 @@ public class Hand {
         return hand.get(index);
     }
 
+    public boolean hasPlus() {
+        for (Card card : hand) {
+            if (card.toString().contains("+")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public String toString() {
         Star = false;
         String ret = toString(null);

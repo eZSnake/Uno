@@ -82,6 +82,9 @@ public class UnoGraphicsGame {
 
     public void doSpecialMove(String col) {
         //Executes special move
+        if (stackPlus && placePile.toString().contains("+") && getPlayerHand(getNextPlayer()).hasPlus()) {
+            //Dont do effect yet and see if player wants to stack on top
+        }
         placePile.specialMove(deck, hands, player, rev, col);
         //TODO Add case for stacking plus cards so they add together (Just Plus 2 or also 4?)
     }
@@ -100,7 +103,7 @@ public class UnoGraphicsGame {
         handLengths[player] = hands[player].length();
     }
 
-    public void nextPlayer() {
+    public int getNextPlayer() {
         //Determines which player goes next, taking into account the direction and if the next player is supposed to be skipped
         int nextPlayer;
         if (!rev && !skip) {
@@ -113,7 +116,12 @@ public class UnoGraphicsGame {
             nextPlayer = Math.floorMod(player - 2, hands.length);
         }
         skip = false;
-        player = nextPlayer;
+
+        return nextPlayer;
+    }
+
+    public void nextPlayer() {
+        player = getNextPlayer();
     }
 
     private void switchSkip() {
