@@ -8,7 +8,7 @@ public class UnoListener implements ActionListener, ChangeListener {
     private final UnoPanel panel;
     private int playerCount = 2;
     private UnoGraphicsGame game = new UnoGraphicsGame(2);
-    private boolean botGame = false, stackChangeCol = true, stackPlus = false;
+    private boolean botGame = false, stackChangeCol = true, stackPlus = false, sortCards;
     private Card toPlay;
 
     public UnoListener(UnoPanel panel) {
@@ -43,6 +43,9 @@ public class UnoListener implements ActionListener, ChangeListener {
             case "Settings":
                 panel.goToSettings();
                 panel.repaint();
+                break;
+            case "Sort cards on hand by color (takes longer to load)":
+                panel.setSort(sortCards);
                 break;
             case "Can't stack Change Color cards on top of each other":
                 panel.setStackChangeCol(stackChangeCol);
@@ -133,8 +136,10 @@ public class UnoListener implements ActionListener, ChangeListener {
             JCheckBox box = (JCheckBox) e.getSource();
             if (box.getText().equals("Can't stack Change Color cards on top of each other")) {
                 stackChangeCol = !box.isSelected();
-            } else {
+            } else if (box.getText().equals("Can stack Plus 2 cards on top of each other")) {
                 stackPlus = box.isSelected();
+            } else {
+                sortCards = box.isSelected();
             }
         }
     }

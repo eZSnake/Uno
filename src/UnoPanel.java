@@ -19,7 +19,7 @@ public class UnoPanel extends JPanel {
     private static int[] statCounts = new int[16]; //0: tot games; 1: bot games; 2: player games; 3: player wins; 4: bot wins; 5: bot game ties; 6: player 1 wins; 7: player 2 wins; 8: player 3 wins; 9: player 3 wins; 10: player game tie; 11: player 1 games; 12: player 2 games; 13: player 3 games; 14: player 4 games
     private static final String tab = "    ", ARIAL = "Arial";
     private static int targetWidth, targetHeight;
-    private boolean bigger13 = false, stackChangeCol = true, stackPlus = false, gameEnded = false;
+    private boolean bigger13 = false, stackChangeCol = true, stackPlus = false, sortCards = false, gameEnded = false;
     private static Image back;
     private static final Color none = new Color(255, 255, 255, 255);
 
@@ -476,7 +476,11 @@ public class UnoPanel extends JPanel {
         goMenu.setFont(new Font(ARIAL, Font.PLAIN, 30));
         settings.add(goMenu, BorderLayout.NORTH);
         JPanel clickSets = new JPanel();
-        clickSets.setLayout(new GridLayout(2, 1));
+        clickSets.setLayout(new GridLayout(3, 1));
+        JCheckBox sort = new JCheckBox("Sort cards on hand by color (takes longer to load)");
+        sort.addActionListener(listener);
+        sort.addChangeListener(listener);
+        clickSets.add(sort);
         JCheckBox stackChangeCol = new JCheckBox("Can't stack Change Color cards on top of each other");
         stackChangeCol.addActionListener(listener);
         stackChangeCol.addChangeListener(listener);
@@ -629,6 +633,10 @@ public class UnoPanel extends JPanel {
 
     public void setStackPlus(boolean toSetTo) {
         stackPlus = toSetTo;
+    }
+
+    public void setSort(boolean toSetTo) {
+        sortCards = toSetTo;
     }
 
     public void setPanelDims(int width, int height) {
