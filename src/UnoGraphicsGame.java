@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class UnoGraphicsGame {
     private final Deck deck;
     private Card placePile;
@@ -215,6 +217,66 @@ public class UnoGraphicsGame {
         updateHandLength();
         return diff;
     }
+
+    /*
+    //TODO Implement sorting of cards correctly
+    public void sortHand() {
+        ArrayList<Card> blue = new ArrayList<>(), green = new ArrayList<>(), yellow = new ArrayList<>(), red = new ArrayList<>(), black = new ArrayList<>();
+        for (int i = 0; i < hands[player].length(); i++) {
+            Card temp = hands[player].getCard(i);
+            if (temp.getColor().equals("Blue") && temp.getId() == 0) {
+                blue.add(temp);
+            } else if (temp.getColor().equals("Green") && temp.getId() == 0) {
+                green.add(temp);
+            } else if (temp.getColor().equals("Yellow") && temp.getId() == 0) {
+                yellow.add(temp);
+            } else if (temp.getColor().equals("Red") && temp.getId() == 0) {
+                red.add(temp);
+            } else {
+                black.add(temp);
+            }
+        }
+        Card[] blueArr = new Card[blue.size()], greenArr = new Card[green.size()], yellowArr = new Card[yellow.size()], redArr = new Card[red.size()];
+        blue.toArray(blueArr);
+        green.toArray(greenArr);
+        yellow.toArray(yellowArr);
+        red.toArray(redArr);
+        quickSort(blueArr, 0, blueArr.length);
+        quickSort(greenArr, 0, greenArr.length);
+        quickSort(yellowArr, 0, yellowArr.length);
+        quickSort(redArr, 0, redArr.length);
+    }
+
+    public void quickSort(Card[] arr, int begin, int end) {
+        if (begin < end) {
+            int partitionIndex = partition(arr, begin, end);
+
+            quickSort(arr, begin, partitionIndex-1);
+            quickSort(arr, partitionIndex+1, end);
+        }
+    }
+
+    private int partition(Card[] arr, int begin, int end) {
+        int pivot = arr[end].getNum();
+        int i = (begin-1);
+
+        for (int j = begin; j < end; j++) {
+            if (arr[j].getNum() <= pivot) {
+                i++;
+
+                Card swapTemp = arr[i];
+                arr[i] = arr[j];
+                arr[j] = swapTemp;
+            }
+        }
+
+        Card swapTemp = arr[i+1];
+        arr[i+1] = arr[end];
+        arr[end] = swapTemp;
+
+        return i+1;
+    }
+    */
 
     public String getBotsPlay() {
         return botsPlay;
