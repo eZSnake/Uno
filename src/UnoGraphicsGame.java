@@ -1,10 +1,8 @@
-import java.util.ArrayList;
-
 public class UnoGraphicsGame {
     private final Deck deck;
     private Card placePile;
     private final Hand[] hands;
-    private boolean rev = false, skip = false, botGame, stackChangeCol = true, stackPlus = false;
+    private boolean rev = false, skip = false, stackChangeCol = true, stackPlus = false;
     private final BasicBot bot = new BasicBot();
     private int player = 0, players;
     private int[] handLengths;
@@ -284,10 +282,6 @@ public class UnoGraphicsGame {
 
     public void resetBotsPlay() {
         botsPlay = "";
-    }
-
-    public void setBotGame(boolean isBotGame) {
-        botGame = isBotGame;
     }
 
     public void setStackChangeCol(boolean toSetTo) {

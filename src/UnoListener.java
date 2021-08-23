@@ -21,7 +21,6 @@ public class UnoListener implements ActionListener, ChangeListener {
         switch (button) {
             case "Bot":
                 botGame = true;
-                game.setBotGame(true);
                 playerCount = 2;
                 game = new UnoGraphicsGame(playerCount);
                 panel.setBotGame();
@@ -30,7 +29,6 @@ public class UnoListener implements ActionListener, ChangeListener {
                 break;
             case "Players: ":
                 botGame = false;
-                game.setBotGame(true);
                 game = new UnoGraphicsGame(playerCount);
                 panel.setPlayerGame();
                 panel.playerScreen("player0");
