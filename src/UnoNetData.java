@@ -17,8 +17,8 @@ public class UnoNetData {
         return placePile;
     }
 
-    public Hand[] getHands() {
-        return hands;
+    public Hand getHand(int handToGet) {
+        return hands[handToGet];
     }
 
     public int[] getHandLengths() {

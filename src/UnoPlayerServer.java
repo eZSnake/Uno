@@ -11,13 +11,6 @@ public class UnoPlayerServer {
     private static final Color none = new Color(255, 255, 255, 255);
 
     public static void main (String[] args) {
-//        try {
-//            ServerSocket servsoc = new ServerSocket(4200);
-//            Socket soc = servsoc.accept();
-//            DataInputStream din = new DataInputStream(soc.getInputStream());
-//            DataOutputStream dout = new DataOutputStream(soc.getOutputStream());
-//        } catch (IOException ignored) {}
-
         window = new JFrame("Uno Server");
         try {
             back = ImageIO.read(new File("UnoCards/back.png"));
@@ -36,6 +29,7 @@ public class UnoPlayerServer {
     static JPanel serverPanel() {
         JPanel home = new JPanel();
         home.setLayout(new GridLayout(2, 1));
+
         JPanel top = new JPanel();
         top.setLayout(new GridLayout(2, 1));
         top.add(new JLabel(new ImageIcon(back.getScaledInstance(100, 143, Image.SCALE_SMOOTH))));
@@ -48,6 +42,7 @@ public class UnoPlayerServer {
         top.add(topTxtBox);
         top.setBackground(none);
         home.add(top);
+
         JPanel bottom = new JPanel();
         bottom.setLayout(new GridLayout(2, 1));
         JSlider playerCount = new JSlider(2, 4, 2);
@@ -57,6 +52,7 @@ public class UnoPlayerServer {
         playerCount.setPaintLabels(true);
         playerCount.setBackground(none);
         bottom.add(playerCount);
+
         JButton start = new JButton("Start");
         start.setFont(new Font("Arial", Font.PLAIN, 50));
         bottom.add(start);
@@ -67,7 +63,12 @@ public class UnoPlayerServer {
     }
 
     public void start() {
-
+//        try {
+//            ServerSocket servsoc = new ServerSocket(4200);
+//            Socket soc = servsoc.accept();
+//            DataInputStream din = new DataInputStream(soc.getInputStream());
+//            DataOutputStream dout = new DataOutputStream(soc.getOutputStream());
+//        } catch (IOException ignored) {}
     }
 
     public void menu() {
