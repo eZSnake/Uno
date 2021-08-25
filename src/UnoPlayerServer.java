@@ -7,7 +7,10 @@ import java.net.*;
 public class UnoPlayerServer {
     private static JFrame window;
     private static UnoServerListener listener;
+    private UnoGraphicsGame game;
     private static Image back;
+    private static Container c;
+    private CardLayout screen;
     private static final Color none = new Color(255, 255, 255, 255);
 
     public static void main (String[] args) {
@@ -16,8 +19,11 @@ public class UnoPlayerServer {
             back = ImageIO.read(new File("UnoCards/back.png"));
         } catch (IOException ignored) {}
 
+        c = window.getContentPane();
+
         UnoPlayerServer server = new UnoPlayerServer();
         listener = new UnoServerListener(server);
+
         window.setSize(1920,1080);
         window.setContentPane(serverPanel());
         window.setLocation(0,0);
@@ -68,7 +74,13 @@ public class UnoPlayerServer {
 //            Socket soc = servsoc.accept();
 //            DataInputStream din = new DataInputStream(soc.getInputStream());
 //            DataOutputStream dout = new DataOutputStream(soc.getOutputStream());
-//        } catch (IOException ignored) {}
+//        } catch (IOException ignored) {} //Maybe close program
+        game = new UnoGraphicsGame(listener.getPlayerCount());
+
+        while (game.determineWinner() == -1) {
+            //Output game data
+            //Take in game data from players
+        }
     }
 
     public void menu() {

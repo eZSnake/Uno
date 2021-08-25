@@ -31,6 +31,9 @@ public class UnoNetListener implements ActionListener {
                 client.nextScreen();
                 client.repaint();
                 break;
+            case "Menu":
+                client.goMenu();
+                client.repaint();
         }
     }
 }
