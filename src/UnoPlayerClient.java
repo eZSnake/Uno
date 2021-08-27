@@ -96,7 +96,7 @@ public class UnoPlayerClient extends JPanel {
         goMenu.setFont(new Font(ARIAL, Font.PLAIN, 30));
         left.add(goMenu);
         StringBuilder cardsLeftAsString = new StringBuilder("Cards left:  ");
-        for (int i = 0; i < UnoNetData.getPlayerCount(); i++) {
+        for (int i = 0; i < UnoNetData.getPlayerCount(); i++) { //TODO ??? What;s wrong here
             cardsLeftAsString.append("Player ").append(i + 1).append(": ").append(UnoNetData.getCardsLeft(i));
             if (i < UnoNetData.getPlayerCount() - 1) {
                 cardsLeftAsString.append(" - ");
