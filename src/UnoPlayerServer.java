@@ -7,10 +7,12 @@ import java.net.*;
 public class UnoPlayerServer {
     private static JFrame window;
     private static UnoServerListener listener;
+    private ObjectInputStream din;
+    private ObjectOutputStream dout;
     private UnoGraphicsGame game;
     private static Image back;
     private static Container c;
-    private CardLayout screen;
+    private static CardLayout screen = new CardLayout();
     private static final Color none = new Color(255, 255, 255, 255);
 
     public static void main (String[] args) {
@@ -20,12 +22,14 @@ public class UnoPlayerServer {
         } catch (IOException ignored) {}
 
         c = window.getContentPane();
+        c.setLayout(screen);
+        c.add(serverPanel());
 
         UnoPlayerServer server = new UnoPlayerServer();
         listener = new UnoServerListener(server);
 
         window.setSize(1920,1080);
-        window.setContentPane(serverPanel());
+        window.setContentPane(c);
         window.setLocation(0,0);
         window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         window.setIconImage(back);
@@ -69,21 +73,29 @@ public class UnoPlayerServer {
     }
 
     public void start() {
-//        try {
-//            ServerSocket servsoc = new ServerSocket(4200);
-//            Socket soc = servsoc.accept();
-//            DataInputStream din = new DataInputStream(soc.getInputStream());
-//            DataOutputStream dout = new DataOutputStream(soc.getOutputStream());
-//        } catch (IOException ignored) {} //Maybe close program
+        try {
+            ServerSocket servsoc = new ServerSocket(4200);
+            Socket soc = servsoc.accept();
+            din = new ObjectInputStream(soc.getInputStream());
+            dout = new ObjectOutputStream(soc.getOutputStream());
+        } catch (IOException fatalError) {
+            System.out.println("A fatal error has occurred.\nConnection to the server could not be established.");
+            System.exit(0);
+        }
+
         game = new UnoGraphicsGame(listener.getPlayerCount());
 
         while (game.determineWinner() == -1) {
             //Output game data
+            UnoNetData toSend = new UnoNetData(game.getPlacePile(), game.getHands(), game.getPlayer(), listener.getPlayerCount(), game.getCardsLeft());
+            dout.write(toSend); //TODO Figure out how to send data
             //Take in game data from players
         }
     }
 
-    public void menu() {
+    public JPanel gameMenu() {
+        JPanel gameMenu = new JPanel();
 
+        return gameMenu;
     }
 }

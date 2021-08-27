@@ -11,30 +11,31 @@ public class UnoNetListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         switch (e.getActionCommand()) {
-            case "Player 1":
+            case "Player 1" -> {
                 client.setPlayer(1);
                 client.repaint();
-                break;
-            case "Player 2":
+            }
+            case "Player 2" -> {
                 client.setPlayer(2);
                 client.repaint();
-                break;
-            case "Player 3":
+            }
+            case "Player 3" -> {
                 client.setPlayer(3);
                 client.repaint();
-                break;
-            case "Player 4":
+            }
+            case "Player 4" -> {
                 client.setPlayer(4);
                 client.repaint();
-                break;
-            case "Continue":
+            }
+            case "Continue" -> {
                 client.nextScreen();
                 client.startConnection();
                 client.repaint();
-                break;
-            case "Menu":
+            }
+            case "Menu" -> {
                 client.goMenu();
                 client.repaint();
+            }
         }
     }
 }

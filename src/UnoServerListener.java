@@ -28,9 +28,6 @@ public class UnoServerListener implements ActionListener, ChangeListener {
             case "Start":
                 server.start();
                 break;
-            case "Menu":
-                server.menu();
-                break;
         }
     }
 

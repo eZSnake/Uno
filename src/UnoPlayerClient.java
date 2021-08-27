@@ -9,13 +9,13 @@ public class UnoPlayerClient extends JPanel {
     private static JFrame window;
     private static UnoNetListener listener;
     private UnoNetData data;
-    private DataInputStream din;
-    private DataOutputStream dout;
+    private ObjectInputStream din;
+    private ObjectOutputStream dout;
     private static int player = 0, numPlayers, targetWidth, targetHeight, port;
     private static double ip;
     private static Image back;
     private static Container c;
-    private CardLayout screen;
+    private CardLayout screen = new CardLayout();
     private PanelDims dims = new PanelDims(1920, 1080);
     private JLabel pCardsLeft, cardsLeft, placePile;
     private ArrayList<JPanel> botCards = new ArrayList<>(), pCards = new ArrayList<>();
@@ -25,21 +25,21 @@ public class UnoPlayerClient extends JPanel {
 
     public static void main(String[] args) {
         port = 4200;
-
+        data = new UnoNetData(null, null, -1, -1, -1);
 
         window = new JFrame("Uno");
         UnoPlayerClient client = new UnoPlayerClient();
         listener = new UnoNetListener(client);
         window.setSize(1920,1080);
 
-        c = window.getContentPane();
-
         try {
             back = ImageIO.read(new File("UnoCards/back.png"));
         } catch (IOException ignored) {}
 
-        c.add(client.selection(), "menu");
-        c.add(client.waitingScreen(), "wait");
+        c = window.getContentPane();
+        c.setLayout(client.screen);
+        c.add(client.selection());
+        c.add(client.waitingScreen());
 
         window.setContentPane(c);
         window.setLocation(0,0);
@@ -179,10 +179,14 @@ public class UnoPlayerClient extends JPanel {
     private JPanel waitingScreen() {
         JPanel wait = new JPanel(new GridLayout(3, 1));
         JLabel serverInfo = new JLabel("Attempting to connect on IP 192.168.201.1 and Port " + port);
-        wait.add(serverInfo);
+        JPanel servInf = new JPanel();
+        servInf.add(serverInfo);
+        wait.add(servInf);
         JLabel waitTxt = new JLabel("Waiting for server connection...");
         waitTxt.setFont(new Font(ARIAL, Font.PLAIN, 75));
-        wait.add(waitTxt);
+        JPanel waitTxtScrn = new JPanel();
+        waitTxtScrn.add(waitTxt);
+        wait.add(waitTxtScrn);
 
         return wait;
     }
@@ -190,8 +194,8 @@ public class UnoPlayerClient extends JPanel {
     public void startConnection() {
         try {
             Socket soc = new Socket("192.168.201.1", port);
-            din = new DataInputStream(soc.getInputStream());
-            dout = new DataOutputStream(soc.getOutputStream());
+            din = new ObjectInputStream(soc.getInputStream());
+            dout = new ObjectOutputStream(soc.getOutputStream());
         } catch (IOException fatalError) {
             System.out.println("A fatal error has occurred.\nConnection to the server could not be established.");
             System.exit(0);

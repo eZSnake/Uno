@@ -216,6 +216,10 @@ public class UnoGraphicsGame {
         return diff;
     }
 
+    public Hand[] getHands() {
+        return hands;
+    }
+
     /*
     //TODO Implement sorting of cards correctly
     public void sortHand() {
