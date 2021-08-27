@@ -1,17 +1,16 @@
 public class UnoNetData {
     private Card placePile;
     private Hand[] hands;
-    private int[] handLengths;
-    private int currPlayer, totPlayers;
+    private int currPlayer, playerCount, cardsInDrawPile;
     private String specialMove;
 
-    UnoNetData(Card placePile, Hand[] hands, int[] handLengths, int currPlayer, int totPlayers, String specialMove) {
+    UnoNetData(Card placePile, Hand[] hands, int currPlayer, int totPlayers, String specialMove, int cardsInDrawPile) {
         this.placePile = placePile;
         this.hands = hands;
-        this.handLengths = handLengths;
         this.currPlayer = currPlayer;
-        this.totPlayers = totPlayers;
+        this.playerCount = totPlayers;
         this.specialMove = specialMove;
+        this.cardsInDrawPile = cardsInDrawPile;
     }
 
     public Card getPlacePile() {
@@ -22,8 +21,16 @@ public class UnoNetData {
         return hands[handToGet];
     }
 
-    public int[] getHandLengths() {
-        return handLengths;
+    public int getCardsLeft(int plyr) {
+        return hands[plyr].length();
+    }
+
+    public int getPlayerCount() {
+        return playerCount;
+    }
+
+    public int getCardsInDrawPile() {
+        return cardsInDrawPile;
     }
 
     public int getCurrPlayer() {

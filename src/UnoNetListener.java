@@ -29,6 +29,7 @@ public class UnoNetListener implements ActionListener {
                 break;
             case "Continue":
                 client.nextScreen();
+                client.startConnection();
                 client.repaint();
                 break;
             case "Menu":

@@ -9,7 +9,10 @@ public class UnoPlayerClient extends JPanel {
     private static JFrame window;
     private static UnoNetListener listener;
     private UnoNetData data;
-    private static int player = 0, numPlayers, targetWidth, targetHeight;
+    private DataInputStream din;
+    private DataOutputStream dout;
+    private static int player = 0, numPlayers, targetWidth, targetHeight, port;
+    private static double ip;
     private static Image back;
     private static Container c;
     private CardLayout screen;
@@ -21,11 +24,8 @@ public class UnoPlayerClient extends JPanel {
     private static final Color none = new Color(255, 255, 255, 255);
 
     public static void main(String[] args) {
-//        try {
-//        Socket soc = new Socket("192.168.201.1", 4200);
-//        DataInputStream din = new DataInputStream(soc.getInputStream());
-//        DataOutputStream dout = new DataOutputStream(soc.getOutputStream());
-//        } catch (IOException ignored) {}
+        port = 4200;
+
 
         window = new JFrame("Uno");
         UnoPlayerClient client = new UnoPlayerClient();
@@ -38,7 +38,8 @@ public class UnoPlayerClient extends JPanel {
             back = ImageIO.read(new File("UnoCards/back.png"));
         } catch (IOException ignored) {}
 
-        c.add(selection(), "menu");
+        c.add(client.selection(), "menu");
+        c.add(client.waitingScreen(), "wait");
 
         window.setContentPane(c);
         window.setLocation(0,0);
@@ -47,7 +48,7 @@ public class UnoPlayerClient extends JPanel {
         window.setVisible(true);
     }
 
-    private static JPanel selection() {
+    private JPanel selection() {
         numPlayers = 4;
         JPanel selection = new JPanel();
         selection.setLayout(new GridLayout(numPlayers + 3, 1)); //TODO Only have enough slots for required amt of players
@@ -79,7 +80,7 @@ public class UnoPlayerClient extends JPanel {
         return selection;
     }
 
-    public JPanel playerPlayingScreen(int player) {
+    private JPanel playerPlayingScreen(int player) {
         //Creates playing screen for specified player
         JPanel playerPlayingScreen = new JPanel();
         playerPlayingScreen.setLayout(new BorderLayout());
@@ -95,9 +96,9 @@ public class UnoPlayerClient extends JPanel {
         goMenu.setFont(new Font(ARIAL, Font.PLAIN, 30));
         left.add(goMenu);
         StringBuilder cardsLeftAsString = new StringBuilder("Cards left:  ");
-        for (int i = 0; i < listener.getPlayerCount(); i++) {
-            cardsLeftAsString.append("Player ").append(i + 1).append(": ").append(listener.pCardsLeft(i));
-            if (i < listener.getPlayerCount() - 1) {
+        for (int i = 0; i < UnoNetData.getPlayerCount(); i++) {
+            cardsLeftAsString.append("Player ").append(i + 1).append(": ").append(UnoNetData.getCardsLeft(i));
+            if (i < UnoNetData.getPlayerCount() - 1) {
                 cardsLeftAsString.append(" - ");
             }
         }
@@ -123,7 +124,7 @@ public class UnoPlayerClient extends JPanel {
         targetWidth = dims.getWidth() / 20;
         targetHeight = targetWidth * 143 / 100;
         right.add(new JLabel(new ImageIcon(back.getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH))));
-        cardsLeft = new JLabel("Cards in drawpile: " + listener.getCardsLeft());
+        cardsLeft = new JLabel("Cards in drawpile: " + UnoNetData.getCardsInDrawPile());
         cardsLeft.setFont(new Font(ARIAL, Font.PLAIN, 20));
         drawCardsLeft.add(cardsLeft);
         JPanel centDrawCardsLeft = new JPanel();
@@ -136,7 +137,7 @@ public class UnoPlayerClient extends JPanel {
         //Center (card on place pile)
         targetWidth = dims.getWidth() / 15;
         targetHeight = targetWidth * 143 / 100;
-        Image img = listener.getPlacePile().getImage().getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
+        Image img = UnoNetData.getPlacePile().getImage().getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
         placePile = new JLabel(new ImageIcon(img));
         placePileCard.add(placePile);
         playerPlayingScreen.add(placePileCard.get(player), BorderLayout.CENTER);
@@ -175,7 +176,31 @@ public class UnoPlayerClient extends JPanel {
         return initialCards;
     }
 
-    public static void setPlayer(int newPlayer) {
+    private JPanel waitingScreen() {
+        JPanel wait = new JPanel(new GridLayout(3, 1));
+        JLabel serverInfo = new JLabel("Attempting to connect on IP 192.168.201.1 and Port " + port);
+        wait.add(serverInfo);
+        JLabel waitTxt = new JLabel("Waiting for server connection...");
+        waitTxt.setFont(new Font(ARIAL, Font.PLAIN, 75));
+        wait.add(waitTxt);
+
+        return wait;
+    }
+
+    public void startConnection() {
+        try {
+            Socket soc = new Socket("192.168.201.1", port);
+            din = new DataInputStream(soc.getInputStream());
+            dout = new DataOutputStream(soc.getOutputStream());
+        } catch (IOException fatalError) {
+            System.out.println("A fatal error has occurred.\nConnection to the server could not be established.");
+            System.exit(0);
+        }
+
+        c.add(playerPlayingScreen(player));
+    }
+
+    public void setPlayer(int newPlayer) {
         player = newPlayer;
         selectedPlayer.get(0).setText("Currently player " + player);
     }
