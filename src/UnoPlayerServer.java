@@ -9,12 +9,13 @@ public class UnoPlayerServer {
     private static JFrame window;
     private static UnoServerListener listener;
     private ObjectInputStream din;
-    private ObjectOutputStream dout;
+    private OutputStreamWriter dout;
     private UnoGraphicsGame game;
     private UnoNetData data;
     private static Image back;
     private static Container c;
     private static CardLayout screen = new CardLayout();
+    private PanelDims dims = new PanelDims(1920, 1080);
     private static final Color none = new Color(255, 255, 255, 255);
 
     public static void main (String[] args) {
@@ -79,7 +80,7 @@ public class UnoPlayerServer {
             ServerSocket servsoc = new ServerSocket(4200);
             Socket soc = servsoc.accept();
             din = new ObjectInputStream(soc.getInputStream());
-            dout = new ObjectOutputStream(soc.getOutputStream());
+            dout = new OutputStreamWriter(soc.getOutputStream());
         } catch (IOException fatalError) {
             System.out.println("A fatal error has occurred.\nConnection to the server could not be established.");
             System.exit(0);
@@ -90,9 +91,12 @@ public class UnoPlayerServer {
         while (game.determineWinner() == -1) {
             //Output game data
             data = new UnoNetData(game.getPlacePile(), null, game.getHands(), game.getPlayer(), listener.getPlayerCount(), game.getCardsLeft(), null);
-            dout.write(data); //TODO Figure out how to send data
             try {
+                writeJSON(data);
+                dout.write("data.json");
                 dout.flush();
+
+                data = readJSON();
             } catch (IOException ignored) {}
             //Take in game data from players
         }
@@ -100,7 +104,7 @@ public class UnoPlayerServer {
 
     private void writeJSON(UnoNetData toJSON) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        mapper.writeValue(new File("data.json"), toJSON);
+        mapper.writeValue(dout, toJSON);
     }
 
     private UnoNetData readJSON() throws IOException {
@@ -117,10 +121,10 @@ public class UnoPlayerServer {
         veryTop.add(infoTxt);
         veryTop.add(menu);
         gameMenu.add(veryTop);
-        targetWidth = dims.getWidth() / 15;
-        targetHeight = targetWidth * 143 / 100;
+        int targetHeight = dims.getHeight() / listener.getPlayerCount() + 4;
+        int targetWidth = targetHeight / 143 * 100;
         Image img = game.getPlacePile().getImage().getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
-        JLabel placePile = new JLabel(img);
+        JLabel placePile = new JLabel(new ImageIcon(img));
         JLabel cardsLeft = new JLabel("Cards left: " + game.getCardsLeft());
         JPanel cardInfo = new JPanel(new GridLayout(1, 2));
         cardInfo.add(placePile);

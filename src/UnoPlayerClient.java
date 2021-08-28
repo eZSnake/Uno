@@ -16,7 +16,7 @@ public class UnoPlayerClient extends JPanel {
     private static Image back;
     private static Container c;
     private CardLayout screen = new CardLayout();
-    private PanelDims dims = new PanelDims(1920, 1080);
+    private final PanelDims dims = new PanelDims(1920, 1080);
     private JLabel pCardsLeft, cardsLeft, placePile;
     private ArrayList<JPanel> botCards = new ArrayList<>(), pCards = new ArrayList<>();
     private ArrayList<JLabel> selectedPlayer = new ArrayList<>(), playerCardsLeft = new ArrayList<>(), drawCardsLeft = new ArrayList<>(), placePileCard = new ArrayList<>();
@@ -179,6 +179,10 @@ public class UnoPlayerClient extends JPanel {
     public void updateCards() {
     }
 
+    public void removeCard(Card toRemove) {
+
+    }
+
     private JPanel waitingScreen() {
         JPanel wait = new JPanel(new GridLayout(3, 1));
         JLabel serverInfo = new JLabel("Attempting to connect on IP 192.168.201.1 and Port " + port);
@@ -194,6 +198,41 @@ public class UnoPlayerClient extends JPanel {
         return wait;
     }
 
+    private JPanel winnerScreen(int winner) {
+        JPanel winnerScreen = new JPanel(new BorderLayout());
+        JButton goMenu = new JButton("Menu");
+        goMenu.addActionListener(listener);
+        goMenu.setFont(new Font(ARIAL, Font.PLAIN, 30));
+        winnerScreen.add(goMenu, BorderLayout.NORTH);
+        JTextArea text = new JTextArea("Player " + (player + 1) + " wins!\nCongratulations!\nBut can this feat be repeated?");
+        text.setFont(new Font(ARIAL, Font.PLAIN, 50));
+        text.setEditable(false);
+        JPanel winTxt = new JPanel();
+        winTxt.add(text, BorderLayout.CENTER);
+        winTxt.setBackground(none);
+        winnerScreen.add(winTxt);
+
+        return winnerScreen;
+    }
+
+    public static JPanel tieGame() {
+        JPanel tieGame = new JPanel();
+        tieGame.setLayout(new BorderLayout());
+        JButton goMenu = new JButton("Menu");
+        goMenu.addActionListener(listener);
+        goMenu.setFont(new Font(ARIAL, Font.PLAIN, 30));
+        tieGame.add(goMenu, BorderLayout.NORTH);
+        JTextArea text = new JTextArea("The game is a tie!\nThere are no more cards to draw or play!\nBetter luck next time!");
+        text.setFont(new Font(ARIAL, Font.PLAIN, 50));
+        text.setEditable(false);
+        JPanel winTxt = new JPanel();
+        winTxt.add(text, BorderLayout.CENTER);
+        winTxt.setBackground(none);
+        tieGame.add(winTxt);
+
+        return tieGame;
+    }
+
     public void startConnection() {
         boolean connected = false;
         while (!connected) {
@@ -206,10 +245,27 @@ public class UnoPlayerClient extends JPanel {
         }
 
         c.add(playerPlayingScreen(player));
+
+        playGame();
+    }
+
+    private void playGame() {
+        while (data.getWinner() == -1) {
+            //accept and send data
+        }
+
+        int winner = data.getWinner();
+        if (winner == 4) {
+            c.add(tieGame());
+            screen.next(c);
+        } else {
+            c.add(winnerScreen(winner));
+            screen.next(c);
+        }
     }
 
     public void playCard(Card toPlay, String specialMove) {
-        UnoNetData toSend = new UnoNetData(null, toPlay, null, -1, -1, -1, specialMove);
+        UnoNetData toSend = new UnoNetData(null, toPlay, null, -1, -1, -1, -1, specialMove);
 
         try {
             dout.flush();
@@ -242,6 +298,9 @@ public class UnoPlayerClient extends JPanel {
     }
 
     public void goMenu() {
-        screen.show(c, "menu");
+        c.setVisible(false);
+        c.removeAll();
+        c.add(selection());
+        c.setVisible(true);
     }
 }

@@ -63,12 +63,8 @@ public class UnoNetListener implements ActionListener {
                 } else {
                     client.playCard(toPlay, null);
                 }
-                client.removeCard(player);
-                client.updatePlayerCards(player);
+                client.removeCard(toPlay);
 //                game.nextPlayer();
-                if (setWinnerScreen()) {
-                    break;
-                }
                 updateWholeScreen();
                 break;
             }
@@ -95,5 +91,9 @@ public class UnoNetListener implements ActionListener {
         }
         Card placePile = client.getPlacePile();
         return toPlay.getId() == 4 || toPlay.getColor().equals(placePile.getColor()) || toPlay.getNum() == placePile.getNum();
+    }
+
+    private boolean setWinnerScreen() {
+
     }
 }
