@@ -1,0 +1,14 @@
+
+.
+java:S1700"Rename field "hand"(ßÁíÑÿÿÿÿÿ
+—
+java:S1186"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(Æò¯°
+i	java:S116"ORename this field "Star" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÇÔìÿÿÿÿÿ
+t
+java:S2293"YReplace the type specification in this constructor call with the diamond operator ("<>").(ßÁíÑÿÿÿÿÿ
+J
+java:S6212$"/Declare this local variable with "var" instead.(öäòïøÿÿÿÿ
+E
+java:S6212*"/Declare this local variable with "var" instead.(£åÑÏ
+E
+java:S6212+"/Declare this local variable with "var" instead.(»Ê‹Ú

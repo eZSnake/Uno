@@ -3,6 +3,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.*;
 import java.net.*;
+import com.fasterxml.jackson.databind.*;
 
 public class UnoPlayerServer {
     private static JFrame window;
@@ -10,6 +11,7 @@ public class UnoPlayerServer {
     private ObjectInputStream din;
     private ObjectOutputStream dout;
     private UnoGraphicsGame game;
+    private UnoNetData data;
     private static Image back;
     private static Container c;
     private static CardLayout screen = new CardLayout();
@@ -87,14 +89,43 @@ public class UnoPlayerServer {
 
         while (game.determineWinner() == -1) {
             //Output game data
-            UnoNetData toSend = new UnoNetData(game.getPlacePile(), game.getHands(), game.getPlayer(), listener.getPlayerCount(), game.getCardsLeft());
-            dout.write(toSend); //TODO Figure out how to send data
+            data = new UnoNetData(game.getPlacePile(), null, game.getHands(), game.getPlayer(), listener.getPlayerCount(), game.getCardsLeft(), null);
+            dout.write(data); //TODO Figure out how to send data
+            try {
+                dout.flush();
+            } catch (IOException ignored) {}
             //Take in game data from players
         }
     }
 
+    private void writeJSON(UnoNetData toJSON) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.writeValue(new File("data.json"), toJSON);
+    }
+
+    private UnoNetData readJSON() throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        data = mapper.readValue(new File("data.json"), UnoNetData.class);
+        return data;
+    }
+
     public JPanel gameMenu() {
-        JPanel gameMenu = new JPanel();
+        JPanel gameMenu = new JPanel(new GridLayout(listener.getPlayerCount() + 3, 1));
+        JLabel infoTxt = new JLabel("Game Info");
+        JButton menu = new JButton("Menu");
+        JPanel veryTop = new JPanel(new GridLayout(1, 2));
+        veryTop.add(infoTxt);
+        veryTop.add(menu);
+        gameMenu.add(veryTop);
+        targetWidth = dims.getWidth() / 15;
+        targetHeight = targetWidth * 143 / 100;
+        Image img = game.getPlacePile().getImage().getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
+        JLabel placePile = new JLabel(img);
+        JLabel cardsLeft = new JLabel("Cards left: " + game.getCardsLeft());
+        JPanel cardInfo = new JPanel(new GridLayout(1, 2));
+        cardInfo.add(placePile);
+        cardInfo.add(cardsLeft);
+        gameMenu.add(cardInfo);
 
         return gameMenu;
     }

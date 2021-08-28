@@ -38,8 +38,8 @@ public class UnoPlayerClient extends JPanel {
 
         c = window.getContentPane();
         c.setLayout(client.screen);
-        c.add(client.selection());
-        c.add(client.waitingScreen());
+        c.add(client.selection(), "menu");
+        c.add(client.waitingScreen(), "wait");
 
         window.setContentPane(c);
         window.setLocation(0,0);
@@ -176,6 +176,9 @@ public class UnoPlayerClient extends JPanel {
         return initialCards;
     }
 
+    public void updateCards() {
+    }
+
     private JPanel waitingScreen() {
         JPanel wait = new JPanel(new GridLayout(3, 1));
         JLabel serverInfo = new JLabel("Attempting to connect on IP 192.168.201.1 and Port " + port);
@@ -192,21 +195,46 @@ public class UnoPlayerClient extends JPanel {
     }
 
     public void startConnection() {
-        try {
-            Socket soc = new Socket("192.168.201.1", port);
-            din = new ObjectInputStream(soc.getInputStream());
-            dout = new ObjectOutputStream(soc.getOutputStream());
-        } catch (IOException fatalError) {
-            System.out.println("A fatal error has occurred.\nConnection to the server could not be established.");
-            System.exit(0);
+        boolean connected = false;
+        while (!connected) {
+            try {
+                Socket soc = new Socket("192.168.201.1", port);
+                din = new ObjectInputStream(soc.getInputStream());
+                dout = new ObjectOutputStream(soc.getOutputStream());
+                connected = true;
+            } catch (IOException ignored) {}
         }
 
         c.add(playerPlayingScreen(player));
     }
 
+    public void playCard(Card toPlay, String specialMove) {
+        UnoNetData toSend = new UnoNetData(null, toPlay, null, -1, -1, -1, specialMove);
+
+        try {
+            dout.flush();
+        } catch (IOException ignored) {}
+    }
+
+    public Hand getHand() {
+        return data.getHand(player);
+    }
+
+    public Card getPlacePile() {
+        return data.getPlacePile();
+    }
+
     public void setPlayer(int newPlayer) {
         player = newPlayer;
         selectedPlayer.get(0).setText("Currently player " + player);
+    }
+
+    public int getPlayer() {
+        return player;
+    }
+
+    public int getCurrPlayer() {
+        return data.getCurrPlayer();
     }
 
     public void nextScreen() {
