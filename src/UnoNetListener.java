@@ -40,6 +40,13 @@ public class UnoNetListener implements ActionListener {
                 client.goMenu();
                 client.repaint();
             }
+            case "Draw" -> {
+                if (player == client.getCurrPlayer()) {
+                    client.draw();
+                }
+                updateWholeScreen();
+                break;
+            }
             default -> {
                 if (player != client.getCurrPlayer()) {
                     JOptionPane.showMessageDialog(client, "It is not your turn.");
@@ -65,7 +72,7 @@ public class UnoNetListener implements ActionListener {
                 }
                 client.removeCard(toPlay);
 //                game.nextPlayer();
-                updateWholeScreen();
+                client.updateWholeScreen();
                 break;
             }
         }

@@ -8,14 +8,15 @@ import com.fasterxml.jackson.databind.*;
 public class UnoPlayerServer {
     private static JFrame window;
     private static UnoServerListener listener;
-    private ObjectInputStream din;
+    private InputStream din;
     private OutputStreamWriter dout;
     private UnoGraphicsGame game;
     private UnoNetData data;
     private static Image back;
     private static Container c;
     private static CardLayout screen = new CardLayout();
-    private PanelDims dims = new PanelDims(1920, 1080);
+    private int targetWidth = 1920, targetHeight = 1080;
+    private PanelDims dims = new PanelDims(targetWidth, targetHeight);
     private static final Color none = new Color(255, 255, 255, 255);
 
     public static void main (String[] args) {
@@ -90,8 +91,9 @@ public class UnoPlayerServer {
 
         while (game.determineWinner() == -1) {
             //Output game data
-            data = new UnoNetData(game.getPlacePile(), null, game.getHands(), game.getPlayer(), listener.getPlayerCount(), game.getCardsLeft(), null);
+            data = new UnoNetData(game.getPlacePile(), null, game.getHands(), game.getPlayer(), listener.getPlayerCount(), game.getCardsLeft(), -1, null);
             try {
+                setPanelDims(window.getWidth(), window.getHeight());
                 writeJSON(data);
                 dout.write("data.json");
                 dout.flush();
@@ -109,7 +111,7 @@ public class UnoPlayerServer {
 
     private UnoNetData readJSON() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        data = mapper.readValue(new File("data.json"), UnoNetData.class);
+        data = mapper.readValue(din, UnoNetData.class);
         return data;
     }
 
@@ -121,8 +123,8 @@ public class UnoPlayerServer {
         veryTop.add(infoTxt);
         veryTop.add(menu);
         gameMenu.add(veryTop);
-        int targetHeight = dims.getHeight() / listener.getPlayerCount() + 4;
-        int targetWidth = targetHeight / 143 * 100;
+        targetHeight = dims.getHeight() / listener.getPlayerCount() + 4;
+        targetWidth = targetHeight / 143 * 100;
         Image img = game.getPlacePile().getImage().getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
         JLabel placePile = new JLabel(new ImageIcon(img));
         JLabel cardsLeft = new JLabel("Cards left: " + game.getCardsLeft());
@@ -132,5 +134,10 @@ public class UnoPlayerServer {
         gameMenu.add(cardInfo);
 
         return gameMenu;
+    }
+
+    private void setPanelDims(int width, int height) {
+        targetHeight = height;
+        targetWidth = width;
     }
 }

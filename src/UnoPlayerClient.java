@@ -96,9 +96,9 @@ public class UnoPlayerClient extends JPanel {
         goMenu.setFont(new Font(ARIAL, Font.PLAIN, 30));
         left.add(goMenu);
         StringBuilder cardsLeftAsString = new StringBuilder("Cards left:  ");
-        for (int i = 0; i < UnoNetData.getPlayerCount(); i++) { //TODO ??? What;s wrong here
-            cardsLeftAsString.append("Player ").append(i + 1).append(": ").append(UnoNetData.getCardsLeft(i));
-            if (i < UnoNetData.getPlayerCount() - 1) {
+        for (int i = 0; i < data.getPlayerCount(); i++) { //TODO ??? What;s wrong here
+            cardsLeftAsString.append("Player ").append(i + 1).append(": ").append(data.getCardsLeft(i));
+            if (i < data.getPlayerCount() - 1) {
                 cardsLeftAsString.append(" - ");
             }
         }
@@ -124,7 +124,7 @@ public class UnoPlayerClient extends JPanel {
         targetWidth = dims.getWidth() / 20;
         targetHeight = targetWidth * 143 / 100;
         right.add(new JLabel(new ImageIcon(back.getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH))));
-        cardsLeft = new JLabel("Cards in drawpile: " + UnoNetData.getCardsInDrawPile());
+        cardsLeft = new JLabel("Cards in drawpile: " + data.getCardsInDrawPile());
         cardsLeft.setFont(new Font(ARIAL, Font.PLAIN, 20));
         drawCardsLeft.add(cardsLeft);
         JPanel centDrawCardsLeft = new JPanel();
@@ -137,7 +137,7 @@ public class UnoPlayerClient extends JPanel {
         //Center (card on place pile)
         targetWidth = dims.getWidth() / 15;
         targetHeight = targetWidth * 143 / 100;
-        Image img = UnoNetData.getPlacePile().getImage().getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
+        Image img = data.getPlacePile().getImage().getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
         placePile = new JLabel(new ImageIcon(img));
         placePileCard.add(placePile);
         playerPlayingScreen.add(placePileCard.get(player), BorderLayout.CENTER);
@@ -177,6 +177,77 @@ public class UnoPlayerClient extends JPanel {
     }
 
     public void updateCards() {
+        setPanelDims(window.getWidth(), window.getHeight());
+        JPanel toUpdate = botCards.get(player);
+        toUpdate.setVisible(false);
+        toUpdate.removeAll();
+        toUpdate.setLayout(new GridLayout(2, 1));
+        updatePlayerCards(player);
+        toUpdate.setBackground(none);
+        toUpdate.add(pCards.get(player));
+        if (data.getCardsLeft(player) != 0) {
+            JButton draw = new JButton("Draw");
+            draw.setFont(new Font(ARIAL, Font.BOLD, 40));
+            draw.addActionListener(listener);
+            toUpdate.add(draw);
+        }
+        toUpdate.setVisible(true);
+        repaint();
+    }
+
+    private void removeCard(int player) {
+        int toRemove = listener.getPlayedCard();
+        if (toRemove != -1) {
+            pCards.get(player).remove(toRemove);
+            listener.removeCard();
+        }
+    }
+
+    public void updatePlayerCards(int player) {
+        JPanel newCards = pCards.get(player);
+        Hand playerHand = data.getHand(player);
+        boolean bigger13 = false;
+        int div = 20;
+        if (playerHand.length() > 13) {
+            bigger13 = true;
+            div += (playerHand.length() / 7) * playerHand.length();
+        }
+        targetWidth = dims.getWidth() / div;
+        targetHeight = targetWidth * 143 / 100;
+        if (bigger13) {
+            newCards = new JPanel();
+            for (int i = 0; i < playerHand.length(); i++) {
+                JButton card = new JButton(playerHand.getCard(i).toString());
+                Image img = playerHand.getCard(i).getImage().getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
+                card.setIcon(new ImageIcon(img));
+                card.addActionListener(listener);
+                card.setFont(new Font(card.getFont().toString(), Font.PLAIN, 0));
+                card.setSize(targetWidth, targetHeight);
+                newCards.add(card);
+            }
+        } else {
+            int amtNewCards = listener.newCardsAdded();
+            if (amtNewCards > 0) {
+                for (int i = amtNewCards; i > 0; i--) {
+                    JButton card = new JButton(playerHand.getCard(playerHand.length() - i).toString());
+                    Image img = playerHand.getCard(playerHand.length() - i).getImage().getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
+                    card.setIcon(new ImageIcon(img));
+                    card.addActionListener(listener);
+                    card.setFont(new Font(card.getFont().toString(), Font.PLAIN, 0));
+                    card.setSize(targetWidth, targetHeight);
+                    newCards.add(card);
+                }
+            }
+        }
+        if (playerHand.length() <= 13) {
+            bigger13 = false;
+        }
+
+        pCards.set(player, newCards);
+    }
+
+    public void updateWholeScreen() {
+
     }
 
     public void removeCard(Card toRemove) {
@@ -204,7 +275,7 @@ public class UnoPlayerClient extends JPanel {
         goMenu.addActionListener(listener);
         goMenu.setFont(new Font(ARIAL, Font.PLAIN, 30));
         winnerScreen.add(goMenu, BorderLayout.NORTH);
-        JTextArea text = new JTextArea("Player " + (player + 1) + " wins!\nCongratulations!\nBut can this feat be repeated?");
+        JTextArea text = new JTextArea("Player " + (winner + 1) + " wins!\nCongratulations!\nBut can this feat be repeated?");
         text.setFont(new Font(ARIAL, Font.PLAIN, 50));
         text.setEditable(false);
         JPanel winTxt = new JPanel();
@@ -215,7 +286,7 @@ public class UnoPlayerClient extends JPanel {
         return winnerScreen;
     }
 
-    public static JPanel tieGame() {
+    private JPanel tieGame() {
         JPanel tieGame = new JPanel();
         tieGame.setLayout(new BorderLayout());
         JButton goMenu = new JButton("Menu");
@@ -272,6 +343,10 @@ public class UnoPlayerClient extends JPanel {
         } catch (IOException ignored) {}
     }
 
+    public void draw() {
+        playCard(null, "draw");
+    }
+
     public Hand getHand() {
         return data.getHand(player);
     }
@@ -300,7 +375,13 @@ public class UnoPlayerClient extends JPanel {
     public void goMenu() {
         c.setVisible(false);
         c.removeAll();
-        c.add(selection());
+        c.add(selection(), "menu");
+        c.add(waitingScreen(), "wait");
         c.setVisible(true);
+    }
+
+    private void setPanelDims(int width, int height) {
+        targetHeight = height;
+        targetWidth = width;
     }
 }
