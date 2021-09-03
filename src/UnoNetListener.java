@@ -8,7 +8,6 @@ public class UnoNetListener implements ActionListener {
 
     public UnoNetListener(UnoPlayerClient client) {
         this.client = client;
-        this.player = client.getPlayer();
     }
 
     @Override
@@ -17,24 +16,32 @@ public class UnoNetListener implements ActionListener {
         switch (button) {
             case "Player 1" -> {
                 client.setPlayer(1);
+                player = 1;
                 client.repaint();
             }
             case "Player 2" -> {
                 client.setPlayer(2);
+                player = 2;
                 client.repaint();
             }
             case "Player 3" -> {
                 client.setPlayer(3);
+                player = 3;
                 client.repaint();
             }
             case "Player 4" -> {
                 client.setPlayer(4);
+                player = 4;
                 client.repaint();
             }
             case "Continue" -> {
-                client.nextScreen();
-                client.startConnection();
-                client.repaint();
+                if (player != 0) {
+                    client.nextScreen();
+                    client.startConnection();
+                    client.repaint();
+                } else {
+                    JOptionPane.showMessageDialog(client, "You must select a valid player.");
+                }
             }
             case "Menu" -> {
                 client.goMenu();
@@ -43,14 +50,14 @@ public class UnoNetListener implements ActionListener {
             case "Draw" -> {
                 if (player == client.getCurrPlayer()) {
                     client.draw();
+                    client.updateWholeScreen();
+                } else {
+                    JOptionPane.showMessageDialog(client, "It is not your turn.");
                 }
-//                updateWholeScreen();
-                break;
             }
             default -> {
                 if (player != client.getCurrPlayer()) {
                     JOptionPane.showMessageDialog(client, "It is not your turn.");
-                    client.updateCards();
                     break;
                 }
                 Card toPlay = stringToCard(button);
@@ -73,7 +80,6 @@ public class UnoNetListener implements ActionListener {
                 client.removeCard(toPlay);
 //                game.nextPlayer();
                 client.updateWholeScreen();
-                break;
             }
         }
     }
@@ -93,15 +99,11 @@ public class UnoNetListener implements ActionListener {
     }
 
     private boolean canPlayCard(Card toPlay) {
+        //Checks if inputted card can be played
         if (toPlay == null) {
             return false;
         }
         Card placePile = client.getPlacePile();
         return toPlay.getId() == 4 || toPlay.getColor().equals(placePile.getColor()) || toPlay.getNum() == placePile.getNum();
-    }
-
-    private boolean setWinnerScreen() {
-
-        return true;
     }
 }

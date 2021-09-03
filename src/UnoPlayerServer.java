@@ -8,7 +8,9 @@ import com.fasterxml.jackson.databind.*;
 public class UnoPlayerServer extends JPanel {
     private static JFrame window;
     private static UnoServerListener listener;
-    private InputStream din;
+    private ServerSocket servsoc;
+    private Socket soc;
+    private InputStreamReader din;
     private OutputStreamWriter dout;
     private UnoGraphicsGame game;
     private UnoNetData data;
@@ -43,6 +45,7 @@ public class UnoPlayerServer extends JPanel {
     }
 
     private static JPanel serverPanel() {
+        //Creates initial home screen for the server
         JPanel home = new JPanel();
         home.setLayout(new GridLayout(2, 1));
 
@@ -80,12 +83,14 @@ public class UnoPlayerServer extends JPanel {
     }
 
     public void start() {
+        //Starts up the server and the game, running it until the end
         try {
             System.out.println("Attempting to open socket");
-            ServerSocket servsoc = new ServerSocket(4200);
-            Socket soc = servsoc.accept();
-            din = new ObjectInputStream(soc.getInputStream());
+            servsoc = new ServerSocket(4200);
+            soc = servsoc.accept();
+            din = new InputStreamReader(soc.getInputStream());
             dout = new OutputStreamWriter(soc.getOutputStream());
+            System.out.println("Socket opened");
         } catch (IOException fatalError) {
             System.out.println("A fatal error has occurred.\nConnection to the server could not be established.");
             System.exit(0);
@@ -108,6 +113,14 @@ public class UnoPlayerServer extends JPanel {
             } catch (IOException ignored) {}
             //Take in game data from players
         }
+
+        try {
+            System.out.println("Closing socket");
+            servsoc.close();
+            soc.close();
+            dout.close();
+            din.close();
+        } catch(IOException ignored) {}
     }
 
     private void writeJSON(UnoNetData toJSON) throws IOException {
@@ -122,6 +135,7 @@ public class UnoPlayerServer extends JPanel {
     }
 
     private JPanel gameMenu() {
+        //Creates panel for when the game is running and displays info about the game
         JPanel gameMenu = new JPanel(new GridLayout(listener.getPlayerCount() + 3, 1));
         JLabel infoTxt = new JLabel("Game Info");
         JButton menu = new JButton("Menu");
@@ -138,6 +152,8 @@ public class UnoPlayerServer extends JPanel {
         cardInfo.add(placePile);
         cardInfo.add(cardsLeft);
         gameMenu.add(cardInfo);
+
+
 
         return gameMenu;
     }

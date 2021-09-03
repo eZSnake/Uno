@@ -9,10 +9,10 @@ public class UnoPlayerClient extends JPanel {
     private static JFrame window;
     private static UnoNetListener listener;
     private static UnoNetData data;
-    private ObjectInputStream din;
-    private ObjectOutputStream dout;
+    private Socket soc;
+    private InputStreamReader din;
+    private OutputStreamWriter dout;
     private static int player = 0, numPlayers, targetWidth, targetHeight, port;
-    private static double ip;
     private static Image back;
     private static Container c;
     private CardLayout screen = new CardLayout();
@@ -308,9 +308,9 @@ public class UnoPlayerClient extends JPanel {
         boolean connected = false;
         while (!connected) {
             try {
-                Socket soc = new Socket("192.168.201.1", port);
-                din = new ObjectInputStream(soc.getInputStream());
-                dout = new ObjectOutputStream(soc.getOutputStream());
+                soc = new Socket("192.168.201.1", port);
+                din = new InputStreamReader(soc.getInputStream());
+                dout = new OutputStreamWriter(soc.getOutputStream());
                 connected = true;
             } catch (IOException ignored) {}
         }
@@ -328,11 +328,16 @@ public class UnoPlayerClient extends JPanel {
         int winner = data.getWinner();
         if (winner == 4) {
             c.add(tieGame());
-            screen.next(c);
         } else {
             c.add(winnerScreen(winner));
-            screen.next(c);
         }
+        screen.next(c);
+
+        try {
+            soc.close();
+            dout.close();
+            din.close();
+        } catch(IOException ignored) {}
     }
 
     public void playCard(Card toPlay, String specialMove) {
@@ -358,10 +363,6 @@ public class UnoPlayerClient extends JPanel {
     public void setPlayer(int newPlayer) {
         player = newPlayer;
         selectedPlayer.get(0).setText("Currently player " + player);
-    }
-
-    public int getPlayer() {
-        return player;
     }
 
     public int getCurrPlayer() {
