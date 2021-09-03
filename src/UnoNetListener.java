@@ -44,7 +44,7 @@ public class UnoNetListener implements ActionListener {
                 if (player == client.getCurrPlayer()) {
                     client.draw();
                 }
-                updateWholeScreen();
+//                updateWholeScreen();
                 break;
             }
             default -> {
@@ -102,5 +102,6 @@ public class UnoNetListener implements ActionListener {
 
     private boolean setWinnerScreen() {
 
+        return true;
     }
 }

@@ -5,7 +5,7 @@ import java.io.*;
 import java.net.*;
 import com.fasterxml.jackson.databind.*;
 
-public class UnoPlayerServer {
+public class UnoPlayerServer extends JPanel {
     private static JFrame window;
     private static UnoServerListener listener;
     private InputStream din;
@@ -17,10 +17,12 @@ public class UnoPlayerServer {
     private static CardLayout screen = new CardLayout();
     private int targetWidth = 1920, targetHeight = 1080;
     private PanelDims dims = new PanelDims(targetWidth, targetHeight);
+    private static final String ARIAL = "Arial";
     private static final Color none = new Color(255, 255, 255, 255);
 
     public static void main (String[] args) {
         window = new JFrame("Uno Server");
+
         try {
             back = ImageIO.read(new File("UnoCards/back.png"));
         } catch (IOException ignored) {}
@@ -40,7 +42,7 @@ public class UnoPlayerServer {
         window.setVisible(true);
     }
 
-    static JPanel serverPanel() {
+    private static JPanel serverPanel() {
         JPanel home = new JPanel();
         home.setLayout(new GridLayout(2, 1));
 
@@ -49,7 +51,7 @@ public class UnoPlayerServer {
         top.add(new JLabel(new ImageIcon(back.getScaledInstance(100, 143, Image.SCALE_SMOOTH))));
         JTextArea topTxt = new JTextArea("Uno Server");
         topTxt.setEditable(false);
-        topTxt.setFont(new Font("Arial", Font.PLAIN, 75));
+        topTxt.setFont(new Font(ARIAL, Font.PLAIN, 75));
         JPanel topTxtBox = new JPanel();
         topTxtBox.add(topTxt);
         topTxtBox.setBackground(none);
@@ -68,7 +70,8 @@ public class UnoPlayerServer {
         bottom.add(playerCount);
 
         JButton start = new JButton("Start");
-        start.setFont(new Font("Arial", Font.PLAIN, 50));
+        start.addActionListener(listener);
+        start.setFont(new Font(ARIAL, Font.PLAIN, 50));
         bottom.add(start);
         bottom.setBackground(none);
         home.add(bottom);
@@ -78,6 +81,7 @@ public class UnoPlayerServer {
 
     public void start() {
         try {
+            System.out.println("Attempting to open socket");
             ServerSocket servsoc = new ServerSocket(4200);
             Socket soc = servsoc.accept();
             din = new ObjectInputStream(soc.getInputStream());
@@ -88,6 +92,8 @@ public class UnoPlayerServer {
         }
 
         game = new UnoGraphicsGame(listener.getPlayerCount());
+        c.add(gameMenu());
+        screen.next(c);
 
         while (game.determineWinner() == -1) {
             //Output game data
@@ -95,7 +101,7 @@ public class UnoPlayerServer {
             try {
                 setPanelDims(window.getWidth(), window.getHeight());
                 writeJSON(data);
-                dout.write("data.json");
+//                dout.write("data.json");
                 dout.flush();
 
                 data = readJSON();
@@ -115,7 +121,7 @@ public class UnoPlayerServer {
         return data;
     }
 
-    public JPanel gameMenu() {
+    private JPanel gameMenu() {
         JPanel gameMenu = new JPanel(new GridLayout(listener.getPlayerCount() + 3, 1));
         JLabel infoTxt = new JLabel("Game Info");
         JButton menu = new JButton("Menu");
@@ -134,6 +140,14 @@ public class UnoPlayerServer {
         gameMenu.add(cardInfo);
 
         return gameMenu;
+    }
+
+
+    public void goMenu() {
+        c.setVisible(false);
+        c.removeAll();
+        c.add(serverPanel());
+        c.setVisible(true);
     }
 
     private void setPanelDims(int width, int height) {

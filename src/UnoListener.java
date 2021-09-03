@@ -19,44 +19,40 @@ public class UnoListener implements ActionListener, ChangeListener {
     public void actionPerformed(ActionEvent e) {
         String button = e.getActionCommand();
         switch (button) {
-            case "Bot":
+            case "Bot" -> {
                 botGame = true;
                 playerCount = 2;
                 game = new UnoGraphicsGame(playerCount);
                 panel.setBotGame();
                 panel.showScreen("player");
                 panel.repaint();
-                break;
-            case "Players: ":
+            }
+            case "Players: " -> {
                 botGame = false;
                 game = new UnoGraphicsGame(playerCount);
                 panel.setPlayerGame();
                 panel.playerScreen("player0");
                 panel.repaint();
-                break;
-            case "Stats":
+            }
+            case "Stats" -> {
                 panel.goToStats();
                 panel.repaint();
-                break;
-            case "Settings":
+            }
+            case "Settings" -> {
                 panel.goToSettings();
                 panel.repaint();
-                break;
-            case "Sort cards on hand by color (takes longer to load)":
-                panel.setSort(sortCards);
-                break;
-            case "Can't stack Change Color cards on top of each other":
+            }
+            case "Sort cards on hand by color (takes longer to load)" -> panel.setSort(sortCards);
+            case "Can't stack Change Color cards on top of each other" -> {
                 panel.setStackChangeCol(stackChangeCol);
                 game.setStackChangeCol(stackChangeCol);
-                break;
-            case "Can stack Plus 2 cards on top of each other":
+            }
+            case "Can stack Plus 2 cards on top of each other" -> {
                 panel.setStackPlus(stackPlus);
                 game.setStackPlus(stackPlus);
-                break;
-            case "Print Hands":
-                panel.printAllHands();
-                break;
-            case "Draw":
+            }
+            case "Print Hands" -> panel.printAllHands();
+            case "Draw" -> {
                 if (botGame) {
                     game.resetBotsPlay();
                     game.draw(0);
@@ -75,13 +71,13 @@ public class UnoListener implements ActionListener, ChangeListener {
                     panel.playerScreen("player" + game.getPlayer());
                 }
                 updateWholeScreen();
-                break;
-            case "Menu":
+            }
+            case "Menu" -> {
                 panel.resetC();
                 panel.goToMenu();
                 panel.repaint();
-                break;
-            default:
+            }
+            default -> {
                 toPlay = game.stringToCard(button);
                 if (!game.canPlayCard(toPlay)) {
                     JOptionPane.showMessageDialog(panel, "That card can't be played.");
@@ -97,7 +93,7 @@ public class UnoListener implements ActionListener, ChangeListener {
                     int col = JOptionPane.showOptionDialog(panel, "What color would you like? Please select below.", "Choose color", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[3]);
                     if (col == -1) {
                         JOptionPane.showMessageDialog(panel, "A random color will now be chosen for you as you have failed to follow instructions");
-                        col = (int)(Math.random() * 4);
+                        col = (int) (Math.random() * 4);
                     }
                     game.doSpecialMove(options[col].toString());
                 } else {
@@ -120,7 +116,7 @@ public class UnoListener implements ActionListener, ChangeListener {
                     panel.playerScreen("player" + game.getPlayer());
                 }
                 updateWholeScreen();
-                break;
+            }
         }
     }
 

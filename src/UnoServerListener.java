@@ -4,14 +4,28 @@ import java.awt.event.*;
 
 public class UnoServerListener implements ActionListener, ChangeListener {
     private int playerCount = 2;
-    private UnoPlayerServer server;
+    private final UnoPlayerServer server;
 
-    UnoServerListener(UnoPlayerServer server) {
+    public UnoServerListener(UnoPlayerServer server) {
         this.server = server;
     }
 
-    public UnoServerListener() {
-
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        switch (e.getActionCommand()) {
+            case "Start" -> {
+                System.out.println("Starting");
+                server.start();
+                server.repaint();
+            }
+            case "Menu" -> {
+                server.goMenu();
+                server.repaint();
+            }
+            default -> {
+                System.out.println("Reached base case");
+            }
+        }
     }
 
     @Override
@@ -19,15 +33,7 @@ public class UnoServerListener implements ActionListener, ChangeListener {
         JSlider source = (JSlider) e.getSource();
         if (!source.getValueIsAdjusting()) {
             playerCount = source.getValue();
-        }
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        switch (e.getActionCommand()) {
-            case "Start":
-                server.start();
-                break;
+            System.out.println("Number of players: " + source.getValue());
         }
     }
 

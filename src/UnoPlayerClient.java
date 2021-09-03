@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class UnoPlayerClient extends JPanel {
     private static JFrame window;
     private static UnoNetListener listener;
-    private UnoNetData data;
+    private static UnoNetData data;
     private ObjectInputStream din;
     private ObjectOutputStream dout;
     private static int player = 0, numPlayers, targetWidth, targetHeight, port;
@@ -25,7 +25,7 @@ public class UnoPlayerClient extends JPanel {
 
     public static void main(String[] args) {
         port = 4200;
-        data = new UnoNetData(null, null, -1, -1, -1);
+        data = new UnoNetData(null, null, null, -1, -1, -1, -1, null);
 
         window = new JFrame("Uno");
         UnoPlayerClient client = new UnoPlayerClient();
@@ -96,7 +96,7 @@ public class UnoPlayerClient extends JPanel {
         goMenu.setFont(new Font(ARIAL, Font.PLAIN, 30));
         left.add(goMenu);
         StringBuilder cardsLeftAsString = new StringBuilder("Cards left:  ");
-        for (int i = 0; i < data.getPlayerCount(); i++) { //TODO ??? What;s wrong here
+        for (int i = 0; i < data.getPlayerCount(); i++) {
             cardsLeftAsString.append("Player ").append(i + 1).append(": ").append(data.getCardsLeft(i));
             if (i < data.getPlayerCount() - 1) {
                 cardsLeftAsString.append(" - ");
@@ -195,13 +195,13 @@ public class UnoPlayerClient extends JPanel {
         repaint();
     }
 
-    private void removeCard(int player) {
-        int toRemove = listener.getPlayedCard();
-        if (toRemove != -1) {
-            pCards.get(player).remove(toRemove);
-            listener.removeCard();
-        }
-    }
+//    private void removeCard(int player) {
+//        int toRemove = listener.getPlayedCard();
+//        if (toRemove != -1) {
+//            pCards.get(player).remove(toRemove);
+//            listener.removeCard();
+//        }
+//    }
 
     public void updatePlayerCards(int player) {
         JPanel newCards = pCards.get(player);
@@ -226,7 +226,7 @@ public class UnoPlayerClient extends JPanel {
                 newCards.add(card);
             }
         } else {
-            int amtNewCards = listener.newCardsAdded();
+            int amtNewCards = 0;//listener.newCardsAdded();
             if (amtNewCards > 0) {
                 for (int i = amtNewCards; i > 0; i--) {
                     JButton card = new JButton(playerHand.getCard(playerHand.length() - i).toString());
