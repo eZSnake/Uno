@@ -8,6 +8,7 @@ public class UnoServerListener implements ActionListener, ChangeListener {
 
     public UnoServerListener(UnoPlayerServer server) {
         this.server = server;
+        server.start();
     }
 
     @Override

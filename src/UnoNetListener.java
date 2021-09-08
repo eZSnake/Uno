@@ -14,6 +14,9 @@ public class UnoNetListener implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         String button = e.getActionCommand();
         switch (button) {
+            case "Start connection" -> {
+                client.startConnection();
+            }
             case "Player 1" -> {
                 client.setPlayer(1);
                 player = 1;
@@ -36,8 +39,9 @@ public class UnoNetListener implements ActionListener {
             }
             case "Continue" -> {
                 if (player != 0) {
+                    client.playGame();
+                     client.setPlayerScreen();
                     client.nextScreen();
-                    client.startConnection();
                     client.repaint();
                 } else {
                     JOptionPane.showMessageDialog(client, "You must select a valid player.");

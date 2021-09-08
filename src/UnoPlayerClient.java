@@ -38,7 +38,6 @@ public class UnoPlayerClient extends JPanel {
 
         c = window.getContentPane();
         c.setLayout(client.screen);
-        c.add(client.selection(), "menu");
         c.add(client.waitingScreen(), "wait");
 
         window.setContentPane(c);
@@ -48,8 +47,8 @@ public class UnoPlayerClient extends JPanel {
         window.setVisible(true);
     }
 
-    private JPanel selection() {
-        numPlayers = 4;
+    private JPanel selection(int amtPlayers) {
+        numPlayers = amtPlayers;
         JPanel selection = new JPanel();
         selection.setLayout(new GridLayout(numPlayers + 3, 1)); //TODO Only have enough slots for required amt of players
         JTextArea topTxt = new JTextArea("\nSelect which player you would like to be");
@@ -265,6 +264,9 @@ public class UnoPlayerClient extends JPanel {
         JPanel waitTxtScrn = new JPanel();
         waitTxtScrn.add(waitTxt);
         wait.add(waitTxtScrn);
+        JButton connect = new JButton("Start connection");
+        connect.addActionListener(listener);
+        wait.add(connect);
 
         return wait;
     }
@@ -308,19 +310,21 @@ public class UnoPlayerClient extends JPanel {
         boolean connected = false;
         while (!connected) {
             try {
-                soc = new Socket("192.168.201.1", port);
+                System.out.println("Attempting connection");
+                soc = new Socket("localhost", port);
                 din = new InputStreamReader(soc.getInputStream());
                 dout = new OutputStreamWriter(soc.getOutputStream());
-                connected = true;
+                System.out.println("Connection success");
             } catch (IOException ignored) {}
+            connected = true;
         }
 
-        c.add(playerPlayingScreen(player));
-
-        playGame();
+//        c.add(selection(data.getPlayerCount()), "menu");
+        c.add(selection(2));
+        screen.next(c);
     }
 
-    private void playGame() {
+    public void playGame() {
         while (data.getWinner() == -1) {
             //accept and send data
         }
@@ -369,6 +373,10 @@ public class UnoPlayerClient extends JPanel {
         return data.getCurrPlayer();
     }
 
+    public void setPlayerScreen() {
+        c.add(playerPlayingScreen(player));
+    }
+
     public void nextScreen() {
         screen.next(c);
     }
@@ -376,8 +384,8 @@ public class UnoPlayerClient extends JPanel {
     public void goMenu() {
         c.setVisible(false);
         c.removeAll();
-        c.add(selection(), "menu");
         c.add(waitingScreen(), "wait");
+        c.add(selection(data.getPlayerCount()), "menu");
         c.setVisible(true);
     }
 

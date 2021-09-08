@@ -87,8 +87,11 @@ public class UnoPlayerServer extends JPanel {
         try {
             System.out.println("Attempting to open socket");
             servsoc = new ServerSocket(4200);
+            System.out.println("Socket state: " + servsoc);
             soc = servsoc.accept();
+            System.out.println("Socket accepted");
             din = new InputStreamReader(soc.getInputStream());
+            System.out.println("Got input stream");
             dout = new OutputStreamWriter(soc.getOutputStream());
             System.out.println("Socket opened");
         } catch (IOException fatalError) {
@@ -132,6 +135,12 @@ public class UnoPlayerServer extends JPanel {
         ObjectMapper mapper = new ObjectMapper();
         data = mapper.readValue(din, UnoNetData.class);
         return data;
+    }
+
+    private JPanel waitConn() {
+        JPanel waitConn = new JPanel();
+
+        return waitConn;
     }
 
     private JPanel gameMenu() {
