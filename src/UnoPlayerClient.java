@@ -1,3 +1,5 @@
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -7,7 +9,7 @@ import java.util.ArrayList;
 
 public class UnoPlayerClient extends JPanel {
     private static JFrame window;
-    private static UnoNetListener listener;
+    private static PlayerListener listener;
     private static UnoNetData data;
     private Socket soc;
     private InputStreamReader din;
@@ -29,7 +31,7 @@ public class UnoPlayerClient extends JPanel {
 
         window = new JFrame("Uno");
         UnoPlayerClient client = new UnoPlayerClient();
-        listener = new UnoNetListener(client);
+        listener = new PlayerListener(client);
         window.setSize(1920,1080);
 
         try {
@@ -324,9 +326,27 @@ public class UnoPlayerClient extends JPanel {
         screen.next(c);
     }
 
+    private void writeJSON(UnoNetData toJSON) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.writeValue(dout, toJSON);
+    }
+
+    public void writeJSON(String toJSON) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.writeValue(dout, toJSON);
+    }
+
+    private void readJSON() throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        data = mapper.readValue(din, UnoNetData.class);
+    }
+
     public void playGame() {
         while (data.getWinner() == -1) {
             //accept and send data
+            try {
+                readJSON();
+            } catch (IOException ignored) {}
         }
 
         int winner = data.getWinner();
@@ -348,7 +368,7 @@ public class UnoPlayerClient extends JPanel {
         UnoNetData toSend = new UnoNetData(null, toPlay, null, -1, -1, -1, -1, specialMove);
 
         try {
-            dout.flush();
+            writeJSON(toSend);
         } catch (IOException ignored) {}
     }
 

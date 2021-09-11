@@ -2,17 +2,18 @@ import javax.swing.*;
 import javax.swing.event.*;
 import java.awt.event.*;
 
-public class UnoServerListener implements ActionListener, ChangeListener {
+public class ServerListener implements ActionListener, ChangeListener {
     private int playerCount = 2;
-    private final UnoPlayerServer server;
+    private UnoPlayerServer server;
 
-    public UnoServerListener(UnoPlayerServer server) {
+    public ServerListener(UnoPlayerServer server) {
         this.server = server;
-        server.start();
+//        server.start();
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        System.out.println(e.getActionCommand());
         switch (e.getActionCommand()) {
             case "Start" -> {
                 System.out.println("Starting");

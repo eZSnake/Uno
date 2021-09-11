@@ -1,12 +1,13 @@
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
-public class UnoNetListener implements ActionListener {
+public class PlayerListener implements ActionListener {
     private UnoPlayerClient client;
     private int player;
 
-    public UnoNetListener(UnoPlayerClient client) {
+    public PlayerListener(UnoPlayerClient client) {
         this.client = client;
     }
 
@@ -16,6 +17,7 @@ public class UnoNetListener implements ActionListener {
         switch (button) {
             case "Start connection" -> {
                 client.startConnection();
+                client.repaint();
             }
             case "Player 1" -> {
                 client.setPlayer(1);
@@ -39,9 +41,9 @@ public class UnoNetListener implements ActionListener {
             }
             case "Continue" -> {
                 if (player != 0) {
-                    client.playGame();
-                     client.setPlayerScreen();
+                    client.setPlayerScreen();
                     client.nextScreen();
+                    client.playGame();
                     client.repaint();
                 } else {
                     JOptionPane.showMessageDialog(client, "You must select a valid player.");
@@ -68,6 +70,7 @@ public class UnoNetListener implements ActionListener {
                 if (!canPlayCard(toPlay)) {
                     JOptionPane.showMessageDialog(client, "That card can't be played.");
                     client.updateCards();
+                    toPlay = null;
                     break;
                 }
                 if (toPlay.getId() == 4) {
