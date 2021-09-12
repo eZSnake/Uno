@@ -1,13 +1,12 @@
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 
 public class PlayerListener implements ActionListener {
-    private UnoPlayerClient client;
+    private UnoClient client;
     private int player;
 
-    public PlayerListener(UnoPlayerClient client) {
+    public PlayerListener(UnoClient client) {
         this.client = client;
     }
 

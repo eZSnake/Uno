@@ -5,7 +5,7 @@ import java.io.*;
 import java.net.*;
 import com.fasterxml.jackson.databind.*;
 
-public class UnoPlayerServer extends JPanel {
+public class UnoServer extends JPanel {
     private static JFrame window;
     private static ServerListener listener;
     private ServerSocket servsoc;
@@ -33,7 +33,7 @@ public class UnoPlayerServer extends JPanel {
         c.setLayout(screen);
         c.add(serverPanel());
 
-        UnoPlayerServer server = new UnoPlayerServer();
+        UnoServer server = new UnoServer();
         listener = new ServerListener(server);
 
         window.setSize(1920,1080);

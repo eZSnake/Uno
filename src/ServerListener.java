@@ -4,9 +4,9 @@ import java.awt.event.*;
 
 public class ServerListener implements ActionListener, ChangeListener {
     private int playerCount = 2;
-    private UnoPlayerServer server;
+    private UnoServer server;
 
-    public ServerListener(UnoPlayerServer server) {
+    public ServerListener(UnoServer server) {
         this.server = server;
 //        server.start();
     }

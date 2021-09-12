@@ -7,7 +7,7 @@ import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
 
-public class UnoPlayerClient extends JPanel {
+public class UnoClient extends JPanel {
     private static JFrame window;
     private static PlayerListener listener;
     private static UnoNetData data;
@@ -30,7 +30,7 @@ public class UnoPlayerClient extends JPanel {
         data = new UnoNetData(null, null, null, -1, -1, -1, -1, null);
 
         window = new JFrame("Uno");
-        UnoPlayerClient client = new UnoPlayerClient();
+        UnoClient client = new UnoClient();
         listener = new PlayerListener(client);
         window.setSize(1920,1080);
 
