@@ -24,6 +24,8 @@ public class UnoServer extends JPanel {
 
     public static void main (String[] args) {
         window = new JFrame("Uno Server");
+        UnoServer server = new UnoServer();
+        listener = new ServerListener(server);
 
         try {
             back = ImageIO.read(new File("UnoCards/back.png"));
@@ -32,9 +34,6 @@ public class UnoServer extends JPanel {
         c = window.getContentPane();
         c.setLayout(screen);
         c.add(serverPanel());
-
-        UnoServer server = new UnoServer();
-        listener = new ServerListener(server);
 
         window.setSize(1920,1080);
         window.setContentPane(c);
@@ -84,19 +83,26 @@ public class UnoServer extends JPanel {
 
     public void start() {
         //Starts up the server and the game, running it until the end
-        try {
-            System.out.println("Attempting to open socket");
-            servsoc = new ServerSocket(4200);
-            System.out.println("Socket state: " + servsoc);
-            soc = servsoc.accept();
-            System.out.println("Socket accepted");
-            din = new InputStreamReader(soc.getInputStream());
-            System.out.println("Got input stream");
-            dout = new OutputStreamWriter(soc.getOutputStream());
-            System.out.println("Socket opened");
-        } catch (IOException fatalError) {
-            System.out.println("A fatal error has occurred.\nConnection to the server could not be established.");
-            System.exit(0);
+        c.add(waitConn());
+        screen.next(c);
+
+        boolean connected = false;
+        while (!connected) {
+            try {
+                System.out.println("Attempting to open socket");
+                servsoc = new ServerSocket(4200);
+                System.out.println("Socket state: " + servsoc);
+                soc = servsoc.accept();
+                System.out.println("Socket accepted");
+                din = new InputStreamReader(soc.getInputStream());
+                System.out.println("Got input stream");
+                dout = new OutputStreamWriter(soc.getOutputStream());
+                System.out.println("Socket opened");
+                connected = true;
+            } catch (IOException fatalError) {
+                System.out.println("A fatal error has occurred.\nConnection to the server could not be established.");
+                System.exit(0);
+            }
         }
 
         game = new UnoGraphicsGame(listener.getPlayerCount());
@@ -109,12 +115,14 @@ public class UnoServer extends JPanel {
             try {
                 setPanelDims(window.getWidth(), window.getHeight());
                 writeJSON(data);
-//                dout.write("data.json");
                 dout.flush();
 
                 data = readJSON();
             } catch (IOException ignored) {}
             //Take in game data from players
+            try {
+                readJSON();
+            } catch (IOException ignored) {}
         }
 
         try {
@@ -123,7 +131,7 @@ public class UnoServer extends JPanel {
             soc.close();
             dout.close();
             din.close();
-        } catch(IOException ignored) {}
+        } catch (IOException ignored) {}
     }
 
     private void writeJSON(UnoNetData toJSON) throws IOException {
@@ -138,7 +146,11 @@ public class UnoServer extends JPanel {
     }
 
     private JPanel waitConn() {
-        JPanel waitConn = new JPanel();
+        JPanel waitConn = new JPanel(new BorderLayout());
+        JTextArea waiting = new JTextArea();
+        waiting.setEditable(false);
+        waiting.setFont(new Font(ARIAL, Font.PLAIN, 75));
+        waitConn.add(waiting, BorderLayout.CENTER);
 
         return waitConn;
     }
@@ -161,8 +173,7 @@ public class UnoServer extends JPanel {
         cardInfo.add(placePile);
         cardInfo.add(cardsLeft);
         gameMenu.add(cardInfo);
-
-
+        // Player Cards
 
         return gameMenu;
     }

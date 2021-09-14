@@ -82,6 +82,9 @@ public class UnoClient extends JPanel {
     }
 
     private JPanel playerPlayingScreen(int player) {
+        try {
+            readJSON();
+        } catch (IOException ignored) {}
         //Creates playing screen for specified player
         JPanel playerPlayingScreen = new JPanel();
         playerPlayingScreen.setLayout(new BorderLayout());
@@ -385,8 +388,8 @@ public class UnoClient extends JPanel {
     }
 
     public void setPlayer(int newPlayer) {
-        player = newPlayer;
-        selectedPlayer.get(0).setText("Currently player " + player);
+        player = newPlayer - 1;
+        selectedPlayer.get(0).setText("Currently player " + (player + 1));
     }
 
     public int getCurrPlayer() {
