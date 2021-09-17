@@ -40,7 +40,8 @@ public class UnoClient extends JPanel {
 
         c = window.getContentPane();
         c.setLayout(client.screen);
-        c.add(client.waitingScreen(), "wait");
+        c.add(client.waitingScreen());
+        c.add(client.waitForGame());
 
         window.setContentPane(c);
         window.setLocation(0,0);
@@ -82,9 +83,6 @@ public class UnoClient extends JPanel {
     }
 
     private JPanel playerPlayingScreen(int player) {
-        try {
-            readJSON();
-        } catch (IOException ignored) {}
         //Creates playing screen for specified player
         JPanel playerPlayingScreen = new JPanel();
         playerPlayingScreen.setLayout(new BorderLayout());
@@ -276,6 +274,16 @@ public class UnoClient extends JPanel {
         return wait;
     }
 
+    private JPanel waitForGame() {
+        JPanel waitForGame = new JPanel(new BorderLayout());
+        waitForGame.setBackground(none);
+        JLabel waiting = new JLabel("Waiting for game to start");
+        waiting.setFont(new Font(ARIAL, Font.PLAIN, 75));
+        waitForGame.add(waiting);
+
+        return waitForGame;
+    }
+
     private JPanel winnerScreen(int winner) {
         JPanel winnerScreen = new JPanel(new BorderLayout());
         JButton goMenu = new JButton("Menu");
@@ -324,8 +332,15 @@ public class UnoClient extends JPanel {
             connected = true;
         }
 
-//        c.add(selection(data.getPlayerCount()), "menu");
-        c.add(selection(2));
+        screen.next(c);
+
+        while (data.getPlayerCount() == -1) {
+            try {
+                readJSON();
+            } catch (IOException ignored) {}
+        }
+
+        c.add(selection(data.getPlayerCount()));
         screen.next(c);
     }
 
@@ -334,14 +349,11 @@ public class UnoClient extends JPanel {
         mapper.writeValue(dout, toJSON);
     }
 
-    public void writeJSON(String toJSON) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.writeValue(dout, toJSON);
-    }
-
     private void readJSON() throws IOException {
+        System.out.println("Reading from datastream\n" + din.toString());
         ObjectMapper mapper = new ObjectMapper();
         data = mapper.readValue(din, UnoNetData.class);
+        System.out.println(data);
     }
 
     public void playGame() {
