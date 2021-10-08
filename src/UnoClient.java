@@ -350,10 +350,9 @@ public class UnoClient extends JPanel {
     }
 
     private void readJSON() throws IOException {
-        System.out.println("Reading from datastream\n" + din.toString());
+//        System.out.println("Reading from datastream\n" + din.toString());
         ObjectMapper mapper = new ObjectMapper();
         data = mapper.readValue(din, UnoNetData.class);
-        System.out.println(data);
     }
 
     public void playGame() {

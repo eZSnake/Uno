@@ -86,9 +86,11 @@ public class UnoServer extends JPanel {
 
     public void start() {
         //Starts up the server and the game, running it until the end
+        System.out.println(c.getComponentCount());
         c.add(waitConn());
+        System.out.println(c.getComponentCount());
         screen.next(c);
-/*
+
         boolean connected = false;
         while (!connected) {
             try {
@@ -106,14 +108,13 @@ public class UnoServer extends JPanel {
             }
         }
 
- */
-
         game = new UnoGraphicsGame(listener.getPlayerCount());
         System.out.println("Game created");
 
         c.add(gameMenu());
         screen.next(c);
-/*
+
+        System.out.println("Starting game");
         while (game.determineWinner() == -1) {
             setPanelDims(window.getWidth(), window.getHeight());
             //Output game data
@@ -142,12 +143,10 @@ public class UnoServer extends JPanel {
             dout.close();
             din.close();
         } catch (IOException ignored) {}
-
- */
     }
 
     private void writeJSON(UnoNetData toJSON) throws IOException {
-        System.out.println("Writing to data stream");
+//        System.out.println("Writing to data stream");
         ObjectMapper mapper = new ObjectMapper();
         mapper.writeValue(dout, toJSON);
     }
