@@ -342,7 +342,7 @@ public class UnoClient extends JPanel {
         screen.next(c);
 
         synchronized (data) {
-            System.out.println("In synchronized\n" + screen.toString());
+            System.out.println("In synchronized 1");
 
             try {
                 data.wait(500);
@@ -350,6 +350,9 @@ public class UnoClient extends JPanel {
                 System.out.println("Error: " + interruptedException);
                 Thread.currentThread().interrupt();
             }
+        }
+        synchronized (data) {
+            System.out.println("In synchronized 2");
 
             data.notifyAll();
         }

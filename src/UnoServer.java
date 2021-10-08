@@ -117,11 +117,12 @@ public class UnoServer extends JPanel {
         screen.next(c);
 
         synchronized (data) {
-            data = new UnoNetData(game.getPlacePile(), null, game.getHands(), game.getPlayer(), listener.getPlayerCount(), game.getCardsLeft(), -1, null);
-            try {
-                writeJSON(data);
-                data.notifyAll();
-            } catch (IOException ignored) {}
+            System.out.println("In synchronized 1");
+
+            data.notifyAll();
+        }
+        synchronized (data) {
+            System.out.println("In synchronized 2");
 
             try {
                 data.wait(500);
