@@ -21,6 +21,7 @@ public class UnoServer extends JPanel {
     private static CardLayout screen = new CardLayout();
     private int targetWidth = 1920, targetHeight = 1080;
     private PanelDims dims = new PanelDims(targetWidth, targetHeight);
+    private ArrayList<JPanel> botCards = new ArrayList<>(), pCards = new ArrayList<>();
     private ArrayList<JLabel> playerCardsLeft = new ArrayList<>(), drawCardsLeft = new ArrayList<>(), placePileCard = new ArrayList<>();
     private static final String ARIAL = "Arial";
     private static final Color none = new Color(255, 255, 255, 255);
@@ -109,20 +110,38 @@ public class UnoServer extends JPanel {
         }
 
         game = new UnoGraphicsGame(listener.getPlayerCount());
+        data = new UnoNetData(game.getPlacePile(), null, game.getHands(), game.getPlayer(), listener.getPlayerCount(), game.getCardsLeft(), -1, null);
         System.out.println("Game created");
 
         c.add(gameMenu());
         screen.next(c);
 
-        System.out.println("Starting game");
-        while (game.determineWinner() == -1) {
-            setPanelDims(window.getWidth(), window.getHeight());
-            //Output game data
+        synchronized (data) {
             data = new UnoNetData(game.getPlacePile(), null, game.getHands(), game.getPlayer(), listener.getPlayerCount(), game.getCardsLeft(), -1, null);
             try {
                 writeJSON(data);
+                data.notifyAll();
             } catch (IOException ignored) {}
-            //Take in game data from players
+
+            try {
+                data.wait(500);
+            } catch (InterruptedException interruptedException) {
+                System.out.println("Error: " + interruptedException);
+                Thread.currentThread().interrupt();
+            }
+        }
+
+        System.out.println("Starting game and synchronized");
+        while (game.determineWinner() == -1) {
+            setPanelDims(window.getWidth(), window.getHeight());
+            // Output game data
+            data = new UnoNetData(game.getPlacePile(), null, game.getHands(), game.getPlayer(), listener.getPlayerCount(), game.getCardsLeft(), -1, null);
+            try {
+                writeJSON(data);
+                data.notifyAll();
+            } catch (IOException ignored) {}
+
+            // Take in game data from players
             try {
                 readJSON();
             } catch (IOException ignored) {}
@@ -135,6 +154,7 @@ public class UnoServer extends JPanel {
                 }
             }
         }
+
 
         try {
             System.out.println("Closing socket");
@@ -216,8 +236,71 @@ public class UnoServer extends JPanel {
         playerCardsLeftPn.setBackground(none);
         gameMenu.add(playerCardsLeftPn);
         // Player Cards
+        for (int i = 0; i < data.getPlayerCount(); i++) {
+            pCards.add(initialSet(i));
+            gameMenu.add(pCards.get(i));
+        }
 
         return gameMenu;
+    }
+
+    private JPanel initialSet(int player) {
+        // Creates the initial version of the player's cards
+        JPanel initialCards = new JPanel();
+        Hand playerHand = data.getHand(player);
+        targetWidth = dims.getWidth() / 20;
+        targetHeight = targetWidth * 143 / 100;
+        for (int i = 0; i < playerHand.length(); i++) {
+            JLabel card = new JLabel(playerHand.getCard(i).toString());
+            Image img = playerHand.getCard(i).getImage().getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
+            card.setIcon(new ImageIcon(img));
+            card.setFont(new Font(card.getFont().toString(), Font.PLAIN, 0));
+            card.setSize(targetWidth, targetHeight);
+            initialCards.add(card);
+        }
+
+        return initialCards;
+    }
+
+    public void updatePlayerCards(int player) {
+        JPanel newCards = pCards.get(player);
+        Hand playerHand = data.getHand(player);
+        boolean bigger13 = false;
+        int div = 20;
+        if (playerHand.length() > 13) {
+            bigger13 = true;
+            div += (playerHand.length() / 7) * playerHand.length();
+        }
+        targetWidth = dims.getWidth() / div;
+        targetHeight = targetWidth * 143 / 100;
+        if (bigger13) {
+            newCards = new JPanel();
+            for (int i = 0; i < playerHand.length(); i++) {
+                JLabel card = new JLabel(playerHand.getCard(i).toString());
+                Image img = playerHand.getCard(i).getImage().getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
+                card.setIcon(new ImageIcon(img));
+                card.setFont(new Font(card.getFont().toString(), Font.PLAIN, 0));
+                card.setSize(targetWidth, targetHeight);
+                newCards.add(card);
+            }
+        } else {
+            int amtNewCards = 0;//listener.newCardsAdded();
+            if (amtNewCards > 0) {
+                for (int i = amtNewCards; i > 0; i--) {
+                    JLabel card = new JLabel(playerHand.getCard(playerHand.length() - i).toString());
+                    Image img = playerHand.getCard(playerHand.length() - i).getImage().getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
+                    card.setIcon(new ImageIcon(img));
+                    card.setFont(new Font(card.getFont().toString(), Font.PLAIN, 0));
+                    card.setSize(targetWidth, targetHeight);
+                    newCards.add(card);
+                }
+            }
+        }
+        if (playerHand.length() <= 13) {
+            bigger13 = false;
+        }
+
+        pCards.set(player, newCards);
     }
 
     public void goMenu() {

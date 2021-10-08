@@ -1,5 +1,4 @@
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -22,7 +21,7 @@ public class UnoClient extends JPanel {
     private JLabel pCardsLeft, cardsLeft, placePile;
     private ArrayList<JPanel> botCards = new ArrayList<>(), pCards = new ArrayList<>();
     private ArrayList<JLabel> selectedPlayer = new ArrayList<>(), playerCardsLeft = new ArrayList<>(), drawCardsLeft = new ArrayList<>(), placePileCard = new ArrayList<>();
-    private static final String tab = "    ", ARIAL = "Arial";
+    private static final String TAB = "    ", ARIAL = "Arial";
     private static final Color none = new Color(255, 255, 255, 255);
 
     public static void main(String[] args) {
@@ -113,7 +112,7 @@ public class UnoClient extends JPanel {
         centPlayerCardsLeft.add(playerCardsLeft.get(player), BorderLayout.CENTER);
         centPlayerCardsLeft.setBackground(none);
         left.add(centPlayerCardsLeft);
-        JLabel currPlayer = new JLabel(tab + tab + "Current player: " + (player + 1));
+        JLabel currPlayer = new JLabel(TAB + TAB + "Current player: " + (player + 1));
         currPlayer.setFont(new Font(ARIAL, Font.PLAIN, 20));
         left.add(currPlayer);
         left.setBackground(none);
@@ -342,13 +341,29 @@ public class UnoClient extends JPanel {
 
         screen.next(c);
 
-        while (data.getPlayerCount() == -1) {
+        synchronized (data) {
+            System.out.println("In synchronized\n" + screen.toString());
+
             try {
-                readJSON();
-            } catch (IOException ignored) {}
+                data.wait(500);
+            } catch (InterruptedException interruptedException) {
+                System.out.println("Error: " + interruptedException);
+                Thread.currentThread().interrupt();
+            }
+
+            data.notifyAll();
         }
 
-        c.add(selection(data.getPlayerCount()));
+//        while (data.getPlayerCount() == -1) {
+//            try {
+//                readJSON();
+//            } catch (IOException exception) {
+//                System.out.println("Couldn't read JSON: " + exception);
+//            }
+//        }
+//
+//        c.add(selection(data.getPlayerCount()));
+        c.add(selection(2));
         screen.next(c);
     }
 
@@ -367,7 +382,7 @@ public class UnoClient extends JPanel {
     public void playGame() {
         // Code that runs the game until it ends
         while (data.getWinner() == -1) {
-            //accept and send data
+            // Accept and send data
             try {
                 readJSON();
             } catch (IOException ignored) {}
@@ -426,10 +441,11 @@ public class UnoClient extends JPanel {
     }
 
     public void goMenu() {
+        System.out.println("Going to menu");
         c.setVisible(false);
         c.removeAll();
-        c.add(waitingScreen(), "wait");
-        c.add(selection(data.getPlayerCount()), "menu");
+        c.add(waitingScreen());
+        c.add(selection(data.getPlayerCount()));
         c.setVisible(true);
     }
 
