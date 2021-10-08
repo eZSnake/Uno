@@ -47,7 +47,7 @@ public class UnoServer extends JPanel {
     }
 
     private static JPanel serverPanel() {
-        //Creates initial home screen for the server
+        // Creates initial home screen for the server
         JPanel home = new JPanel();
         home.setLayout(new GridLayout(2, 1));
 
@@ -85,7 +85,7 @@ public class UnoServer extends JPanel {
     }
 
     public void start() {
-        //Starts up the server and the game, running it until the end
+        // Starts up the server and the game, running it until the end
         System.out.println(c.getComponentCount());
         c.add(waitConn());
         System.out.println(c.getComponentCount());
@@ -145,6 +145,7 @@ public class UnoServer extends JPanel {
         } catch (IOException ignored) {}
     }
 
+    // Methods to read and write JSON to and from the data stream
     private void writeJSON(UnoNetData toJSON) throws IOException {
 //        System.out.println("Writing to data stream");
         ObjectMapper mapper = new ObjectMapper();
@@ -157,6 +158,7 @@ public class UnoServer extends JPanel {
     }
 
     private JPanel waitConn() {
+        // Creates panel to show that the server is waiting for a valid connection to start the game
         JPanel waitConn = new JPanel(new BorderLayout());
         JTextArea waiting = new JTextArea("Waiting for clients");
         waiting.setEditable(false);
@@ -167,7 +169,7 @@ public class UnoServer extends JPanel {
     }
 
     private JPanel gameMenu() {
-        //Creates panel for when the game is running and displays info about the game
+        // Creates panel for when the game is running and displays info about the game
         JPanel gameMenu = new JPanel(new GridLayout(listener.getPlayerCount() + 3, 1));
         gameMenu.setBackground(none);
         JLabel infoTxt = new JLabel("Game Info");
@@ -181,6 +183,7 @@ public class UnoServer extends JPanel {
         veryTop.add(infoTxtPn);
         veryTop.add(menu);
         gameMenu.add(veryTop);
+
         targetHeight = dims.getHeight() / (listener.getPlayerCount() + 4);
         targetWidth = targetHeight / 100 * 120; //TODO Maybe fix ratio
         Image img = game.getPlacePile().getImage().getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
@@ -188,6 +191,7 @@ public class UnoServer extends JPanel {
         JLabel cardsLeft = new JLabel("Cards left: " + game.getCardsLeft());
         cardsLeft.setFont(new Font(ARIAL, Font.PLAIN, 50));
         drawCardsLeft.add(cardsLeft);
+
         JPanel cardsLeftPn = new JPanel();
         cardsLeftPn.add(drawCardsLeft.get(0), BorderLayout.CENTER);
         cardsLeftPn.setBackground(none);
@@ -196,6 +200,7 @@ public class UnoServer extends JPanel {
         cardInfo.add(cardsLeftPn);
         cardInfo.setBackground(none);
         gameMenu.add(cardInfo);
+
         StringBuilder cardsLeftAsString = new StringBuilder("Cards left:  ");
         for (int i = 0; i < listener.getPlayerCount(); i++) {
             cardsLeftAsString.append("Player ").append(i + 1).append(": ").append(game.getPCardsLeft(i));
@@ -214,7 +219,6 @@ public class UnoServer extends JPanel {
 
         return gameMenu;
     }
-
 
     public void goMenu() {
         c.setVisible(false);

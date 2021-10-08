@@ -51,6 +51,7 @@ public class UnoClient extends JPanel {
     }
 
     private JPanel selection(int amtPlayers) {
+        // Creates the panel where the player can select their player number
         numPlayers = amtPlayers;
         JPanel selection = new JPanel();
         selection.setLayout(new GridLayout(numPlayers + 3, 1)); //TODO Only have enough slots for required amt of players
@@ -67,6 +68,7 @@ public class UnoClient extends JPanel {
             tempButton.addActionListener(listener);
             selection.add(tempButton);
         }
+
         JLabel botTxt = new JLabel("Currently player " + player);
         botTxt.setFont(new Font(ARIAL, Font.PLAIN, 50));
         selectedPlayer.add(botTxt);
@@ -83,14 +85,14 @@ public class UnoClient extends JPanel {
     }
 
     private JPanel playerPlayingScreen(int player) {
-        //Creates playing screen for specified player
+        // Creates playing screen for specified player
         JPanel playerPlayingScreen = new JPanel();
         playerPlayingScreen.setLayout(new BorderLayout());
-        //Top of the screen
+        // Top of the screen
         JPanel top = new JPanel();
         top.setLayout(new GridLayout(1, 2));
         top.setBackground(none);
-        //Left top (cards left and go to menu)
+        // Left top (cards left and go to menu)
         JPanel left = new JPanel();
         left.setLayout(new GridLayout(3, 1));
         JButton goMenu = new JButton("Menu");
@@ -116,7 +118,7 @@ public class UnoClient extends JPanel {
         left.add(currPlayer);
         left.setBackground(none);
         top.add(left);
-        //Top right (cards left in draw pile w/ pic and debug print button)
+        // Top right (cards left in draw pile w/ pic and debug print button)
         JPanel right = new JPanel();
         right.setLayout(new GridLayout(3, 1));
         JButton printHands = new JButton("Print Hands");
@@ -136,14 +138,14 @@ public class UnoClient extends JPanel {
         right.setBackground(none);
         top.add(right);
         playerPlayingScreen.add(top, BorderLayout.NORTH);
-        //Center (card on place pile)
+        // Center (card on place pile)
         targetWidth = dims.getWidth() / 15;
         targetHeight = targetWidth * 143 / 100;
         Image img = data.getPlacePile().getImage().getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
         placePile = new JLabel(new ImageIcon(img));
         placePileCard.add(placePile);
         playerPlayingScreen.add(placePileCard.get(player), BorderLayout.CENTER);
-        //Bottom (cards on hand and draw)
+        // Bottom (cards on hand and draw)
         JPanel bottomCards = new JPanel();
         bottomCards.setLayout(new GridLayout(2, 1));
         JButton draw = new JButton("Draw");
@@ -161,6 +163,7 @@ public class UnoClient extends JPanel {
     }
 
     private JPanel initialSet(int player) {
+        // Creates the initial version of the player's cards
         JPanel initialCards = new JPanel();
         Hand playerHand = data.getHand(player);
         targetWidth = dims.getWidth() / 20;
@@ -257,6 +260,7 @@ public class UnoClient extends JPanel {
     }
 
     private JPanel waitingScreen() {
+        // Creates a waiting screen to show the game is waiting for a connection
         JPanel wait = new JPanel(new GridLayout(3, 1));
         JLabel serverInfo = new JLabel("Attempting to connect on IP 192.168.201.1 and Port " + port);
         JPanel servInf = new JPanel();
@@ -275,6 +279,7 @@ public class UnoClient extends JPanel {
     }
 
     private JPanel waitForGame() {
+        // Creates a waiting screen while the server hasn't created the game yet
         JPanel waitForGame = new JPanel(new BorderLayout());
         waitForGame.setBackground(none);
         JLabel waiting = new JLabel("Waiting for game to start");
@@ -285,6 +290,7 @@ public class UnoClient extends JPanel {
     }
 
     private JPanel winnerScreen(int winner) {
+        // Screen to show which player won
         JPanel winnerScreen = new JPanel(new BorderLayout());
         JButton goMenu = new JButton("Menu");
         goMenu.addActionListener(listener);
@@ -302,6 +308,7 @@ public class UnoClient extends JPanel {
     }
 
     private JPanel tieGame() {
+        // Screen to show that the game resulted in a tie
         JPanel tieGame = new JPanel();
         tieGame.setLayout(new BorderLayout());
         JButton goMenu = new JButton("Menu");
@@ -320,6 +327,7 @@ public class UnoClient extends JPanel {
     }
 
     public void startConnection() {
+        // Starts the connection to the server
         boolean connected = false;
         while (!connected) {
             try {
@@ -344,6 +352,7 @@ public class UnoClient extends JPanel {
         screen.next(c);
     }
 
+    // Methods to read and write JSON to and from the data stream
     private void writeJSON(UnoNetData toJSON) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         mapper.writeValue(dout, toJSON);
@@ -356,6 +365,7 @@ public class UnoClient extends JPanel {
     }
 
     public void playGame() {
+        // Code that runs the game until it ends
         while (data.getWinner() == -1) {
             //accept and send data
             try {

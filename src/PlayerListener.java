@@ -12,6 +12,7 @@ public class PlayerListener implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        // Takes in the button the player pressed and converts it into a command
         String button = e.getActionCommand();
         switch (button) {
             case "Start connection" -> {
@@ -91,7 +92,7 @@ public class PlayerListener implements ActionListener {
     }
 
     private Card stringToCard(String conv) {
-        //Converts an inputted string to a card on the hand of the current player
+        // Converts an inputted string to a card on the hand of the current player
         try {
             Hand toCheck = client.getHand();
             for (int i = 0; i < toCheck.length(); i++) {
@@ -105,7 +106,7 @@ public class PlayerListener implements ActionListener {
     }
 
     private boolean canPlayCard(Card toPlay) {
-        //Checks if inputted card can be played
+        // Checks if inputted card can be played
         if (toPlay == null) {
             return false;
         }

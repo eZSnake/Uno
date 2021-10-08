@@ -15,6 +15,7 @@ public class UnoNetData {
         this.specialMove = specialMove;
     }
 
+    // Methods to get information from the UnoNetData sent between players and server
     public Card getPlacePile() {
         return placePile;
     }

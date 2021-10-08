@@ -23,9 +23,9 @@ public class ServerListener implements ActionListener, ChangeListener {
                 server.goMenu();
                 server.repaint();
             }
-            default -> {
-                System.out.println("Reached base case");
-            }
+//            default -> {
+//                System.out.println("Reached base case");
+//            }
         }
     }
 
