@@ -4,10 +4,12 @@ import java.awt.*;
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
+import java.util.logging.*;
 
 import com.fasterxml.jackson.databind.*;
 
 public class UnoServer extends JPanel {
+    private Logger logger = Logger.getLogger("UnoServer");
     private static JFrame window;
     private static ServerListener listener;
     private ServerSocket servsoc;
@@ -95,44 +97,44 @@ public class UnoServer extends JPanel {
         boolean connected = false;
         while (!connected) {
             try {
-                System.out.println("Attempting to open socket");
+                logger.log(Level.INFO, "Attempting to open socket");
                 servsoc = new ServerSocket(4200);
-                System.out.println("Socket state: " + servsoc);
+                logger.log(Level.INFO, "Socket state: " + servsoc);
                 soc = servsoc.accept();
                 din = new InputStreamReader(soc.getInputStream());
                 dout = new OutputStreamWriter(soc.getOutputStream());
-                System.out.println("Socket opened");
+                logger.log(Level.INFO, "Socket opened");
                 connected = true;
             } catch (IOException fatalError) {
-                System.out.println("A fatal error has occurred.\nConnection to the server could not be established.");
+                logger.log(Level.SEVERE, "A fatal error has occurred.\nConnection to the server could not be established.");
                 System.exit(0);
             }
         }
 
         game = new UnoGraphicsGame(listener.getPlayerCount());
         data = new UnoNetData(game.getPlacePile(), null, game.getHands(), game.getPlayer(), listener.getPlayerCount(), game.getCardsLeft(), -1, null);
-        System.out.println("Game created");
+        logger.log(Level.INFO, "Game created");
 
         c.add(gameMenu());
         screen.next(c);
 
         synchronized (data) {
-            System.out.println("In synchronized 1");
+            logger.log(Level.INFO, "In synchronized 1");
 
             data.notifyAll();
         }
         synchronized (data) {
-            System.out.println("In synchronized 2");
+            logger.log(Level.INFO, "In synchronized 2");
 
             try {
                 data.wait(500);
             } catch (InterruptedException interruptedException) {
-                System.out.println("Error: " + interruptedException);
+                logger.log(Level.SEVERE, "Error: " + interruptedException);
                 Thread.currentThread().interrupt();
             }
         }
 
-        System.out.println("Starting game and synchronized");
+        logger.log(Level.INFO, "Starting game and synchronized");
         while (game.determineWinner() == -1) {
             setPanelDims(window.getWidth(), window.getHeight());
             // Output game data
@@ -158,7 +160,7 @@ public class UnoServer extends JPanel {
 
 
         try {
-            System.out.println("Closing socket");
+            logger.log(Level.INFO, "Closing socket");
             servsoc.close();
             soc.close();
             dout.close();
@@ -168,7 +170,7 @@ public class UnoServer extends JPanel {
 
     // Methods to read and write JSON to and from the data stream
     private void writeJSON(UnoNetData toJSON) throws IOException {
-//        System.out.println("Writing to data stream");
+//        logger.log(Level.INFO, "Writing to data stream");
         ObjectMapper mapper = new ObjectMapper();
         mapper.writeValue(dout, toJSON);
     }

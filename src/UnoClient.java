@@ -5,8 +5,10 @@ import java.awt.*;
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
+import java.util.logging.*;
 
 public class UnoClient extends JPanel {
+    private Logger logger = Logger.getLogger("UnoClient");
     private static JFrame window;
     private static PlayerListener listener;
     private static UnoNetData data;
@@ -330,11 +332,11 @@ public class UnoClient extends JPanel {
         boolean connected = false;
         while (!connected) {
             try {
-                System.out.println("Attempting connection");
+                logger.log(Level.INFO, "Attempting connection");
                 soc = new Socket("localhost", port);
                 din = new InputStreamReader(soc.getInputStream());
                 dout = new OutputStreamWriter(soc.getOutputStream());
-                System.out.println("Connection success");
+                logger.log(Level.INFO, "Connection success");
             } catch (IOException ignored) {}
             connected = true;
         }
@@ -342,17 +344,17 @@ public class UnoClient extends JPanel {
         screen.next(c);
 
         synchronized (data) {
-            System.out.println("In synchronized 1");
+            logger.log(Level.INFO, "In synchronized 1");
 
             try {
                 data.wait(500);
             } catch (InterruptedException interruptedException) {
-                System.out.println("Error: " + interruptedException);
+                logger.log(Level.SEVERE, "Error: " + interruptedException);
                 Thread.currentThread().interrupt();
             }
         }
         synchronized (data) {
-            System.out.println("In synchronized 2");
+            logger.log(Level.INFO, "In synchronized 2");
 
             data.notifyAll();
         }
@@ -361,7 +363,7 @@ public class UnoClient extends JPanel {
 //            try {
 //                readJSON();
 //            } catch (IOException exception) {
-//                System.out.println("Couldn't read JSON: " + exception);
+//                logger.log(Level.SEVERE, "Couldn't read JSON: " + exception);
 //            }
 //        }
 //
@@ -377,7 +379,7 @@ public class UnoClient extends JPanel {
     }
 
     private void readJSON() throws IOException {
-//        System.out.println("Reading from datastream\n" + din.toString());
+//        logger.log(Level.INFO, "Reading from datastream\n" + din.toString());
         ObjectMapper mapper = new ObjectMapper();
         data = mapper.readValue(din, UnoNetData.class);
     }
@@ -444,7 +446,6 @@ public class UnoClient extends JPanel {
     }
 
     public void goMenu() {
-        System.out.println("Going to menu");
         c.setVisible(false);
         c.removeAll();
         c.add(waitingScreen());
