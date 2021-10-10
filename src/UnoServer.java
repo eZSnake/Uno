@@ -89,9 +89,9 @@ public class UnoServer extends JPanel {
 
     public void start() {
         // Starts up the server and the game, running it until the end
-        System.out.println(c.getComponentCount());
+        logger.log(Level.INFO, "" + c.getComponentCount());
         c.add(waitConn());
-        System.out.println(c.getComponentCount());
+        logger.log(Level.INFO, "" + c.getComponentCount());
         screen.next(c);
 
         boolean connected = false;

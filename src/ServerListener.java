@@ -12,10 +12,8 @@ public class ServerListener implements ActionListener, ChangeListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        System.out.println(e.getActionCommand());
         switch (e.getActionCommand()) {
             case "Start" -> {
-                System.out.println("Starting");
                 server.start();
                 server.repaint();
             }
