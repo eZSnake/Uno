@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.logging.*;
 
 public class UnoClient extends JPanel {
-    private Logger logger = Logger.getLogger("UnoClient");
+    private final Logger logger = Logger.getLogger("UnoClient");
     private static JFrame window;
     private static PlayerListener listener;
     private static UnoNetData data;
@@ -18,9 +18,8 @@ public class UnoClient extends JPanel {
     private static int player = 0, numPlayers, targetWidth, targetHeight, port;
     private static Image back;
     private static Container c;
-    private CardLayout screen = new CardLayout();
+    private final CardLayout screen = new CardLayout();
     private final PanelDims dims = new PanelDims(1920, 1080);
-    private JLabel pCardsLeft, cardsLeft, placePile;
     private ArrayList<JPanel> botCards = new ArrayList<>(), pCards = new ArrayList<>();
     private ArrayList<JLabel> selectedPlayer = new ArrayList<>(), playerCardsLeft = new ArrayList<>(), drawCardsLeft = new ArrayList<>(), placePileCard = new ArrayList<>();
     private static final String TAB = "    ", ARIAL = "Arial";
@@ -51,9 +50,8 @@ public class UnoClient extends JPanel {
         window.setVisible(true);
     }
 
-    private JPanel selection(int amtPlayers) {
+    private JPanel selection() {
         // Creates the panel where the player can select their player number
-        numPlayers = amtPlayers;
         JPanel selection = new JPanel();
         selection.setLayout(new GridLayout(numPlayers + 3, 1)); //TODO Only have enough slots for required amt of players
         JTextArea topTxt = new JTextArea("\nSelect which player you would like to be");
@@ -107,7 +105,7 @@ public class UnoClient extends JPanel {
                 cardsLeftAsString.append(" - ");
             }
         }
-        pCardsLeft = new JLabel(cardsLeftAsString.toString());
+        JLabel pCardsLeft = new JLabel(cardsLeftAsString.toString());
         pCardsLeft.setFont(new Font(ARIAL, Font.PLAIN, 20));
         playerCardsLeft.add(pCardsLeft);
         JPanel centPlayerCardsLeft = new JPanel();
@@ -129,7 +127,7 @@ public class UnoClient extends JPanel {
         targetWidth = dims.getWidth() / 20;
         targetHeight = targetWidth * 143 / 100;
         right.add(new JLabel(new ImageIcon(back.getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH))));
-        cardsLeft = new JLabel("Cards in drawpile: " + data.getCardsInDrawPile());
+        JLabel cardsLeft = new JLabel("Cards in draw pile: " + data.getCardsInDrawPile());
         cardsLeft.setFont(new Font(ARIAL, Font.PLAIN, 20));
         drawCardsLeft.add(cardsLeft);
         JPanel centDrawCardsLeft = new JPanel();
@@ -143,7 +141,7 @@ public class UnoClient extends JPanel {
         targetWidth = dims.getWidth() / 15;
         targetHeight = targetWidth * 143 / 100;
         Image img = data.getPlacePile().getImage().getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
-        placePile = new JLabel(new ImageIcon(img));
+        JLabel placePile = new JLabel(new ImageIcon(img));
         placePileCard.add(placePile);
         playerPlayingScreen.add(placePileCard.get(player), BorderLayout.CENTER);
         // Bottom (cards on hand and draw)
@@ -251,7 +249,7 @@ public class UnoClient extends JPanel {
 
         pCards.set(player, newCards);
     }
-
+/*
     public void updateWholeScreen() {
 
     }
@@ -259,7 +257,7 @@ public class UnoClient extends JPanel {
     public void removeCard(Card toRemove) {
 
     }
-
+*/
     private JPanel waitingScreen() {
         // Creates a waiting screen to show the game is waiting for a connection
         JPanel wait = new JPanel(new GridLayout(3, 1));
@@ -269,9 +267,9 @@ public class UnoClient extends JPanel {
         wait.add(servInf);
         JLabel waitTxt = new JLabel("Waiting for server connection...");
         waitTxt.setFont(new Font(ARIAL, Font.PLAIN, 75));
-        JPanel waitTxtScrn = new JPanel();
-        waitTxtScrn.add(waitTxt);
-        wait.add(waitTxtScrn);
+        JPanel waitTxtScreen = new JPanel();
+        waitTxtScreen.add(waitTxt);
+        wait.add(waitTxtScreen);
         JButton connect = new JButton("Start connection");
         connect.addActionListener(listener);
         wait.add(connect);
@@ -367,8 +365,10 @@ public class UnoClient extends JPanel {
 //            }
 //        }
 //
-//        c.add(selection(data.getPlayerCount()));
-        c.add(selection(2));
+//        numPlayers = data.getPlayerCount();
+//        c.add(selection());
+        numPlayers = 2;
+        c.add(selection());
         screen.next(c);
     }
 
@@ -379,7 +379,7 @@ public class UnoClient extends JPanel {
     }
 
     private void readJSON() throws IOException {
-//        logger.log(Level.INFO, "Reading from datastream\n" + din.toString());
+//        logger.log(Level.INFO, "Reading from data stream\n" + din.toString());
         ObjectMapper mapper = new ObjectMapper();
         data = mapper.readValue(din, UnoNetData.class);
     }
@@ -449,7 +449,7 @@ public class UnoClient extends JPanel {
         c.setVisible(false);
         c.removeAll();
         c.add(waitingScreen());
-        c.add(selection(data.getPlayerCount()));
+        c.add(selection());
         c.setVisible(true);
     }
 

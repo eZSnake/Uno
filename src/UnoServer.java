@@ -1,3 +1,4 @@
+import com.fasterxml.jackson.databind.*;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -6,13 +7,11 @@ import java.net.*;
 import java.util.ArrayList;
 import java.util.logging.*;
 
-import com.fasterxml.jackson.databind.*;
-
 public class UnoServer extends JPanel {
-    private Logger logger = Logger.getLogger("UnoServer");
+    private final Logger logger = Logger.getLogger("UnoServer");
     private static JFrame window;
     private static ServerListener listener;
-    private ServerSocket servsoc;
+    private ServerSocket serverSoc;
     private Socket soc;
     private InputStreamReader din;
     private OutputStreamWriter dout;
@@ -20,10 +19,10 @@ public class UnoServer extends JPanel {
     private UnoNetData data;
     private static Image back;
     private static Container c;
-    private static CardLayout screen = new CardLayout();
+    private static final CardLayout screen = new CardLayout();
     private int targetWidth = 1920, targetHeight = 1080;
     private PanelDims dims = new PanelDims(targetWidth, targetHeight);
-    private ArrayList<JPanel> botCards = new ArrayList<>(), pCards = new ArrayList<>();
+    private ArrayList<JPanel> pCards = new ArrayList<>();
     private ArrayList<JLabel> playerCardsLeft = new ArrayList<>(), drawCardsLeft = new ArrayList<>(), placePileCard = new ArrayList<>();
     private static final String ARIAL = "Arial";
     private static final Color none = new Color(255, 255, 255, 255);
@@ -98,9 +97,9 @@ public class UnoServer extends JPanel {
         while (!connected) {
             try {
                 logger.log(Level.INFO, "Attempting to open socket");
-                servsoc = new ServerSocket(4200);
-                logger.log(Level.INFO, "Socket state: " + servsoc);
-                soc = servsoc.accept();
+                serverSoc = new ServerSocket(4200);
+                logger.log(Level.INFO, "Socket state: " + serverSoc);
+                soc = serverSoc.accept();
                 din = new InputStreamReader(soc.getInputStream());
                 dout = new OutputStreamWriter(soc.getOutputStream());
                 logger.log(Level.INFO, "Socket opened");
@@ -127,7 +126,7 @@ public class UnoServer extends JPanel {
             logger.log(Level.INFO, "In synchronized 2");
 
             try {
-                data.wait(500);
+                data.wait(1000);
             } catch (InterruptedException interruptedException) {
                 logger.log(Level.SEVERE, "Error: " + interruptedException);
                 Thread.currentThread().interrupt();
@@ -141,7 +140,6 @@ public class UnoServer extends JPanel {
             data = new UnoNetData(game.getPlacePile(), null, game.getHands(), game.getPlayer(), listener.getPlayerCount(), game.getCardsLeft(), -1, null);
             try {
                 writeJSON(data);
-                data.notifyAll();
             } catch (IOException ignored) {}
 
             // Take in game data from players
@@ -161,7 +159,7 @@ public class UnoServer extends JPanel {
 
         try {
             logger.log(Level.INFO, "Closing socket");
-            servsoc.close();
+            serverSoc.close();
             soc.close();
             dout.close();
             din.close();
