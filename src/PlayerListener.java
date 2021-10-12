@@ -41,8 +41,8 @@ public class PlayerListener implements ActionListener {
             }
             case "Continue" -> {
                 if (player != 0) {
-                    client.setPlayerScreen();
-                    client.nextScreen();
+//                    client.setPlayerScreen();
+//                    client.nextScreen();
                     client.playGame();
                     client.repaint();
                 } else {
@@ -56,7 +56,7 @@ public class PlayerListener implements ActionListener {
             case "Draw" -> {
                 if (player == client.getCurrPlayer()) {
                     client.draw();
-                    client.updateWholeScreen();
+//                    client.updateWholeScreen();
                 } else {
                     JOptionPane.showMessageDialog(client, "It is not your turn.");
                 }
@@ -84,9 +84,9 @@ public class PlayerListener implements ActionListener {
                 } else {
                     client.playCard(toPlay, null);
                 }
-                client.removeCard(toPlay);
+//                client.removeCard(toPlay);
 //                game.nextPlayer();
-                client.updateWholeScreen();
+//                client.updateWholeScreen();
             }
         }
     }

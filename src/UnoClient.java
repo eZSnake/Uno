@@ -345,7 +345,7 @@ public class UnoClient extends JPanel {
             logger.log(Level.INFO, "In synchronized 1");
 
             try {
-                data.wait(500);
+                data.wait(2000);
             } catch (InterruptedException interruptedException) {
                 logger.log(Level.SEVERE, "Error: " + interruptedException);
                 Thread.currentThread().interrupt();
@@ -374,14 +374,25 @@ public class UnoClient extends JPanel {
 
     // Methods to read and write JSON to and from the data stream
     private void writeJSON(UnoNetData toJSON) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.writeValue(dout, toJSON);
+        synchronized (data) {
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.writeValue(dout, toJSON);
+            data.notifyAll();
+        }
     }
 
     private void readJSON() throws IOException {
-//        logger.log(Level.INFO, "Reading from data stream\n" + din.toString());
-        ObjectMapper mapper = new ObjectMapper();
-        data = mapper.readValue(din, UnoNetData.class);
+        synchronized (data) {
+            logger.log(Level.INFO, "Reading from data stream\n" + din.toString());
+            ObjectMapper mapper = new ObjectMapper();
+            data = mapper.readValue(din, UnoNetData.class);
+            try {
+                wait(100);
+            } catch (InterruptedException interruptedException) {
+                logger.log(Level.SEVERE, "Error: " + interruptedException);
+                Thread.currentThread().interrupt();
+            }
+        }
     }
 
     public void playGame() {

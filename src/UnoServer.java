@@ -111,10 +111,11 @@ public class UnoServer extends JPanel {
         }
 
         game = new UnoGraphicsGame(listener.getPlayerCount());
+        c.add(gameMenu());
+
         data = new UnoNetData(game.getPlacePile(), null, game.getHands(), game.getPlayer(), listener.getPlayerCount(), game.getCardsLeft(), -1, null);
         logger.log(Level.INFO, "Game created");
 
-        c.add(gameMenu());
         screen.next(c);
 
         synchronized (data) {
@@ -126,7 +127,7 @@ public class UnoServer extends JPanel {
             logger.log(Level.INFO, "In synchronized 2");
 
             try {
-                data.wait(1000);
+                data.wait(2000);
             } catch (InterruptedException interruptedException) {
                 logger.log(Level.SEVERE, "Error: " + interruptedException);
                 Thread.currentThread().interrupt();
@@ -168,14 +169,25 @@ public class UnoServer extends JPanel {
 
     // Methods to read and write JSON to and from the data stream
     private void writeJSON(UnoNetData toJSON) throws IOException {
+        synchronized (data) {
 //        logger.log(Level.INFO, "Writing to data stream");
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.writeValue(dout, toJSON);
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.writeValue(dout, toJSON);
+            data.notifyAll();
+        }
     }
 
     private void readJSON() throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        data = mapper.readValue(din, UnoNetData.class);
+        synchronized (data) {
+            ObjectMapper mapper = new ObjectMapper();
+            data = mapper.readValue(din, UnoNetData.class);
+            try {
+                wait(100);
+            } catch (InterruptedException interruptedException) {
+                logger.log(Level.SEVERE, "Error: " + interruptedException);
+                Thread.currentThread().interrupt();
+            }
+        }
     }
 
     private JPanel waitConn() {
@@ -237,7 +249,7 @@ public class UnoServer extends JPanel {
         playerCardsLeftPn.setBackground(none);
         gameMenu.add(playerCardsLeftPn);
         // Player Cards
-        for (int i = 0; i < data.getPlayerCount(); i++) {
+        for (int i = 0; i < listener.getPlayerCount(); i++) {
             pCards.add(initialSet(i));
             gameMenu.add(pCards.get(i));
         }
@@ -248,7 +260,7 @@ public class UnoServer extends JPanel {
     private JPanel initialSet(int player) {
         // Creates the initial version of the player's cards
         JPanel initialCards = new JPanel();
-        Hand playerHand = data.getHand(player);
+        Hand playerHand = game.getPlayerHand(player);
         targetWidth = dims.getWidth() / 20;
         targetHeight = targetWidth * 143 / 100;
         for (int i = 0; i < playerHand.length(); i++) {
