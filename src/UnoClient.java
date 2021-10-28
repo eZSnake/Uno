@@ -325,8 +325,8 @@ public class UnoClient extends JPanel {
         return tieGame;
     }
 
+    // Starts the connection to the server
     public void startConnection() {
-        // Starts the connection to the server
         boolean connected = false;
         while (!connected) {
             try {
@@ -339,15 +339,16 @@ public class UnoClient extends JPanel {
             connected = true;
         }
 
-        screen.next(c);
+        nextScreen();
 
+        // Synchs server and client so they can send and receive data appropriately
         synchronized (data) {
             logger.log(Level.INFO, "In synchronized 1");
 
             try {
                 data.wait(2000);
             } catch (InterruptedException interruptedException) {
-                logger.log(Level.SEVERE, "Error: " + interruptedException);
+                logger.log(Level.SEVERE, String.format("Error: %s", interruptedException));
                 Thread.currentThread().interrupt();
             }
         }
@@ -357,22 +358,26 @@ public class UnoClient extends JPanel {
             data.notifyAll();
         }
 
-//        while (data.getPlayerCount() == -1) {
-//            try {
-//                readJSON();
-//            } catch (IOException exception) {
-//                logger.log(Level.SEVERE, "Couldn't read JSON: " + exception);
-//            }
-//        }
+        // Intial read from the datastream to determine the number of players for the next screen
+        long mainTime = System.currentTimeMillis()/1000;
+        while (data.getPlayerCount() == -1) {
+            if ((System.currentTimeMillis() / 1000 - mainTime) % 60 > 1) {
+                logger.log(Level.INFO , "Attempting to read JSON");
+                try {
+                    readJSON();
+                } catch (IOException exception) {
+                    logger.log(Level.SEVERE, String.format("Couldn't read JSON: %s", exception));
+                }
+            }
+        }
 //
 //        numPlayers = data.getPlayerCount();
-//        c.add(selection());
         numPlayers = 2;
-        c.add(selection());
-        screen.next(c);
+        addScreen(selection());
+        nextScreen();
     }
 
-    // Methods to read and write JSON to and from the data stream
+    // Method to write JSON to the data stream
     private void writeJSON(UnoNetData toJSON) throws IOException {
         synchronized (data) {
             ObjectMapper mapper = new ObjectMapper();
@@ -381,6 +386,7 @@ public class UnoClient extends JPanel {
         }
     }
 
+    // Method to read JSON from the data stream
     private void readJSON() throws IOException {
         synchronized (data) {
             logger.log(Level.INFO, "Reading from data stream\n" + din.toString());
@@ -389,14 +395,14 @@ public class UnoClient extends JPanel {
             try {
                 wait(100);
             } catch (InterruptedException interruptedException) {
-                logger.log(Level.SEVERE, "Error: " + interruptedException);
+                logger.log(Level.SEVERE, String.format("Error: %s", interruptedException));
                 Thread.currentThread().interrupt();
             }
         }
     }
 
+    // Method that runs the game until it ends
     public void playGame() {
-        // Code that runs the game until it ends
         while (data.getWinner() == -1) {
             // Accept and send data
             try {
@@ -406,11 +412,11 @@ public class UnoClient extends JPanel {
 
         int winner = data.getWinner();
         if (winner == 4) {
-            c.add(tieGame());
+            addScreen(tieGame());
         } else {
-            c.add(winnerScreen(winner));
+            addScreen(winnerScreen(winner));
         }
-        screen.next(c);
+        nextScreen();
 
         try {
             soc.close();
@@ -454,6 +460,10 @@ public class UnoClient extends JPanel {
 
     public void nextScreen() {
         screen.next(c);
+    }
+
+    private void addScreen(JPanel toAdd) {
+        c.add(toAdd);
     }
 
     public void goMenu() {
