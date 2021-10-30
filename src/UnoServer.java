@@ -1,11 +1,33 @@
-import com.fasterxml.jackson.databind.*;
-import javax.imageio.ImageIO;
-import javax.swing.*;
-import java.awt.*;
-import java.io.*;
-import java.net.*;
+import java.awt.BorderLayout;
+import java.awt.CardLayout;
+import java.awt.Color;
+import java.awt.Container;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.Image;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.ArrayList;
-import java.util.logging.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JSlider;
+import javax.swing.JTextArea;
+import javax.swing.WindowConstants;
+
+import com.fasterxml.jackson.databind.*;
 
 public class UnoServer extends JPanel {
     private final Logger logger = Logger.getLogger("UnoServer");
@@ -13,7 +35,8 @@ public class UnoServer extends JPanel {
     private static ServerListener listener;
     private ServerSocket serverSoc;
     private Socket soc;
-    private InputStreamReader din;
+    //private InputStreamReader din;
+    private BufferedReader din;
     private OutputStreamWriter dout;
     private UnoGraphicsGame game;
     private UnoNetData data;
@@ -26,20 +49,20 @@ public class UnoServer extends JPanel {
     private ArrayList<JLabel> playerCardsLeft = new ArrayList<>(), drawCardsLeft = new ArrayList<>(), placePileCard = new ArrayList<>();
     private static final String ARIAL = "Arial";
     private static final Color none = new Color(255, 255, 255, 255);
-
+    
     public static void main (String[] args) {
         window = new JFrame("Uno Server");
         UnoServer server = new UnoServer();
         listener = new ServerListener(server);
-
+        
         try {
             back = ImageIO.read(new File("UnoCards/back.png"));
         } catch (IOException ignored) {}
-
+        
         c = window.getContentPane();
         c.setLayout(screen);
         c.add(serverPanel());
-
+        
         window.setSize(1920,1080);
         window.setContentPane(c);
         window.setLocation(0,0);
@@ -47,12 +70,12 @@ public class UnoServer extends JPanel {
         window.setIconImage(back);
         window.setVisible(true);
     }
-
+    
     // Creates initial home screen for the server
     private static JPanel serverPanel() {
         JPanel home = new JPanel();
         home.setLayout(new GridLayout(2, 1));
-
+        
         JPanel top = new JPanel();
         top.setLayout(new GridLayout(2, 1));
         top.add(new JLabel(new ImageIcon(back.getScaledInstance(100, 143, Image.SCALE_SMOOTH))));
@@ -65,7 +88,7 @@ public class UnoServer extends JPanel {
         top.add(topTxtBox);
         top.setBackground(none);
         home.add(top);
-
+        
         JPanel bottom = new JPanel();
         bottom.setLayout(new GridLayout(2, 1));
         JSlider playerCount = new JSlider(2, 4, 2);
@@ -75,58 +98,72 @@ public class UnoServer extends JPanel {
         playerCount.setPaintLabels(true);
         playerCount.setBackground(none);
         bottom.add(playerCount);
-
+        
         JButton start = new JButton("Start");
         start.addActionListener(listener);
         start.setFont(new Font(ARIAL, Font.PLAIN, 50));
         bottom.add(start);
         bottom.setBackground(none);
         home.add(bottom);
-
+        
         return home;
     }
-
+    
     // Starts up the server and the game, running it until the end
     public void start() {
         logger.log(Level.INFO, String.format("%s", c.getComponentCount()));
         c.add(waitConn());
         logger.log(Level.INFO, String.format("%s", c.getComponentCount()));
         screen.next(c);
-
+        
         boolean connected = false;
         while (!connected) {
             try {
                 logger.log(Level.INFO, "Attempting to open socket");
                 serverSoc = new ServerSocket(4200);
                 logger.log(Level.INFO, String.format("Socket state: %s", serverSoc));
+                logger.log(Level.INFO, "Now waiting for a connection....");
                 soc = serverSoc.accept();
-                din = new InputStreamReader(soc.getInputStream());
+                din = new BufferedReader ( new InputStreamReader(soc.getInputStream()));
                 dout = new OutputStreamWriter(soc.getOutputStream());
-                logger.log(Level.INFO, "Socket opened");
+                logger.log(Level.INFO, "We got a connection. Let's see what the client sends our way");
                 connected = true;
             } catch (IOException fatalError) {
                 logger.log(Level.SEVERE, "A fatal error has occurred.\nConnection to the server could not be established.");
                 System.exit(0);
             }
         }
-
+        
+        while ( connected ) {
+            try {
+                System.out.println("echo: " + din.readLine());
+            } catch (IOException fatalError) {}
+        }
+        
+        //logger.log(Level.INFO, "Creating game while we are ready for clients to connect");
+        // with the accept above we already wait until a clisnt connects so only get here if someone connected
+        logger.log(Level.INFO, "Creating game for the client that just connected. We have " + 
+        listener.getPlayerCount() +
+        " players.");
+        
         game = new UnoGraphicsGame(listener.getPlayerCount());
         c.add(gameMenu());
-
+        
         data = new UnoNetData(game.getPlacePile(), null, game.getHands(), game.getPlayer(), listener.getPlayerCount(), game.getCardsLeft(), -1, null);
         logger.log(Level.INFO, "Game created");
-
+        
         screen.next(c);
-
+        
+        /*
         // Synchs server and client so they can send and receive data appropriately
         synchronized (data) {
             logger.log(Level.INFO, "In synchronized 1");
-
+            
             data.notifyAll();
         }
         synchronized (data) {
             logger.log(Level.INFO, "In synchronized 2");
-
+            
             try {
                 data.wait(2000);
             } catch (InterruptedException interruptedException) {
@@ -134,7 +171,7 @@ public class UnoServer extends JPanel {
                 Thread.currentThread().interrupt();
             }
         }
-
+        */
         logger.log(Level.INFO, "Starting game and synchronized");
         while (game.determineWinner() == -1) {
             setPanelDims(window.getWidth(), window.getHeight());
@@ -143,7 +180,7 @@ public class UnoServer extends JPanel {
             try {
                 writeJSON(data);
             } catch (IOException ignored) {}
-
+            
             // Take in game data from players
             try {
                 readJSON();
@@ -157,8 +194,8 @@ public class UnoServer extends JPanel {
                 }
             }
         }
-
-
+        
+        
         try {
             logger.log(Level.INFO, "Closing socket");
             serverSoc.close();
@@ -167,17 +204,17 @@ public class UnoServer extends JPanel {
             din.close();
         } catch (IOException ignored) {}
     }
-
+    
     // Method to write JSON to the data stream
     private void writeJSON(UnoNetData toJSON) throws IOException {
         synchronized (data) {
-//        logger.log(Level.INFO, "Writing to data stream");
+            //        logger.log(Level.INFO, "Writing to data stream");
             ObjectMapper mapper = new ObjectMapper();
             mapper.writeValue(dout, toJSON);
             data.notifyAll();
         }
     }
-
+    
     // Method to read JSON from the data stream
     private void readJSON() throws IOException {
         synchronized (data) {
@@ -191,7 +228,7 @@ public class UnoServer extends JPanel {
             }
         }
     }
-
+    
     // Creates panel to show that the server is waiting for a valid connection to start the game
     private JPanel waitConn() {
         JPanel waitConn = new JPanel(new BorderLayout());
@@ -199,10 +236,10 @@ public class UnoServer extends JPanel {
         waiting.setEditable(false);
         waiting.setFont(new Font(ARIAL, Font.PLAIN, 75));
         waitConn.add(waiting, BorderLayout.CENTER);
-
+        
         return waitConn;
     }
-
+    
     // Creates panel for when the game is running and displays info about the game
     private JPanel gameMenu() {
         JPanel gameMenu = new JPanel(new GridLayout(listener.getPlayerCount() + 3, 1));
@@ -218,7 +255,7 @@ public class UnoServer extends JPanel {
         veryTop.add(infoTxtPn);
         veryTop.add(menu);
         gameMenu.add(veryTop);
-
+        
         targetHeight = dims.getHeight() / (listener.getPlayerCount() + 4);
         targetWidth = targetHeight / 100 * 120; //TODO Maybe fix ratio
         Image img = game.getPlacePile().getImage().getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
@@ -226,7 +263,7 @@ public class UnoServer extends JPanel {
         JLabel cardsLeft = new JLabel("Cards left: " + game.getCardsLeft());
         cardsLeft.setFont(new Font(ARIAL, Font.PLAIN, 50));
         drawCardsLeft.add(cardsLeft);
-
+        
         JPanel cardsLeftPn = new JPanel();
         cardsLeftPn.add(drawCardsLeft.get(0), BorderLayout.CENTER);
         cardsLeftPn.setBackground(none);
@@ -235,7 +272,7 @@ public class UnoServer extends JPanel {
         cardInfo.add(cardsLeftPn);
         cardInfo.setBackground(none);
         gameMenu.add(cardInfo);
-
+        
         StringBuilder cardsLeftAsString = new StringBuilder("Cards left:  ");
         for (int i = 0; i < listener.getPlayerCount(); i++) {
             cardsLeftAsString.append("Player ").append(i + 1).append(": ").append(game.getPCardsLeft(i));
@@ -255,10 +292,10 @@ public class UnoServer extends JPanel {
             pCards.add(initialSet(i));
             gameMenu.add(pCards.get(i));
         }
-
+        
         return gameMenu;
     }
-
+    
     // Creates the initial version of the player's cards
     private JPanel initialSet(int player) {
         JPanel initialCards = new JPanel();
@@ -273,10 +310,10 @@ public class UnoServer extends JPanel {
             card.setSize(targetWidth, targetHeight);
             initialCards.add(card);
         }
-
+        
         return initialCards;
     }
-
+    
     // Updates the display of the given player's cards
     public void updatePlayerCards(int player) {
         JPanel newCards = pCards.get(player);
@@ -315,17 +352,17 @@ public class UnoServer extends JPanel {
         if (playerHand.length() <= 13) {
             bigger13 = false;
         }
-
+        
         pCards.set(player, newCards);
     }
-
+    
     public void goMenu() {
         c.setVisible(false);
         c.removeAll();
         c.add(serverPanel());
         c.setVisible(true);
     }
-
+    
     private void setPanelDims(int width, int height) {
         targetHeight = height;
         targetWidth = width;
