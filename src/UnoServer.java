@@ -134,12 +134,7 @@ public class UnoServer extends JPanel {
             }
         }
         
-        while ( connected ) {
-            try {
-                System.out.println("echo: " + din.readLine());
-            } catch (IOException fatalError) {}
-        }
-        
+
         //logger.log(Level.INFO, "Creating game while we are ready for clients to connect");
         // with the accept above we already wait until a clisnt connects so only get here if someone connected
         logger.log(Level.INFO, "Creating game for the client that just connected. We have " + 
@@ -154,6 +149,13 @@ public class UnoServer extends JPanel {
         
         screen.next(c);
         
+        // while (connected) {
+        //     try {
+        //         System.out.println("echo: " + din.readLine());
+        //     } catch (IOException fatalError) {
+        //     }
+        // }
+
         /*
         // Synchs server and client so they can send and receive data appropriately
         synchronized (data) {
@@ -177,11 +179,15 @@ public class UnoServer extends JPanel {
             setPanelDims(window.getWidth(), window.getHeight());
             // Output game data
             data = new UnoNetData(game.getPlacePile(), null, game.getHands(), game.getPlayer(), listener.getPlayerCount(), game.getCardsLeft(), -1, null);
+            logger.log(Level.INFO, "Sending game status to client");
             try {
                 writeJSON(data);
             } catch (IOException ignored) {}
-            
+            logger.log(Level.INFO, "Successfully sent data to client");
+
             // Take in game data from players
+            logger.log(Level.INFO, "Getting data from client");
+
             try {
                 readJSON();
             } catch (IOException ignored) {}
@@ -217,16 +223,20 @@ public class UnoServer extends JPanel {
     
     // Method to read JSON from the data stream
     private void readJSON() throws IOException {
-        synchronized (data) {
+        logger.log(Level.INFO, "Reading from socket... ");
+        //synchronized (data) {
+            String rawClientMessage = din.readLine();
+            logger.log(Level.INFO, "Reead message " + rawClientMessage );
             ObjectMapper mapper = new ObjectMapper();
-            data = mapper.readValue(din, UnoNetData.class);
-            try {
-                wait(100);
-            } catch (InterruptedException interruptedException) {
-                logger.log(Level.SEVERE, String.format("Error: %s", interruptedException));
-                Thread.currentThread().interrupt();
-            }
-        }
+            //data = mapper.readValue(din, UnoNetData.class);
+            data = mapper.readValue(rawClientMessage, UnoNetData.class );
+            // try {
+            //     wait(100);
+            // } catch (InterruptedException interruptedException) {
+            //     logger.log(Level.SEVERE, String.format("Error: %s", interruptedException));
+            //     Thread.currentThread().interrupt();
+            // }
+        //}
     }
     
     // Creates panel to show that the server is waiting for a valid connection to start the game
