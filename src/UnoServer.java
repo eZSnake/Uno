@@ -137,9 +137,7 @@ public class UnoServer extends JPanel {
 
         //logger.log(Level.INFO, "Creating game while we are ready for clients to connect");
         // with the accept above we already wait until a clisnt connects so only get here if someone connected
-        logger.log(Level.INFO, "Creating game for the client that just connected. We have " + 
-        listener.getPlayerCount() +
-        " players.");
+        logger.log(Level.INFO, "Creating game for the client that just connected. We have " + listener.getPlayerCount() + " players.");
         
         game = new UnoGraphicsGame(listener.getPlayerCount());
         c.add(gameMenu());
