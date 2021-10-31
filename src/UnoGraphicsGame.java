@@ -24,8 +24,12 @@ public class UnoGraphicsGame {
         placePile = deck.deal();
     }
 
+    /**
+     * Draws a card and also checks if the player is trying to draw while the bot is playing
+     *
+     * @param extPlayer the player who is trying to draw
+     */
     public void draw(int extPlayer) {
-        //Draws a card and also checks if the player is trying to draw while the bot is playing
         if (extPlayer == player) {
             hands[player].addCard(deck.deal());
         }
@@ -36,14 +40,20 @@ public class UnoGraphicsGame {
         draw(player);
     }
 
+    /**
+     * Plays a card by putting it on top of the place pile
+     *
+     * @param toPlay the card which is to be played
+     */
     public void playCard(Card toPlay) {
-        //Puts a card on top of the place pile
         placePile = toPlay;
         switchSkip();
     }
 
+    /**
+     * Bot plays a card if it can otherwise it draws one
+     */
     public void botPlayCard() {
-        //Bot plays a card if it can otherwise it draws one
         if (!canPlayACard()) {
             if (botsPlay.contains("+") || botsPlay.contains("Skip")) {
                 botsPlay += ", Draw";
@@ -80,8 +90,12 @@ public class UnoGraphicsGame {
         }
     }
 
+    /**
+     * Executes special move
+     *
+     * @param col the color to be changed to if it's a wish card or null if it isn't
+     */
     public void doSpecialMove(String col) {
-        //Executes special move
         if (stackPlus && placePile.toString().contains("+") && getPlayerHand(getNextPlayer()).hasPlus()) {
             //Dont do effect yet and see if player wants to stack on top
         }
@@ -89,8 +103,12 @@ public class UnoGraphicsGame {
         //TODO Add case for stacking plus cards so they add together (Just Plus 2 or also 4?)
     }
 
+    /**
+     *  Checks if everyone has more than 0 cards on their hand and that there are more than 0 cards left to draw
+     *
+     * @return if the round is playable
+     */
     private boolean roundPlayable() {
-        //Checks if everyone has more than 0 cards on their hand and that there are more than 0 cards left to draw
         for (Hand hand : hands) {
             if (hand.length() == 0) {
                 return false;
@@ -103,8 +121,12 @@ public class UnoGraphicsGame {
         handLengths[player] = hands[player].length();
     }
 
+    /**
+     * Determines which player goes next, taking into account the direction and if the next player is supposed to be skipped
+     *
+     * @return the next player
+     */
     public int getNextPlayer() {
-        //Determines which player goes next, taking into account the direction and if the next player is supposed to be skipped
         int nextPlayer;
         if (!rev && !skip) {
             nextPlayer = Math.floorMod(player + 1, hands.length);
@@ -124,8 +146,10 @@ public class UnoGraphicsGame {
         player = getNextPlayer();
     }
 
+    /**
+     * Checks to make sure that skips and switches aren't done more than once if another card isn't placed on top
+     */
     private void switchSkip() {
-        //Checks to make sure that skips and switches aren't done more than once if another card isn't placed on top
         if (placePile instanceof Skip && !((Skip) placePile).getHasSkipped()) {
             skip = true;
             ((Skip) placePile).setHasSkipped(true);
@@ -144,8 +168,12 @@ public class UnoGraphicsGame {
         }
     }
 
+    /**
+     * Checks if a player has a card to play
+     *
+     * @return if the current player has a playable card
+     */
     private boolean canPlayACard() {
-        //Checks if a player has a card to play
         for (int i = 0; i < hands[player].length(); i++) {
             if (hands[player].getCard(i).isPlayable(placePile)) {
                 return true;
@@ -154,8 +182,13 @@ public class UnoGraphicsGame {
         return false;
     }
 
+    /**
+     * Checks if the selected card can be played
+     *
+     * @param toPlay the card to play
+     * @return if the card can be played
+     */
     public boolean canPlayCard(Card toPlay) {
-        //Checks if card can be played
         if (toPlay == null) {
             return false;
         }
@@ -163,8 +196,13 @@ public class UnoGraphicsGame {
         //TODO Fix implementation of not stacking Change Col cards
     }
 
+    /**
+     * Converts an inputted string to a card on the hand of the current player
+     *
+     * @param conv the String to convert to a card
+     * @return the card which matches the inputted String
+     */
     public Card stringToCard(String conv) {
-        //Converts an inputted string to a card on the hand of the current player
         try {
             for (int i = 0; i < hands[player].length(); i++) {
                 if (hands[player].getCard(i).toString().equals(conv)) {
@@ -176,15 +214,31 @@ public class UnoGraphicsGame {
         return null;
     }
 
-    //Methods to pass along information to the listener class and beyond
+    /**
+     * Gets the amount of cards left in a player's hand
+     *
+     * @param plyr the player whose hand should be checked
+     * @return the amount of cards the player has
+     */
     public int getPCardsLeft(int plyr) {
         return hands[plyr].length();
     }
 
+    /**
+     * Gets the cards left in the draw pile
+     *
+     * @return the number of cards left in the draw pile
+     */
     public int getCardsLeft() {
         return deck.cardsLeft();
     }
 
+    /**
+     * Gets the hand of the specified player
+     *
+     * @param plyr the player whose hand should be gotten
+     * @return the hand of the specified player
+     */
     public Hand getPlayerHand(int plyr) {
         return hands[plyr];
     }
@@ -197,6 +251,12 @@ public class UnoGraphicsGame {
         return player;
     }
 
+    /**
+     * Gets the index of a specified card
+     *
+     * @param toIndex the card whose index should be determined
+     * @return the index of the specified card
+     */
     public int getIndexOfCard(Card toIndex) {
         for (int i = 0; i < hands[player].length(); i++) {
             if (hands[player].getCard(i) == toIndex) {
@@ -206,16 +266,31 @@ public class UnoGraphicsGame {
         return -1;
     }
 
+    /**
+     * Removes a specified card from a player's hand
+     *
+     * @param toRemove the card to remove
+     */
     public void removeCard(Card toRemove) {
         hands[player].removeCard(toRemove);
     }
 
+    /**
+     * Determines the amount of new cards added to a player's hand
+     *
+     * @return the number of new cards
+     */
     public int newCardsAdded() {
         int diff = hands[player].length() - handLengths[player];
         updateHandLength();
         return diff;
     }
 
+    /**
+     * Gets everyone's hands
+     *
+     * @return an array of everyone's hands
+     */
     public Hand[] getHands() {
         return hands;
     }
@@ -296,6 +371,11 @@ public class UnoGraphicsGame {
         stackPlus = toSetTo;
     }
 
+    /**
+     * Determines the winner of the match if there is one
+     *
+     * @return an integer representing the winner or -1 if there is none
+     */
     public int determineWinner() {
         //Determines the winner, if there is one
         if (!roundPlayable()) {

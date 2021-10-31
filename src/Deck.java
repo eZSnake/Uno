@@ -15,7 +15,7 @@ public class Deck {
         int numToSet = 1;
         String BLUE = "Blue";
         for (i = 0; i < 19; i++) {
-            if (i%2 == 0) {
+            if (i % 2 == 0) {
                 numToSet--;
             }
             try {
@@ -46,7 +46,7 @@ public class Deck {
         numToSet = 1;
         String GREEN = "Green";
         for (i = 25; i < 44; i++) {
-            if ((i-1)%2 == 0) {
+            if ((i - 1) % 2 == 0) {
                 numToSet--;
             }
             try {
@@ -77,7 +77,7 @@ public class Deck {
         numToSet = 1;
         String RED = "Red";
         for (i = 50; i < 69; i++) {
-            if (i%2 == 0) {
+            if (i % 2 == 0) {
                 numToSet--;
             }
             try {
@@ -108,7 +108,7 @@ public class Deck {
         numToSet = 1;
         String YELLOW = "Yellow";
         for (i = 75; i < 94; i++) {
-            if ((i-1)%2 == 0) {
+            if ((i - 1) % 2 == 0) {
                 numToSet--;
             }
             try {

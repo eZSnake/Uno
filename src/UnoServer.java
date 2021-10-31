@@ -111,9 +111,7 @@ public class UnoServer extends JPanel {
     
     // Starts up the server and the game, running it until the end
     public void start() {
-        logger.log(Level.INFO, String.format("%s", c.getComponentCount()));
         c.add(waitConn());
-        logger.log(Level.INFO, String.format("%s", c.getComponentCount()));
         screen.next(c);
         
         boolean connected = false;
@@ -212,7 +210,7 @@ public class UnoServer extends JPanel {
     // Method to write JSON to the data stream
     private void writeJSON(UnoNetData toJSON) throws IOException {
         synchronized (data) {
-            //        logger.log(Level.INFO, "Writing to data stream");
+//        logger.log(Level.INFO, "Writing to data stream");
             ObjectMapper mapper = new ObjectMapper();
             mapper.writeValue(dout, toJSON);
             data.notifyAll();

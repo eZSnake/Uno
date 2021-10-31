@@ -50,8 +50,8 @@ public class UnoClient extends JPanel {
         window.setVisible(true);
     }
 
+    // Creates the panel where the player can select their player number
     private JPanel selection() {
-        // Creates the panel where the player can select their player number
         JPanel selection = new JPanel();
         selection.setLayout(new GridLayout(numPlayers + 3, 1)); //TODO Only have enough slots for required amt of players
         JTextArea topTxt = new JTextArea("\nSelect which player you would like to be");
@@ -83,8 +83,8 @@ public class UnoClient extends JPanel {
         return selection;
     }
 
+    // Creates playing screen for specified player
     private JPanel playerPlayingScreen(int player) {
-        // Creates playing screen for specified player
         JPanel playerPlayingScreen = new JPanel();
         playerPlayingScreen.setLayout(new BorderLayout());
         // Top of the screen
@@ -161,8 +161,8 @@ public class UnoClient extends JPanel {
         return playerPlayingScreen;
     }
 
+    // Creates the initial version of the player's cards
     private JPanel initialSet(int player) {
-        // Creates the initial version of the player's cards
         JPanel initialCards = new JPanel();
         Hand playerHand = data.getHand(player);
         targetWidth = dims.getWidth() / 20;
