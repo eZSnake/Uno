@@ -209,30 +209,24 @@ public class UnoServer extends JPanel {
     
     // Method to write JSON to the data stream
     private void writeJSON(UnoNetData toJSON) throws IOException {
-        synchronized (data) {
 //        logger.log(Level.INFO, "Writing to data stream");
-            ObjectMapper mapper = new ObjectMapper();
-            mapper.writeValue(dout, toJSON);
-            data.notifyAll();
-        }
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.writeValue(dout, toJSON);
     }
     
     // Method to read JSON from the data stream
     private void readJSON() throws IOException {
         logger.log(Level.INFO, "Reading from socket... ");
-        //synchronized (data) {
-            String rawClientMessage = din.readLine();
-            logger.log(Level.INFO, "Reead message " + rawClientMessage );
-            ObjectMapper mapper = new ObjectMapper();
-            //data = mapper.readValue(din, UnoNetData.class);
-            data = mapper.readValue(rawClientMessage, UnoNetData.class );
-            // try {
-            //     wait(100);
-            // } catch (InterruptedException interruptedException) {
-            //     logger.log(Level.SEVERE, String.format("Error: %s", interruptedException));
-            //     Thread.currentThread().interrupt();
-            // }
-        //}
+        String rawClientMessage = din.readLine();
+        logger.log(Level.INFO, "Reead message " + rawClientMessage );
+        ObjectMapper mapper = new ObjectMapper();
+        //data = mapper.readValue(din, UnoNetData.class);
+        data = mapper.readValue(rawClientMessage, UnoNetData.class );// try {
+        //     wait(100);
+        // } catch (InterruptedException interruptedException) {
+        //     logger.log(Level.SEVERE, String.format("Error: %s", interruptedException));
+        //     Thread.currentThread().interrupt();
+        // }
     }
     
     // Creates panel to show that the server is waiting for a valid connection to start the game

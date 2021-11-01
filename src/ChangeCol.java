@@ -4,8 +4,8 @@ import java.io.File;
 import java.io.IOException;
 
 public class ChangeCol extends Card {
-    public ChangeCol(Image img) {
-        super("", 4, -4, img);
+    public ChangeCol(String imgLoc) {
+        super("", 4, -4, imgLoc);
     }
 
     public String toString() {
@@ -23,10 +23,6 @@ public class ChangeCol extends Card {
 //            }
 //        }
         this.setColor(col.substring(0, 1).toUpperCase() + col.substring(1));
-        Image img = null;
-        try {
-            img = ImageIO.read(new File("UnoCards/" + col.toLowerCase() + "changecol.jpg"));
-        } catch (IOException ignored) {}
-        setImage(img);
+        setImage("UnoCards/" + col.toLowerCase() + "changecol.jpg");
     }
 }

@@ -3,8 +3,8 @@ import java.awt.*;
 public class Skip extends Card {
     boolean hasSkipped;
 
-    public Skip(String col, Image img) {
-        super(col, 2, -2, img);
+    public Skip(String col, String imgLoc) {
+        super(col, 2, -2, imgLoc);
         hasSkipped = false;
     }
 

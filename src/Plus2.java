@@ -3,8 +3,8 @@ import java.awt.*;
 public class Plus2 extends Card {
     private boolean hasSkipped;
 
-    public Plus2(String col, Image img) {
-        super(col, 3, -3, img);
+    public Plus2(String col, String imgLoc) {
+        super(col, 3, -3, imgLoc);
         hasSkipped = false;
     }
 

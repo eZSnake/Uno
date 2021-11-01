@@ -6,8 +6,8 @@ import java.io.IOException;
 public class Plus4 extends Card {
     private boolean hasSkipped;
 
-    public Plus4(Image img) {
-        super("", 4, -5, img);
+    public Plus4(String imgLoc) {
+        super("", 4, -5, imgLoc);
         hasSkipped = false;
     }
 
@@ -26,11 +26,7 @@ public class Plus4 extends Card {
 //            }
 //        }
         this.setColor(col.substring(0, 1).toUpperCase() + col.substring(1));
-        Image img = null;
-        try {
-            img = ImageIO.read(new File("UnoCards/" + col.toLowerCase() + "plus4.jpg"));
-        } catch (IOException ignored) {}
-        setImage(img);
+        setImage("UnoCards/" + col.toLowerCase() + "plus4.jpg");
         if (rev) {
             currPlayer = Math.floorMod(currPlayer - 1, hands.length);
         } else {

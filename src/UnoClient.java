@@ -341,23 +341,6 @@ public class UnoClient extends JPanel {
 
         nextScreen();
 
-        // Synchs server and client so they can send and receive data appropriately
-        synchronized (data) {
-            logger.log(Level.INFO, "In synchronized 1");
-
-            try {
-                data.wait(2000);
-            } catch (InterruptedException interruptedException) {
-                logger.log(Level.SEVERE, String.format("Error: %s", interruptedException));
-                Thread.currentThread().interrupt();
-            }
-        }
-        synchronized (data) {
-            logger.log(Level.INFO, "In synchronized 2");
-
-            data.notifyAll();
-        }
-
         // Intial read from the datastream to determine the number of players for the next screen
         long mainTime = System.currentTimeMillis()/1000;
         while (data.getPlayerCount() == -1) {
@@ -379,26 +362,15 @@ public class UnoClient extends JPanel {
 
     // Method to write JSON to the data stream
     private void writeJSON(UnoNetData toJSON) throws IOException {
-        synchronized (data) {
-            ObjectMapper mapper = new ObjectMapper();
-            mapper.writeValue(dout, toJSON);
-            data.notifyAll();
-        }
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.writeValue(dout, toJSON);
     }
 
     // Method to read JSON from the data stream
     private void readJSON() throws IOException {
-        synchronized (data) {
-            logger.log(Level.INFO, "Reading from data stream\n" + din.toString());
-            ObjectMapper mapper = new ObjectMapper();
-            data = mapper.readValue(din, UnoNetData.class);
-            try {
-                wait(100);
-            } catch (InterruptedException interruptedException) {
-                logger.log(Level.SEVERE, String.format("Error: %s", interruptedException));
-                Thread.currentThread().interrupt();
-            }
-        }
+        logger.log(Level.INFO, "Reading from data stream\n" + din.toString());
+        ObjectMapper mapper = new ObjectMapper();
+        data = mapper.readValue(din, UnoNetData.class);
     }
 
     // Method that runs the game until it ends

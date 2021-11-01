@@ -3,8 +3,8 @@ import java.awt.*;
 public class Switch extends Card {
     private boolean hasSwitched;
 
-    public Switch(String col, Image img) {
-        super(col, 1, -1, img);
+    public Switch(String col, String imgLoc) {
+        super(col, 1, -1, imgLoc);
         hasSwitched = false;
     }
 

@@ -1,15 +1,17 @@
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 
 public abstract class Card {
     private int num, id;
-    private String color;
-    private Image image;
+    private String color, imgLoc;
 
-    protected Card(String col, int id, int num, Image img) {
+    protected Card(String col, int id, int num, String imgLoc) {
         color = col;
         this.id = id;
         this.num = num;
-        image = img;
+        this.imgLoc = imgLoc;
     }
 
     public abstract String toString();
@@ -33,11 +35,15 @@ public abstract class Card {
     }
 
     public Image getImage() {
-        return image;
+        try {
+            return ImageIO.read(new File("UnoCards/" + imgLoc + ".jpg"));
+        } catch (IOException imgReadFailed) {
+            return null;
+        }
     }
 
-    public void setImage(Image img) {
-        image = img;
+    public void setImage(String newImgLoc) {
+        imgLoc = newImgLoc;
     }
 
     public boolean isPlayable(Card placePile) {
