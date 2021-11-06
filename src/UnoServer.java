@@ -209,9 +209,12 @@ public class UnoServer extends JPanel {
     
     // Method to write JSON to the data stream
     private void writeJSON(UnoNetData toJSON) throws IOException {
-//        logger.log(Level.INFO, "Writing to data stream");
+        logger.log(Level.INFO, "Writing to data stream");
         ObjectMapper mapper = new ObjectMapper();
-        mapper.writeValue(dout, toJSON);
+        String serializedobject = mapper.writeValueAsString(toJSON);
+        logger.log(Level.INFO, "serialized object: " + serializedobject);
+        dout.write(serializedobject);
+        //mapper.writeValue(dout, toJSON);
     }
     
     // Method to read JSON from the data stream
