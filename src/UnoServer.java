@@ -11,6 +11,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -122,7 +123,7 @@ public class UnoServer extends JPanel {
                 logger.log(Level.INFO, String.format("Socket state: %s", serverSoc));
                 logger.log(Level.INFO, "Now waiting for a connection....");
                 soc = serverSoc.accept();
-                din = new BufferedReader ( new InputStreamReader(soc.getInputStream()));
+                din = new BufferedReader( new InputStreamReader(soc.getInputStream()));
                 dout = new OutputStreamWriter(soc.getOutputStream());
                 logger.log(Level.INFO, "We got a connection. Let's see what the client sends our way");
                 connected = true;
@@ -211,7 +212,7 @@ public class UnoServer extends JPanel {
     private void writeJSON(UnoNetData toJSON) throws IOException {
         logger.log(Level.INFO, "Writing to data stream");
         ObjectMapper mapper = new ObjectMapper();
-        String serializedobject = mapper.writeValueAsString(toJSON);
+        String serializedobject = mapper.writeValueAsString(toJSON) + "\n";
         logger.log(Level.INFO, "serialized object: " + serializedobject);
         dout.write(serializedobject);
         //mapper.writeValue(dout, toJSON);
@@ -261,7 +262,7 @@ public class UnoServer extends JPanel {
         
         targetHeight = dims.getHeight() / (listener.getPlayerCount() + 4);
         targetWidth = targetHeight / 100 * 120; //TODO Maybe fix ratio
-        Image img = game.getPlacePile().getImage().getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
+        Image img = game.getPlacePile().getImage(1).getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
         JLabel placePile = new JLabel(new ImageIcon(img));
         JLabel cardsLeft = new JLabel("Cards left: " + game.getCardsLeft());
         cardsLeft.setFont(new Font(ARIAL, Font.PLAIN, 50));
@@ -307,7 +308,7 @@ public class UnoServer extends JPanel {
         targetHeight = targetWidth * 143 / 100;
         for (int i = 0; i < playerHand.length(); i++) {
             JLabel card = new JLabel(playerHand.getCard(i).toString());
-            Image img = playerHand.getCard(i).getImage().getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
+            Image img = playerHand.getCard(i).getImage(1).getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
             card.setIcon(new ImageIcon(img));
             card.setFont(new Font(card.getFont().toString(), Font.PLAIN, 0));
             card.setSize(targetWidth, targetHeight);
@@ -333,7 +334,7 @@ public class UnoServer extends JPanel {
             newCards = new JPanel();
             for (int i = 0; i < playerHand.length(); i++) {
                 JLabel card = new JLabel(playerHand.getCard(i).toString());
-                Image img = playerHand.getCard(i).getImage().getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
+                Image img = playerHand.getCard(i).getImage(1).getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
                 card.setIcon(new ImageIcon(img));
                 card.setFont(new Font(card.getFont().toString(), Font.PLAIN, 0));
                 card.setSize(targetWidth, targetHeight);
@@ -344,7 +345,7 @@ public class UnoServer extends JPanel {
             if (amtNewCards > 0) {
                 for (int i = amtNewCards; i > 0; i--) {
                     JLabel card = new JLabel(playerHand.getCard(playerHand.length() - i).toString());
-                    Image img = playerHand.getCard(playerHand.length() - i).getImage().getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
+                    Image img = playerHand.getCard(playerHand.length() - i).getImage(1).getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
                     card.setIcon(new ImageIcon(img));
                     card.setFont(new Font(card.getFont().toString(), Font.PLAIN, 0));
                     card.setSize(targetWidth, targetHeight);

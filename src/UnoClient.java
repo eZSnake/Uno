@@ -140,7 +140,7 @@ public class UnoClient extends JPanel {
         // Center (card on place pile)
         targetWidth = dims.getWidth() / 15;
         targetHeight = targetWidth * 143 / 100;
-        Image img = data.getPlacePile().getImage().getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
+        Image img = data.getPlacePile().getImage(1).getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
         JLabel placePile = new JLabel(new ImageIcon(img));
         placePileCard.add(placePile);
         playerPlayingScreen.add(placePileCard.get(player), BorderLayout.CENTER);
@@ -169,7 +169,7 @@ public class UnoClient extends JPanel {
         targetHeight = targetWidth * 143 / 100;
         for (int i = 0; i < playerHand.length(); i++) {
             JButton card = new JButton(playerHand.getCard(i).toString());
-            Image img = playerHand.getCard(i).getImage().getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
+            Image img = playerHand.getCard(i).getImage(1).getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
             card.setIcon(new ImageIcon(img));
             card.addActionListener(listener);
             card.setFont(new Font(card.getFont().toString(), Font.PLAIN, 0));
@@ -222,7 +222,7 @@ public class UnoClient extends JPanel {
             newCards = new JPanel();
             for (int i = 0; i < playerHand.length(); i++) {
                 JButton card = new JButton(playerHand.getCard(i).toString());
-                Image img = playerHand.getCard(i).getImage().getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
+                Image img = playerHand.getCard(i).getImage(1).getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
                 card.setIcon(new ImageIcon(img));
                 card.addActionListener(listener);
                 card.setFont(new Font(card.getFont().toString(), Font.PLAIN, 0));
@@ -234,7 +234,7 @@ public class UnoClient extends JPanel {
             if (amtNewCards > 0) {
                 for (int i = amtNewCards; i > 0; i--) {
                     JButton card = new JButton(playerHand.getCard(playerHand.length() - i).toString());
-                    Image img = playerHand.getCard(playerHand.length() - i).getImage().getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
+                    Image img = playerHand.getCard(playerHand.length() - i).getImage(1).getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
                     card.setIcon(new ImageIcon(img));
                     card.addActionListener(listener);
                     card.setFont(new Font(card.getFont().toString(), Font.PLAIN, 0));
